@@ -1,9 +1,7 @@
 package com.company;
 
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class SpaceShip extends Sprite {
 
@@ -18,11 +16,7 @@ public class SpaceShip extends Sprite {
     }
 
     private void initSpaceShip() {
-
         missiles = new ArrayList<>();
-
-        loadImage("src/resources/craft.png");
-        getImageDimensions();
     }
 
     public void move() {
@@ -34,82 +28,52 @@ public class SpaceShip extends Sprite {
         return missiles;
     }
 
-    public void keyPressed(KeyEvent e) {
-
-        int key = e.getKeyCode();
-
-        if (key == KeyEvent.VK_SPACE) {
-            fire();
-        }
-
-        if (key == KeyEvent.VK_LEFT) {
-            dx = -1;
-        }
-
-        if (key == KeyEvent.VK_RIGHT) {
-            dx = 1;
-        }
-
-        if (key == KeyEvent.VK_UP) {
-            dy = -1;
-        }
-
-        if (key == KeyEvent.VK_DOWN) {
-            dy = 1;
-        }
-    }
-
-
-    public void fire() {
-        missiles.add(new Missile(x + width, y + height / 2));
-    }
-
     public void spawn(int x, int y) {
         //Fait apparaitre un missile sur une coordonnee.
         missiles.add(new Missile(x + width, y + height / 2));
     }
 
     private int[][] genereCoordonnees(int nbr, int max_x, int max_y) {
-        //Genere un tableau de coordonnees aleatoire entre le min et le max
+        //Genere un tableau de coordonnees aleatoire entre le min et le max, peut en generer au meme endroit = pas bien
         int [][] tabCoordinates = new int[nbr][2];
-        int randomNum_x;
-        int randomNum_y;
+        Set<int[]> SetCoordonnesPrises = new HashSet<>();
+        Missile m = new Missile(x, y);
+        int randomNum_x = -1;
+        int randomNum_y = -1 ;
         Random rand = new Random();
+        int [] a = {randomNum_x, randomNum_y};
+
         for (int i = 0; i < nbr; i++ ) {
-            randomNum_x = rand.nextInt(max_x + 1);
-            randomNum_y = rand.nextInt(max_y + 1);
+            do {
+                randomNum_x = rand.nextInt(max_x + 1);
+                randomNum_y = rand.nextInt(max_y + 1);
+                a[0] = randomNum_x;
+                a[1] = randomNum_y;
+            } while (SetCoordonnesPrises.contains(a));
+
             tabCoordinates[i][0] = randomNum_x;
             tabCoordinates[i][1] = randomNum_y;
+
+            for (int j = 0; j <= m.getBounds().width; j++) {
+                for (int k = 0; k <= m.getBounds().height; k++) {
+                    int [] b = {randomNum_x + j, randomNum_y + k};
+                    SetCoordonnesPrises.add(b);
+                    b = null;
+                }
+            }
         }
+        m = null;
         return tabCoordinates;
     }
 
     public void placementMissiles(int nbr){
         //place nbr missiles/cercles dans la fenetre
-        int [][] coordonneesInit = genereCoordonnees(nbr + 1, Missile.getBOARD_WIDTH(), Missile.getBOARD_HEIGHT());
-        for (int i = 0; i < nbr + 1; i++) {
+        Missile m = new Missile(x,y);
+        int [][] coordonneesInit = genereCoordonnees(nbr, m.getBOARD_WIDTH() - m.getBounds().width - 10, m.getBOARD_HEIGHT() - m.getBounds().height - 10);
+        for (int i = 0; i < nbr; i++) {
             spawn(coordonneesInit[i][0], coordonneesInit[i][1]);
         }
+        m = null;
     }
 
-    public void keyReleased(KeyEvent e) {
-
-        int key = e.getKeyCode();
-
-        if (key == KeyEvent.VK_LEFT) {
-            dx = 0;
-        }
-
-        if (key == KeyEvent.VK_RIGHT) {
-            dx = 0;
-        }
-
-        if (key == KeyEvent.VK_UP) {
-            dy = 0;
-        }
-
-        if (key == KeyEvent.VK_DOWN) {
-            dy = 0;
-        }
-    }
 }

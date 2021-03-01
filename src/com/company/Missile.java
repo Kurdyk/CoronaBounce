@@ -2,10 +2,11 @@ package com.company;
 
 public class Missile extends Sprite {
 
-    private static final int BOARD_WIDTH = 500;
-    private static final int BOARD_HEIGHT = 400;
-    private int X_MISSILE_SPEED = 2;
-    private int Y_MISSILE_SPEED = 2;
+    public static final int BOARD_WIDTH = 500;
+    public static final int BOARD_HEIGHT = 400;
+    public int X_MISSILE_SPEED = 2;
+    public int Y_MISSILE_SPEED = 2;
+    public String etat;
 
     public Missile(int x, int y) {
         super(x, y);
@@ -23,25 +24,33 @@ public class Missile extends Sprite {
 
     private void initMissile() {
 
-        loadImage("src/resources/Blue_Circle.png");
+        loadImage("src/resources/Neutral.png");
         getImageDimensions();
     }
 
     public void move() {
-        //Gere (mal) les rebonds sur le bord du tableau
+        //Gere les rebonds sur le bord du tableau (considere quelques pixels vides du png)
         x += X_MISSILE_SPEED;
         y += Y_MISSILE_SPEED;
+
+        int limitSupX =  x + this.getBounds().width;
+        int limitSupY =  y + this.getBounds().height;
 
         if (x > BOARD_WIDTH || y > BOARD_WIDTH) {
             visible = false;
         }
 
-        if (x == BOARD_WIDTH || x == BOARD_WIDTH - 1|| x == 0 || x == 1) {
-            X_MISSILE_SPEED *= -1;
+        if (limitSupX == BOARD_WIDTH || limitSupX == BOARD_WIDTH - 1 || x == -1 || x == 0 || x == 1) {
+            this.X_MISSILE_SPEED *= -1;
         }
 
-        if (y == BOARD_HEIGHT || y == BOARD_HEIGHT - 1|| y == 0 || y == 1) {
-            Y_MISSILE_SPEED *= -1;
+        if (limitSupY == BOARD_HEIGHT || limitSupY == BOARD_HEIGHT - 1 || y == -1 || y == 0 || y == 1) {
+            this.Y_MISSILE_SPEED *= -1;
         }
+    }
+
+    public void rebound() {
+        this.X_MISSILE_SPEED *= -1;
+        this.Y_MISSILE_SPEED *= -1;
     }
 }

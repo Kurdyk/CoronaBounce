@@ -1,26 +1,32 @@
 package com.company;
 
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.Timer;
-import java.util.Random;
 
 public class Board extends JPanel implements ActionListener {
 
+    private Timer timer;
+    private SpaceShip spaceship;
+    private boolean ingame;
     private final int ICRAFT_X = 40;
     private final int ICRAFT_Y = 60;
-    private final int DELAY = 10;
-    private final int NBRE = 10;
-    private Timer timer;
-    private SpaceShip spaceShip;
+    private final int B_WIDTH = 500;
+    private final int B_HEIGHT = 400;
+    private final int DELAY = 15;
+
 
     public Board() {
 
@@ -29,84 +35,108 @@ public class Board extends JPanel implements ActionListener {
 
     private void initBoard() {
 
-        addKeyListener(new TAdapter());
-        setBackground(Color.BLACK);
         setFocusable(true);
+        setBackground(Color.BLACK);
+        ingame = true;
 
-        spaceShip = new SpaceShip(ICRAFT_X, ICRAFT_Y);
-        spaceShip.placementMissiles(10);
+        setPreferredSize(new Dimension(B_WIDTH, B_HEIGHT));
+
+        spaceship = new SpaceShip(ICRAFT_X, ICRAFT_Y);
+
 
         timer = new Timer(DELAY, this);
         timer.start();
+        spaceship.placementMissiles(10);
     }
+
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        drawObjects(g);
 
-        doDrawing(g);
 
         Toolkit.getDefaultToolkit().sync();
     }
 
-    private void doDrawing(Graphics g) {
+    private void drawObjects(Graphics g) {
 
-        Graphics2D g2d = (Graphics2D) g;
-
-        g2d.drawImage(spaceShip.getImage(), spaceShip.getX(),
-                spaceShip.getY(), this);
-
-        List<Missile> missiles = spaceShip.getMissiles();
-
-        for (Missile missile : missiles) {
-
-            g2d.drawImage(missile.getImage(), missile.getX(),
-                    missile.getY(), this);
+        if (spaceship.isVisible()) {
+            g.drawImage(spaceship.getImage(), spaceship.getX(), spaceship.getY(),
+                    this);
         }
+
+        List<Missile> ms = spaceship.getMissiles();
+
+        for (Missile missile : ms) {
+            if (missile.isVisible()) {
+                g.drawImage(missile.getImage(), missile.getX(),
+                        missile.getY(), this);
+            }
+        }
+
+        g.setColor(Color.WHITE);
     }
+
 
     @Override
     public void actionPerformed(ActionEvent e) {
 
+        inGame();
+
+        updateShip();
         updateMissiles();
-        updateSpaceShip();
+        CheckCollisions();
 
         repaint();
     }
 
+
+    private void inGame() {
+
+        if (!ingame) {
+            timer.stop();
+        }
+    }
+
+    private void updateShip() {
+
+        if (spaceship.isVisible()) {
+
+            spaceship.move();
+        }
+    }
+
     private void updateMissiles() {
 
-        List<Missile> missiles = spaceShip.getMissiles();
+        List<Missile> ms = spaceship.getMissiles();
 
-        for (int i = 0; i < missiles.size(); i++) {
+        for (int i = 0; i < ms.size(); i++) {
 
-            Missile missile = missiles.get(i);
+            Missile m = ms.get(i);
 
-            if (missile.isVisible()) {
-
-                missile.move();
+            if (m.isVisible()) {
+                m.move();
             } else {
-
-                missiles.remove(i);
+                ms.remove(i);
             }
         }
     }
 
-    private void updateSpaceShip() {
+    public void CheckCollisions() {
+        List<Missile> ms = spaceship.getMissiles();
 
-        spaceShip.move();
-    }
+        for (Missile m : ms) {
 
-    private class TAdapter extends KeyAdapter {
+            Rectangle r1 = m.getBounds();
 
-        @Override
-        public void keyReleased(KeyEvent e) {
-            spaceShip.keyReleased(e);
-        }
+            for (Missile m1 : ms) {
+                Rectangle r2 = m1.getBounds();
 
-        @Override
-        public void keyPressed(KeyEvent e) {
-            spaceShip.keyPressed(e);
+                if (m != m1 && r1.intersects(r2)) {
+                    m.rebound();
+                }
+            }
         }
     }
 }

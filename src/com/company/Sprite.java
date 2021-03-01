@@ -1,6 +1,6 @@
 package com.company;
 
-import java.awt.Image;
+import java.awt.*;
 import javax.swing.ImageIcon;
 
 public class Sprite {
@@ -31,6 +31,10 @@ public class Sprite {
         height = image.getHeight(null);
     }
 
+    public Rectangle getBounds() {
+        return new Rectangle(x, y, width, height);
+    }
+
     public Image getImage() {
         return image;
     }
@@ -52,3 +56,4 @@ public class Sprite {
     }
 
 }
+
