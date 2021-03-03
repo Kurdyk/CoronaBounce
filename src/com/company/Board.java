@@ -132,6 +132,10 @@ public class Board extends JPanel implements ActionListener {
 
             for (Missile m1 : ms) {
                 Rectangle r2 = m1.getBounds();
+                r2.x -= 1;
+                r2.y -= 1;
+                r2.width += 2;
+                r2.height += 2;
 
                 if (m != m1 && r1.intersects(r2)) {
                     m.rebound();

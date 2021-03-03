@@ -43,7 +43,7 @@ public class SpaceShip extends Sprite {
         Random rand = new Random();
         int [] a = {randomNum_x, randomNum_y};
 
-        for (int i = 0; i < nbr; i++ ) {
+        for (int i = 0; i < nbr; i++) {
             do {
                 randomNum_x = rand.nextInt(max_x + 1);
                 randomNum_y = rand.nextInt(max_y + 1);
