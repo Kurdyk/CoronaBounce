@@ -30,7 +30,15 @@ public class SpaceShip extends Sprite {
 
     public void spawn(int x, int y) {
         //Fait apparaitre un missile sur une coordonnee.
-        missiles.add(new Missile(x + width, y + height / 2));
+        missiles.add(new Missile(x, y));
+    }
+
+    public void spawnInfected(int x, int y) {
+        //Fait apparaitre un infecté
+        Missile m = new Missile(x, y);
+        m.etat = "Infected";
+        missiles.add(m);
+        m.reloadImage();
     }
 
     private int[][] genereCoordonnees(int nbr, int max_x, int max_y) {
@@ -45,8 +53,8 @@ public class SpaceShip extends Sprite {
 
         for (int i = 0; i < nbr; i++) {
             do {
-                randomNum_x = rand.nextInt(max_x + 1);
-                randomNum_y = rand.nextInt(max_y + 1);
+                randomNum_x = rand.nextInt(max_x - 1) + 2; //Faut pas générer 0 ou 1;
+                randomNum_y = rand.nextInt(max_y - 1) + 2; //Idem
                 a[0] = randomNum_x;
                 a[1] = randomNum_y;
             } while (SetCoordonnesPrises.contains(a));
@@ -62,18 +70,30 @@ public class SpaceShip extends Sprite {
                 }
             }
         }
+
+        //printList(tabCoordinates);
         m = null;
         return tabCoordinates;
     }
 
-    public void placementMissiles(int nbr){
-        //place nbr missiles/cercles dans la fenetre
+    public void placementMissiles(int nbr, int nbrI){
+        //place nbr missiles/cercles dans la fenetre et nbrI infectés
         Missile m = new Missile(x,y);
-        int [][] coordonneesInit = genereCoordonnees(nbr, m.getBOARD_WIDTH() - m.getBounds().width - 10, m.getBOARD_HEIGHT() - m.getBounds().height - 10);
+        int [][] coordonneesInit = genereCoordonnees(nbr + nbrI, m.getBOARD_WIDTH() - m.getBounds().width - 10, m.getBOARD_HEIGHT() - m.getBounds().height - 10);
         for (int i = 0; i < nbr; i++) {
             spawn(coordonneesInit[i][0], coordonneesInit[i][1]);
+        }
+        for (int j = 0; j < nbrI; j++) {
+            spawnInfected(coordonneesInit[j][0], coordonneesInit[j][1]);
         }
         m = null;
     }
 
+    //debug
+
+    /*private void printList(int[][] tab) {
+        for (int i = 0; i < tab.length; i++) {
+            System.out.println(tab[i][0] + " et " + tab[i][1] + "\n");
+        }
+    }*/
 }

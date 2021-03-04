@@ -46,7 +46,7 @@ public class Board extends JPanel implements ActionListener {
 
         timer = new Timer(DELAY, this);
         timer.start();
-        spaceship.placementMissiles(10);
+        spaceship.placementMissiles(10, 3);
     }
 
 
@@ -61,10 +61,10 @@ public class Board extends JPanel implements ActionListener {
 
     private void drawObjects(Graphics g) {
 
-        if (spaceship.isVisible()) {
+        /*if (spaceship.isVisible()) {
             g.drawImage(spaceship.getImage(), spaceship.getX(), spaceship.getY(),
                     this);
-        }
+        }*/
 
         List<Missile> ms = spaceship.getMissiles();
 
@@ -84,7 +84,6 @@ public class Board extends JPanel implements ActionListener {
 
         inGame();
 
-        updateShip();
         updateMissiles();
         CheckCollisions();
 
@@ -99,13 +98,6 @@ public class Board extends JPanel implements ActionListener {
         }
     }
 
-    private void updateShip() {
-
-        if (spaceship.isVisible()) {
-
-            spaceship.move();
-        }
-    }
 
     private void updateMissiles() {
 
@@ -132,15 +124,25 @@ public class Board extends JPanel implements ActionListener {
 
             for (Missile m1 : ms) {
                 Rectangle r2 = m1.getBounds();
-                r2.x -= 1;
+                /*r2.x -= 1;
                 r2.y -= 1;
                 r2.width += 2;
-                r2.height += 2;
+                r2.height += 2;*/ //Essai pour eviter le bug de collision
 
                 if (m != m1 && r1.intersects(r2)) {
                     m.rebound();
+                    CheckContamination(m,m1);
                 }
             }
+        }
+    }
+
+    protected void CheckContamination (Missile m, Missile m1) {
+        if (m.etat == "Infected" && m1.etat == "Sain") {
+            m1.contamine();
+        }
+        if (m1.etat == "Infected" && m.etat == "Sain") {
+            m.contamine();
         }
     }
 }

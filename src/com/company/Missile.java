@@ -6,7 +6,7 @@ public class Missile extends Sprite {
     public static final int BOARD_HEIGHT = 400;
     public int X_MISSILE_SPEED = 2;
     public int Y_MISSILE_SPEED = 2;
-    public String etat;
+    public String etat; //Infected, Recovered ou Sain;
 
     public Missile(int x, int y) {
         super(x, y);
@@ -28,8 +28,23 @@ public class Missile extends Sprite {
         getImageDimensions();
     }
 
+    protected void reloadImage(){
+        switch (etat) {
+            case "Infected":
+                loadImage("src/resources/Infected.png");
+                break;
+            case "Sain":
+                loadImage("src/resources/Neutral.png");
+                break;
+            case "Recovered":
+                loadImage("src/resources/Recover.png");
+                break;
+        }
+
+    }
+
     public void move() {
-        //Gere les rebonds sur le bord du tableau (considere quelques pixels vides du png)
+        //Gere les rebonds sur le bord du tableau
         x += X_MISSILE_SPEED;
         y += Y_MISSILE_SPEED;
 
@@ -52,5 +67,11 @@ public class Missile extends Sprite {
     public void rebound() {
         this.X_MISSILE_SPEED *= -1;
         this.Y_MISSILE_SPEED *= -1;
+    }
+
+    public void contamine() {
+        this.etat = "Infected";
+        reloadImage();
+        getImageDimensions();
     }
 }
