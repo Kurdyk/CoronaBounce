@@ -7,6 +7,7 @@ public class Missile extends Sprite {
     public int X_MISSILE_SPEED = 2;
     public int Y_MISSILE_SPEED = 2;
     public String etat; //Infected, Recovered ou Sain;
+    enum ETAT {Sain, Gueri, Infecte};
 
     public Missile(int x, int y) {
         super(x, y);
@@ -55,11 +56,11 @@ public class Missile extends Sprite {
             visible = false;
         }
 
-        if (limitSupX == BOARD_WIDTH || limitSupX == BOARD_WIDTH - 1 || x == -1 || x == 0 || x == 1) {
+        if (limitSupX == BOARD_WIDTH || limitSupX == BOARD_WIDTH - 1 || x == 0 || x == 1) {
             this.X_MISSILE_SPEED *= -1;
         }
 
-        if (limitSupY == BOARD_HEIGHT || limitSupY == BOARD_HEIGHT - 1 || y == -1 || y == 0 || y == 1) {
+        if (limitSupY == BOARD_HEIGHT || limitSupY == BOARD_HEIGHT - 1 || y == 0 || y == 1) {
             this.Y_MISSILE_SPEED *= -1;
         }
     }
