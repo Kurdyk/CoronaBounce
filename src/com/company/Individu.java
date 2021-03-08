@@ -1,18 +1,20 @@
 package com.company;
 
-public class Missile extends Sprite {
+
+public class Individu extends Sprite {
 
     public static final int BOARD_WIDTH = 500;
     public static final int BOARD_HEIGHT = 400;
-    public int X_MISSILE_SPEED = 2;
-    public int Y_MISSILE_SPEED = 2;
+    public int X_SPEED = 2;
+    public int Y_SPEED = 2;
+    public int cmptRebond;
     public String etat; //Infected, Recovered ou Sain;
-    enum ETAT {Sain, Gueri, Infecte};
+    enum ETAT {SAIN, GUERI, INFECTE};
 
-    public Missile(int x, int y) {
+    public Individu(int x, int y) {
         super(x, y);
 
-        initMissile();
+        initIndividu();
     }
 
     public static int getBOARD_WIDTH(){
@@ -23,7 +25,7 @@ public class Missile extends Sprite {
         return BOARD_HEIGHT;
     }
 
-    private void initMissile() {
+    private void initIndividu() {
 
         loadImage("src/resources/Neutral.png");
         getImageDimensions();
@@ -46,33 +48,45 @@ public class Missile extends Sprite {
 
     public void move() {
         //Gere les rebonds sur le bord du tableau
-        x += X_MISSILE_SPEED;
-        y += Y_MISSILE_SPEED;
+        int x_temp = x + X_SPEED;
+        int y_temp = y + Y_SPEED;
 
-        int limitSupX =  x + this.getBounds().width;
-        int limitSupY =  y + this.getBounds().height;
+        int limitSupX =  x_temp + this.getBounds().width;
+        int limitSupY =  y_temp + this.getBounds().height;
 
         if (x > BOARD_WIDTH || y > BOARD_WIDTH) {
             visible = false;
         }
 
-        if (limitSupX == BOARD_WIDTH || limitSupX == BOARD_WIDTH - 1 || x == 0 || x == 1) {
-            this.X_MISSILE_SPEED *= -1;
+        if (limitSupX == BOARD_WIDTH || limitSupX == BOARD_WIDTH - 1 || x_temp == 0 || x_temp == 1) {
+            this.X_SPEED *= -1;
+            this.cmptRebond = 1;
         }
 
-        if (limitSupY == BOARD_HEIGHT || limitSupY == BOARD_HEIGHT - 1 || y == 0 || y == 1) {
-            this.Y_MISSILE_SPEED *= -1;
+        if (limitSupY == BOARD_HEIGHT || limitSupY == BOARD_HEIGHT - 1 || y_temp == 0 || y_temp == 1) {
+            this.Y_SPEED *= -1;
+            this.cmptRebond = 1;
         }
+
+        x += X_SPEED;
+        y += Y_SPEED;
     }
 
     public void rebound() {
-        this.X_MISSILE_SPEED *= -1;
-        this.Y_MISSILE_SPEED *= -1;
+        if (cmptRebond == 0) {
+            this.X_SPEED *= -1;
+            this.Y_SPEED *= -1;
+            this.cmptRebond = 1;
+        }
     }
 
     public void contamine() {
         this.etat = "Infected";
         reloadImage();
         getImageDimensions();
+    }
+
+    public void refresh(){
+        this.cmptRebond = 0;
     }
 }
