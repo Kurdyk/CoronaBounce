@@ -2,16 +2,11 @@ package com.company;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -19,7 +14,7 @@ import javax.swing.Timer;
 public class Board extends JPanel implements ActionListener {
 
     private Timer timer;
-    private SpaceShip spaceship;
+    private Placeur placeur;
     private boolean ingame;
     private final int ICRAFT_X = 40;
     private final int ICRAFT_Y = 60;
@@ -41,12 +36,12 @@ public class Board extends JPanel implements ActionListener {
 
         setPreferredSize(new Dimension(B_WIDTH, B_HEIGHT));
 
-        spaceship = new SpaceShip(ICRAFT_X, ICRAFT_Y);
+        placeur = new Placeur(ICRAFT_X, ICRAFT_Y);
 
 
         timer = new Timer(DELAY, this);
         timer.start();
-        spaceship.placementMissiles(10);
+        placeur.placementMissiles(10, 3);
     }
 
 
@@ -61,17 +56,17 @@ public class Board extends JPanel implements ActionListener {
 
     private void drawObjects(Graphics g) {
 
-        if (spaceship.isVisible()) {
+        /*if (spaceship.isVisible()) {
             g.drawImage(spaceship.getImage(), spaceship.getX(), spaceship.getY(),
                     this);
-        }
+        }*/
 
-        List<Missile> ms = spaceship.getMissiles();
+        List<Individu> ls = placeur.getIndividus();
 
-        for (Missile missile : ms) {
-            if (missile.isVisible()) {
-                g.drawImage(missile.getImage(), missile.getX(),
-                        missile.getY(), this);
+        for (Individu individu : ls) {
+            if (individu.isVisible()) {
+                g.drawImage(individu.getImage(), individu.getX(),
+                        individu.getY(), this);
             }
         }
 
@@ -84,9 +79,9 @@ public class Board extends JPanel implements ActionListener {
 
         inGame();
 
-        updateShip();
-        updateMissiles();
-        CheckCollisions();
+        updateIndividus();
+        CheckCollisionsFutures();
+        refreshAll();
 
         repaint();
     }
@@ -99,48 +94,73 @@ public class Board extends JPanel implements ActionListener {
         }
     }
 
-    private void updateShip() {
 
-        if (spaceship.isVisible()) {
+    private void updateIndividus() {
 
-            spaceship.move();
+        List<Individu> ls = placeur.getIndividus();
+
+        for (int i = 0; i < ls.size(); i++) {
+
+            Individu individu = ls.get(i);
+
+            if (individu.isVisible()) {
+                individu.move();
+            } else {
+                ls.remove(i);
+            }
         }
     }
+    private void CheckCollisionsFutures() {
+        List<Individu> ls = placeur.getIndividus();
+        for (Individu individu : ls) {
 
-    private void updateMissiles() {
+            Rectangle r1 = individu.getBounds();
+            r1.x += individu.X_SPEED;
+            r1.y += individu.Y_SPEED;
 
-        List<Missile> ms = spaceship.getMissiles();
+            for (Individu m1 : ls) {
+                Rectangle r2 = m1.getBounds();
 
-        for (int i = 0; i < ms.size(); i++) {
-
-            Missile m = ms.get(i);
-
-            if (m.isVisible()) {
-                m.move();
-            } else {
-                ms.remove(i);
+                if (individu != m1 && r1.intersects(r2)) {
+                    individu.rebound();
+                    CheckContamination(individu,m1);
+                }
             }
         }
     }
 
     public void CheckCollisions() {
-        List<Missile> ms = spaceship.getMissiles();
+        List<Individu> ls = placeur.getIndividus();
 
-        for (Missile m : ms) {
+        for (Individu m : ls) {
 
             Rectangle r1 = m.getBounds();
 
-            for (Missile m1 : ms) {
+            for (Individu m1 : ls) {
                 Rectangle r2 = m1.getBounds();
-                r2.x -= 1;
-                r2.y -= 1;
-                r2.width += 2;
-                r2.height += 2;
 
                 if (m != m1 && r1.intersects(r2)) {
                     m.rebound();
+                    CheckContamination(m,m1);
                 }
             }
+        }
+    }
+
+    protected void CheckContamination (Individu m, Individu m1) {
+        if (m.etat == "Infected" && m1.etat == "Sain") {
+            m1.contamine();
+        }
+        if (m1.etat == "Infected" && m.etat == "Sain") {
+            m.contamine();
+        }
+    }
+
+    private void refreshAll(){
+        List<Individu> ls = placeur.getIndividus();
+        for (int i = 0; i < ls.size(); i++) {
+            Individu individu = ls.get(i);
+            individu.refresh();
         }
     }
 }
