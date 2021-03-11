@@ -9,7 +9,12 @@ public class Individu extends Sprite {
     public int Y_SPEED = 2;
     public int cmptRebond;
     public String etat; //Infected, Recovered ou Sain;
-    enum ETAT {SAIN, GUERI, INFECTE};
+
+    public int compteurGuerison = 0;
+    public int dureeContamination = 500;
+    public int compteurReinfection = 0;
+    public int dureeImmunite = 1000;
+
 
     public Individu(int x, int y) {
         super(x, y);
@@ -86,7 +91,39 @@ public class Individu extends Sprite {
         getImageDimensions();
     }
 
+    private void gueri() {
+        this.etat = "Recovered";
+        reloadImage();
+        getImageDimensions();
+        this.compteurGuerison = 0;
+    }
+
+    private void finImmunite(){
+        this.etat = "Sain";
+        reloadImage();
+        getImageDimensions();
+        this.compteurReinfection = 0;
+    }
+
     public void refresh(){
         this.cmptRebond = 0;
     }
+
+    public void compteurUpdate() {
+        switch (etat) {
+            case "Infected" :
+                this.compteurGuerison++;
+                if (compteurGuerison >= dureeContamination) {
+                    this.gueri();
+                }
+                break;
+            case "Recovered" :
+                this.compteurReinfection++;
+                if (compteurReinfection >= dureeImmunite) {
+                    this.finImmunite();
+                }
+                break;
+        }
+    }
+
 }

@@ -25,6 +25,8 @@ public class Placeur extends Sprite {
     public void spawn(int x, int y) {
         //Fait apparaitre un missile sur une coordonnee.
         individu.add(new Individu(x, y));
+        individu.get(individu.size() - 1).etat = "Sain";
+
     }
 
     public void spawnInfected(int x, int y) {
@@ -66,10 +68,41 @@ public class Placeur extends Sprite {
         return tabCoordinates;
     }
 
-    public void placementMissiles(int nbr, int nbrI){
+    private int[][] coordonneesBrutes(int nbr, int max_x, int max_y) {
+        int[][] res = new int[nbr][2];
+
+        int i = 1;
+        int j = 1;
+        int cmpt = 0;
+
+        while(cmpt < nbr) {
+            res[cmpt][0] = i * 32;
+            res[cmpt][1] = j * 32;
+            i+= 2;
+            if ((i - 1) * 32 >= max_x) {
+                i = 0;
+                j+=2;
+            }
+            if ((j - 1) * 32 >= max_y) {
+                System.out.println("Trop d'élements");
+                return res;
+            }
+            cmpt++;
+        }
+
+        return res;
+    }
+
+    public void placementMissiles(int nbr, int nbrI, boolean alea){
         //place nbr missiles/cercles dans la fenetre et nbrI infectés
         Individu m = new Individu(x,y);
-        int [][] coordonneesInit = genereCoordonnees(nbr + nbrI, m.getBOARD_WIDTH() - m.getBounds().width, m.getBOARD_HEIGHT() - m.getBounds().height);
+        int[][] coordonneesInit;
+        if (alea) {
+            coordonneesInit = genereCoordonnees(nbr + nbrI, m.getBOARD_WIDTH() - m.getBounds().width, m.getBOARD_HEIGHT() - m.getBounds().height);
+        }
+        else {
+            coordonneesInit = coordonneesBrutes(nbr + nbrI, m.getBOARD_WIDTH() - m.getBounds().width, m.getBOARD_HEIGHT() - m.getBounds().height);
+        }
         int i = 0;
         while (i < nbr) {
             spawn(coordonneesInit[i][0], coordonneesInit[i][1]);
