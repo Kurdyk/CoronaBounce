@@ -41,7 +41,7 @@ public class Board extends JPanel implements ActionListener {
 
         timer = new Timer(DELAY, this);
         timer.start();
-        placeur.placementMissiles(10, 1, false);
+        placeur.placementMissiles(20, 3, false);
     }
 
 
