@@ -41,7 +41,7 @@ public class Board extends JPanel implements ActionListener {
 
         timer = new Timer(DELAY, this);
         timer.start();
-        placeur.placementMissiles(10, 3);
+        placeur.placementMissiles(20, 3, false);
     }
 
 
@@ -56,10 +56,6 @@ public class Board extends JPanel implements ActionListener {
 
     private void drawObjects(Graphics g) {
 
-        /*if (spaceship.isVisible()) {
-            g.drawImage(spaceship.getImage(), spaceship.getX(), spaceship.getY(),
-                    this);
-        }*/
 
         List<Individu> ls = placeur.getIndividus();
 
@@ -105,25 +101,27 @@ public class Board extends JPanel implements ActionListener {
 
             if (individu.isVisible()) {
                 individu.move();
+                individu.compteurUpdate();
             } else {
                 ls.remove(i);
             }
         }
     }
+
     private void CheckCollisionsFutures() {
         List<Individu> ls = placeur.getIndividus();
-        for (Individu individu : ls) {
+        for (Individu individu1 : ls) {
 
-            Rectangle r1 = individu.getBounds();
-            r1.x += individu.X_SPEED;
-            r1.y += individu.Y_SPEED;
+            Rectangle r1 = individu1.getBounds();
+            r1.x += individu1.X_SPEED;
+            r1.y += individu1.Y_SPEED;
 
-            for (Individu m1 : ls) {
-                Rectangle r2 = m1.getBounds();
+            for (Individu individu2 : ls) {
+                Rectangle r2 = individu2.getBounds();
 
-                if (individu != m1 && r1.intersects(r2)) {
-                    individu.rebound();
-                    CheckContamination(individu,m1);
+                if (individu1 != individu2 && r1.intersects(r2)) {
+                    individu1.rebound();
+                    CheckContamination(individu1, individu2);
                 }
             }
         }
@@ -148,10 +146,10 @@ public class Board extends JPanel implements ActionListener {
     }
 
     protected void CheckContamination (Individu m, Individu m1) {
-        if (m.etat == "Infected" && m1.etat == "Sain") {
+        if (m.etat.equals("Infected") && m1.etat.equals("Sain")) {
             m1.contamine();
         }
-        if (m1.etat == "Infected" && m.etat == "Sain") {
+        if (m1.etat.equals("Infected") && m.etat.equals("Sain")) {
             m.contamine();
         }
     }
@@ -163,4 +161,5 @@ public class Board extends JPanel implements ActionListener {
             individu.refresh();
         }
     }
+
 }
