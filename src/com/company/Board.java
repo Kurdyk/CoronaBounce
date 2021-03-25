@@ -1,185 +1,185 @@
-package com.company;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Rectangle;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.List;
-import javax.swing.JPanel;
-import javax.swing.Timer;
+	package com.company;
 
-public class Board extends JPanel implements ActionListener {
+	import java.awt.Color;
+	import java.awt.Dimension;
+	import java.awt.Graphics;
+	import java.awt.Rectangle;
+	import java.awt.Toolkit;
+	import java.awt.event.ActionEvent;
+	import java.awt.event.ActionListener;
+	import java.util.List;
+	import javax.swing.JPanel;
+	import javax.swing.Timer;
 
-    private Timer timer;
-    private Placeur placeur;
-    private boolean ingame;
-    private final int ICRAFT_X = 40;
-    private final int ICRAFT_Y = 60;
-    private final int B_WIDTH = 500;
-    private final int B_HEIGHT = 400;
-    private final int DELAY = 15;
+	public class Board extends JPanel implements ActionListener {
 
-
-    public Board() {
-
-        initBoard();
-    }
-    public Board(int i, int j) {
-
-        initBoard2(i,j);
-    }
-
-    private void initBoard() {
-
-        setFocusable(true);
-        setBackground(Color.BLACK);
-        ingame = true;
-
-        setPreferredSize(new Dimension(B_WIDTH, B_HEIGHT));
-
-        placeur = new Placeur(ICRAFT_X, ICRAFT_Y);
+	    private Timer timer;
+	    private Placeur placeur;
+	    private boolean ingame;
+	    private final int ICRAFT_X = 40;
+	    private final int ICRAFT_Y = 60;
+	    private final int B_WIDTH = 500;
+	    private final int B_HEIGHT = 400;
+	    private final int DELAY = 15;
 
 
-        timer = new Timer(DELAY, this);
-        timer.start();
-        placeur.placementMissiles(10, 3);
-    }
-    private void initBoard2(int i, int j) {
+	    public Board() {
 
-        setFocusable(true);
-        setBackground(Color.BLACK);
-        ingame = true;
+	        initBoard();
+	    }
+	    public Board(int i, int j) {
+	    	initBoard(i,j);
+	    }
 
-        setPreferredSize(new Dimension(B_WIDTH, B_HEIGHT));
+	    private void initBoard() {
 
-        placeur = new Placeur(ICRAFT_X, ICRAFT_Y);
+	        setFocusable(true);
+	        setBackground(Color.BLACK);
+	        ingame = true;
 
+	        setPreferredSize(new Dimension(B_WIDTH, B_HEIGHT));
 
-        timer = new Timer(DELAY, this);
-        timer.start();
-        placeur.placementMissiles(i, j);
-    }
+	        placeur = new Placeur(ICRAFT_X, ICRAFT_Y);
 
 
-    @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        drawObjects(g);
+	        timer = new Timer(DELAY, this);
+	        timer.start();
+	        placeur.placementMissiles(20, 3, false);
+	    }
+	    
+	    private void initBoard(int i, int j) {
+
+	        setFocusable(true);
+	        setBackground(Color.BLACK);
+	        ingame = true;
+
+	        setPreferredSize(new Dimension(B_WIDTH, B_HEIGHT));
+
+	        placeur = new Placeur(ICRAFT_X, ICRAFT_Y);
 
 
-        Toolkit.getDefaultToolkit().sync();
-    }
-
-    private void drawObjects(Graphics g) {
-
-        /*if (spaceship.isVisible()) {
-            g.drawImage(spaceship.getImage(), spaceship.getX(), spaceship.getY(),
-                    this);
-        }*/
-
-        List<Individu> ls = placeur.getIndividus();
-
-        for (Individu individu : ls) {
-            if (individu.isVisible()) {
-                g.drawImage(individu.getImage(), individu.getX(),
-                        individu.getY(), this);
-            }
-        }
-
-        g.setColor(Color.WHITE);
-    }
+	        timer = new Timer(DELAY, this);
+	        timer.start();
+	        placeur.placementMissiles(i, j, false);
+	    }
 
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-
-        inGame();
-
-        updateIndividus();
-        CheckCollisionsFutures();
-        refreshAll();
-
-        repaint();
-    }
+	    @Override
+	    public void paintComponent(Graphics g) {
+	        super.paintComponent(g);
+	        drawObjects(g);
 
 
-    private void inGame() {
+	        Toolkit.getDefaultToolkit().sync();
+	    }
 
-        if (!ingame) {
-            timer.stop();
-        }
-    }
+	    private void drawObjects(Graphics g) {
 
 
-    private void updateIndividus() {
+	        List<Individu> ls = placeur.getIndividus();
 
-        List<Individu> ls = placeur.getIndividus();
+	        for (Individu individu : ls) {
+	            if (individu.isVisible()) {
+	                g.drawImage(individu.getImage(), individu.getX(),
+	                        individu.getY(), this);
+	            }
+	        }
 
-        for (int i = 0; i < ls.size(); i++) {
+	        g.setColor(Color.WHITE);
+	    }
 
-            Individu individu = ls.get(i);
 
-            if (individu.isVisible()) {
-                individu.move();
-            } else {
-                ls.remove(i);
-            }
-        }
-    }
-    private void CheckCollisionsFutures() {
-        List<Individu> ls = placeur.getIndividus();
-        for (Individu individu : ls) {
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
 
-            Rectangle r1 = individu.getBounds();
-            r1.x += individu.X_SPEED;
-            r1.y += individu.Y_SPEED;
+	        inGame();
 
-            for (Individu m1 : ls) {
-                Rectangle r2 = m1.getBounds();
+	        updateIndividus();
+	        CheckCollisionsFutures();
+	        refreshAll();
 
-                if (individu != m1 && r1.intersects(r2)) {
-                    individu.rebound();
-                    CheckContamination(individu,m1);
-                }
-            }
-        }
-    }
+	        repaint();
+	    }
 
-    public void CheckCollisions() {
-        List<Individu> ls = placeur.getIndividus();
 
-        for (Individu m : ls) {
+	    private void inGame() {
 
-            Rectangle r1 = m.getBounds();
+	        if (!ingame) {
+	            timer.stop();
+	        }
+	    }
 
-            for (Individu m1 : ls) {
-                Rectangle r2 = m1.getBounds();
 
-                if (m != m1 && r1.intersects(r2)) {
-                    m.rebound();
-                    CheckContamination(m,m1);
-                }
-            }
-        }
-    }
+	    private void updateIndividus() {
 
-    protected void CheckContamination (Individu m, Individu m1) {
-        if (m.etat == "Infected" && m1.etat == "Sain") {
-            m1.contamine();
-        }
-        if (m1.etat == "Infected" && m.etat == "Sain") {
-            m.contamine();
-        }
-    }
+	        List<Individu> ls = placeur.getIndividus();
 
-    private void refreshAll(){
-        List<Individu> ls = placeur.getIndividus();
-        for (int i = 0; i < ls.size(); i++) {
-            Individu individu = ls.get(i);
-            individu.refresh();
-        }
-    }
-}
+	        for (int i = 0; i < ls.size(); i++) {
+
+	            Individu individu = ls.get(i);
+
+	            if (individu.isVisible()) {
+	                individu.move();
+	                individu.compteurUpdate();
+	            } else {
+	                ls.remove(i);
+	            }
+	        }
+	    }
+
+	    private void CheckCollisionsFutures() {
+	        List<Individu> ls = placeur.getIndividus();
+	        for (Individu individu1 : ls) {
+
+	            Rectangle r1 = individu1.getBounds();
+	            r1.x += individu1.X_SPEED;
+	            r1.y += individu1.Y_SPEED;
+
+	            for (Individu individu2 : ls) {
+	                Rectangle r2 = individu2.getBounds();
+
+	                if (individu1 != individu2 && r1.intersects(r2)) {
+	                    individu1.rebound();
+	                    CheckContamination(individu1, individu2);
+	                }
+	            }
+	        }
+	    }
+
+	    public void CheckCollisions() {
+	        List<Individu> ls = placeur.getIndividus();
+
+	        for (Individu m : ls) {
+
+	            Rectangle r1 = m.getBounds();
+
+	            for (Individu m1 : ls) {
+	                Rectangle r2 = m1.getBounds();
+
+	                if (m != m1 && r1.intersects(r2)) {
+	                    m.rebound();
+	                    CheckContamination(m,m1);
+	                }
+	            }
+	        }
+	    }
+
+	    protected void CheckContamination (Individu m, Individu m1) {
+	        if (m.etat.equals("Infected") && m1.etat.equals("Sain")) {
+	            m1.contamine();
+	        }
+	        if (m1.etat.equals("Infected") && m.etat.equals("Sain")) {
+	            m.contamine();
+	        }
+	    }
+
+	    private void refreshAll(){
+	        List<Individu> ls = placeur.getIndividus();
+	        for (int i = 0; i < ls.size(); i++) {
+	            Individu individu = ls.get(i);
+	            individu.refresh();
+	        }
+	    }
+
+	}

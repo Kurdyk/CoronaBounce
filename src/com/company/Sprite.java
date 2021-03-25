@@ -22,6 +22,7 @@ public class Sprite {
     protected void loadImage(String imageName) {
 
         ImageIcon ii = new ImageIcon(imageName);
+        ii.getImage().flush();
         this.image = ii.getImage();
     }
 
@@ -57,4 +58,6 @@ public class Sprite {
     }
 
 }
+
+
 
