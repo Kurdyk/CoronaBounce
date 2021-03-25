@@ -10,8 +10,7 @@ public class Test {
 		public Test() {
 			view= new Vue();
 			view.setVisible(true);
-			model= new Modele();
-			control= new Controleur(model, view);
+			
 		}
 		
 		public static void main (String[]args) {

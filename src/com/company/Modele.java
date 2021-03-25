@@ -8,6 +8,11 @@ public class Modele {
 		malade=0;
 		immun=0;
 	}
+	Modele(int x, int y, int z){
+		sain=x;
+		malade=y;
+		immun=z;
+	}
 	
 	public int getSain() {return sain;}
 	public int getMalade() {return malade;}
