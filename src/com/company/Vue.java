@@ -5,7 +5,7 @@ import javax.swing.event.ChangeListener;
 
 import java.awt.*;
 public class Vue extends JFrame{
-	Board board= new Board(0,0);
+	Board board;
 	JPanel panneau= new JPanel();
 	JPanel Spinner =new JPanel();
 	JPanel Graphique= new JPanel(); 
@@ -69,12 +69,12 @@ public class Vue extends JFrame{
 		int j=infecte.getValue();
 		this.test.setText("i:"+i+" j:"+j);
 		this.panneau.add(test, BorderLayout.CENTER);
-		this.Graphique.add(new CurveCanvas());
-		this.Graphique.setSize(500,500);
+		//this.Graphique.add(new CurveCanvas());
+		//this.Graphique.setSize(500,500);
 		this.board=new Board(i,j);
 		
 		this.getContentPane().add(board,BorderLayout.CENTER);
-		this.getContentPane().add(this.Graphique, BorderLayout.NORTH);
+		//this.getContentPane().add(this.Graphique, BorderLayout.NORTH);
 		this.b2.setEnabled(false);
 		this.b1.setEnabled(false);
 		this.b3.setEnabled(true);
@@ -96,7 +96,7 @@ public class Vue extends JFrame{
 	        
 	        JFormattedTextField ftf = null;
 	        	
-	        SpinnerModel chiffre = new SpinnerNumberModel(0, 0, 25, 1);       
+	        SpinnerModel chiffre = new SpinnerNumberModel(10, 0, 25, 1);
 	         spinner = addLabeledSpinner(this, s, chiffre);
 	        spinner.setEditor(new JSpinner.NumberEditor(spinner, "#"));
 	        

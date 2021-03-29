@@ -27,6 +27,7 @@ public class Placeur extends Sprite {
         //Fait apparaitre un missile sur une coordonnee.
         individu.add(new Individu(x, y));
         individu.get(individu.size() - 1).etat = "Neutral";
+        individu.get(individu.size() - 1).reloadImage();
 
     }
 
@@ -95,7 +96,7 @@ public class Placeur extends Sprite {
     }
 
     public void placementIndividus(int nbr, int nbrI, boolean alea){
-        //place nbr missiles/cercles dans la fenetre et nbrI infectés
+        //place nbr cercles dans la fenetre et nbrI infectés
         Individu m = new Individu(x,y);
         int[][] coordonneesInit;
         if (alea) {
@@ -104,13 +105,13 @@ public class Placeur extends Sprite {
         else {
             coordonneesInit = coordonneesBrutes(nbr + nbrI, m.getBOARD_WIDTH() - m.getBounds().width, m.getBOARD_HEIGHT() - m.getBounds().height);
         }
-        int i = 0;
-        while (i < nbr) {
-            spawn(coordonneesInit[i][0], coordonneesInit[i][1]);
-            i++;
+        int a = 0;
+        while (a < nbr) {
+            spawn(coordonneesInit[a][0], coordonneesInit[a][1]);
+            a++;
         }
-        for (int j = i; j < nbr + nbrI; j++) {
-            spawnInfected(coordonneesInit[j][0], coordonneesInit[j][1]);
+        for (int b = a; b < nbr + nbrI; b++) {
+            spawnInfected(coordonneesInit[b][0], coordonneesInit[b][1]);
         }
         m = null;
 

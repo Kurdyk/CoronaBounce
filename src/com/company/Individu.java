@@ -10,6 +10,7 @@ public class Individu extends Sprite {
     public int X_SPEED = 2;
     public int Y_SPEED = 2;
     public int cmptRebond;
+
     public String etat; //Infected, Recovered ou Neutral;
     public String stream;
     public int size = 0; //défaut : 0 ; petit sprite : 1;
@@ -36,23 +37,25 @@ public class Individu extends Sprite {
 
     private void initIndividu() {
 
-        loadImage("src/resources/Neutral.png");
+        this.streamConstr();
+        loadImage(stream);
         getImageDimensions();
     }
 
     protected void streamConstr() {
         switch (size) {
             case 0 :
-                this.stream = "src/ressources/" + etat + ".png";
+                this.stream = "src/resources/" + etat + ".png";
                 break;
             case 1 :
-                this.stream = "src/ressources/Mini" + etat + ".png";
+                this.stream = "src/resources/Mini" + etat + ".png";
                 break;
         }
     }
 
     protected void reloadImage(){
         this.streamConstr();
+        loadImage(stream);
         getImageDimensions();
     }
 
@@ -64,9 +67,6 @@ public class Individu extends Sprite {
         int limitSupX =  x_temp + this.getBounds().width;
         int limitSupY =  y_temp + this.getBounds().height;
 
-        if (x > BOARD_WIDTH || y > BOARD_WIDTH) {
-            visible = false;
-        }
 
         if (limitSupX == BOARD_WIDTH || limitSupX == BOARD_WIDTH - 1 || x_temp == 0 || x_temp == 1) {
             this.X_SPEED *= -1;
