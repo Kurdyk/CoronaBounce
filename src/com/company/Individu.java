@@ -1,6 +1,8 @@
 package com.company;
 
 
+import java.util.Random;
+
 public class Individu extends Sprite {
 
     public static final int BOARD_WIDTH = 500;
@@ -8,7 +10,9 @@ public class Individu extends Sprite {
     public int X_SPEED = 2;
     public int Y_SPEED = 2;
     public int cmptRebond;
-    public String etat; //Infected, Recovered ou Sain;
+    public String etat; //Infected, Recovered ou Neutral;
+    public String stream;
+    public int size = 0; //défaut : 0 ; petit sprite : 1;
 
     public int compteurGuerison = 0;
     public int dureeContamination = 500;
@@ -36,19 +40,20 @@ public class Individu extends Sprite {
         getImageDimensions();
     }
 
-    protected void reloadImage(){
-        switch (etat) {
-            case "Infected":
-                loadImage("src/resources/Infected.png");
+    protected void streamConstr() {
+        switch (size) {
+            case 0 :
+                this.stream = "src/ressources/" + etat + ".png";
                 break;
-            case "Sain":
-                loadImage("src/resources/Neutral.png");
-                break;
-            case "Recovered":
-                loadImage("src/resources/Recover.png");
+            case 1 :
+                this.stream = "src/ressources/Mini" + etat + ".png";
                 break;
         }
+    }
 
+    protected void reloadImage(){
+        this.streamConstr();
+        getImageDimensions();
     }
 
     public void move() {
@@ -85,6 +90,12 @@ public class Individu extends Sprite {
         }
     }
 
+    public void forcedRebound() {
+        this.X_SPEED *= -1;
+        this.Y_SPEED *= -1;
+        this.cmptRebond = 1;
+    }
+
     public void contamine() {
         this.etat = "Infected";
         reloadImage();
@@ -99,7 +110,7 @@ public class Individu extends Sprite {
     }
 
     private void finImmunite(){
-        this.etat = "Sain";
+        this.etat = "Neutral";
         reloadImage();
         getImageDimensions();
         this.compteurReinfection = 0;
@@ -125,5 +136,6 @@ public class Individu extends Sprite {
                 break;
         }
     }
+
 
 }

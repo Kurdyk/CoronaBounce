@@ -57,6 +57,21 @@ public class Sprite {
         this.visible = visible;
     }
 
+    public int[][] caseOccupees() {
+        int taille = this.height * this.width;
+        int res[][] = new int[taille][2];
+
+        for (int i = 0; i < taille; i++) {
+            for (int j = this.y; j < this.y + this.height; j++) {
+                for (int k = this.x; k < this.x + this.height; k++) {
+                    res[i] = new int[]{k, j};
+                }
+            }
+        }
+
+        return res;
+    }
+
 }
 
 

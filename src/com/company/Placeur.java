@@ -7,6 +7,7 @@ import java.util.List;
 public class Placeur extends Sprite {
 
     private List<Individu> individu;
+    private List<Lieu> lieu;
 
     public Placeur(int x, int y) {
         super(x, y);
@@ -25,7 +26,7 @@ public class Placeur extends Sprite {
     public void spawn(int x, int y) {
         //Fait apparaitre un missile sur une coordonnee.
         individu.add(new Individu(x, y));
-        individu.get(individu.size() - 1).etat = "Sain";
+        individu.get(individu.size() - 1).etat = "Neutral";
 
     }
 
@@ -93,7 +94,7 @@ public class Placeur extends Sprite {
         return res;
     }
 
-    public void placementMissiles(int nbr, int nbrI, boolean alea){
+    public void placementIndividus(int nbr, int nbrI, boolean alea){
         //place nbr missiles/cercles dans la fenetre et nbrI infectés
         Individu m = new Individu(x,y);
         int[][] coordonneesInit;
@@ -112,6 +113,79 @@ public class Placeur extends Sprite {
             spawnInfected(coordonneesInit[j][0], coordonneesInit[j][1]);
         }
         m = null;
+
+    }
+
+    private int[][] coordonneesBrutesTot(int max_x, int max_y, Image image) {
+        int[][] res = new int[0][2];
+
+        int i = 1;
+        int j = 1;
+        int cmpt = 0;
+        int height = image.getHeight(null);
+        int width = image.getWidth(null);
+
+        while(i * width < max_x && j * height < max_y) {
+            res[cmpt][0] = i * width;
+            res[cmpt][1] = j * height;
+            i += 3;
+            if ((i - 1) * width >= max_x - 5) {
+                i = 0;
+                j += 3;
+            }
+            if ((j - 1) * height >= max_y - 5) {
+                return res;
+            }
+            cmpt++;
+        }
+        return res;
+    }
+
+    int [] randomList(int nbr, int bound) {
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        for (int i=0; i < bound ; i++) {
+            list.add(i);
+        }
+        Collections.shuffle(list);
+        int[] res = new int [nbr];
+        for (int i = 0; i < nbr; i++) {
+            res[i] = list.get(i);
+        }
+        return res;
+    }
+
+    private int[][] chooseCoordinates(int nbrTot, int[][] choices) {
+        int[][] res = new int[nbrTot][2];
+        int [] randList = randomList(nbrTot, nbrTot);
+        int cmpt = 0;
+        while (cmpt < nbrTot) {
+            res[cmpt] = choices[randList[cmpt]];
+        }
+        return res;
+    }
+
+    private int getIndice(Individu indiv) {
+        for (int i = 0; i < individu.size(); i++) {
+            if (individu.get(i) == indiv) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public void placeEntreprise(int x, int y, String name) {
+        lieu.add(new Entreprise (x, y));
+        lieu.get(lieu.size()).nom = name;
+    }
+
+    private int[][] coordinatesEnt(int n) {
+        switch (n) {
+            case 0:
+                return null;
+            case 1 :
+                return new int[][] {{128, 128}};
+            default : return new int[][] {{128, 128}, {256, 256}};
+        }
     }
 
     //debug
