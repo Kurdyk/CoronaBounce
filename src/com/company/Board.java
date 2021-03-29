@@ -46,6 +46,22 @@ public class Board extends JPanel implements ActionListener {
         placeur.placementIndividus(20, 3, false);
     }
 
+    private void initBoard(int i, int j) {
+
+        setFocusable(true);
+        setBackground(Color.BLACK);
+        ingame = true;
+
+        setPreferredSize(new Dimension(B_WIDTH, B_HEIGHT));
+
+        placeur = new Placeur(ICRAFT_X, ICRAFT_Y);
+
+
+        timer = new Timer(DELAY, this);
+        timer.start();
+        placeur.placementIndividus(i, j, false);
+    }
+
 
     @Override
     public void paintComponent(Graphics g) {
