@@ -5,11 +5,15 @@ import java.util.Random;
 
 public class Individu extends Sprite {
 
-    public static  int BOARD_WIDTH;
-    public static  int BOARD_HEIGHT;
+    public static final int BOARD_WIDTH = 500;
+    public static final int BOARD_HEIGHT = 400;
     public int X_SPEED = 2;
     public int Y_SPEED = 2;
-    public int cmptRebond;
+    public int saveXSpeed;
+    public int saveYSpeed;
+    public int cmptRebond = 0;
+    public int insideLieu = 0; //0 si hors d'un lieu, 1 sinon;
+    public int cmptInside = 0; //Utliser temps systeme;
 
     public String etat; //Infected, Recovered ou Neutral;
     public String stream;
@@ -23,33 +27,19 @@ public class Individu extends Sprite {
 
     public Individu(int x, int y) {
         super(x, y);
-
         initIndividu();
     }
-    public Individu(int x, int y, int h, int w) {
-        super(x, y);
 
-        initIndividu(h, w);
-    
-    }
-    public static int getBOARD_WIDTH(){
+    public int getBOARD_WIDTH(){
         return BOARD_WIDTH;
     }
 
-    public static int getBOARD_HEIGHT(){
+    public int getBOARD_HEIGHT(){
         return BOARD_HEIGHT;
     }
 
     private void initIndividu() {
-    	Individu.BOARD_HEIGHT=500;
-    	Individu.BOARD_WIDTH=500;
-        this.streamConstr();
-        loadImage(stream);
-        getImageDimensions();
-    }
-    private void initIndividu(int h, int w) {
-    	Individu.BOARD_HEIGHT=h;
-    	Individu.BOARD_WIDTH=w;
+
         this.streamConstr();
         loadImage(stream);
         getImageDimensions();
@@ -64,6 +54,11 @@ public class Individu extends Sprite {
                 this.stream = "src/resources/Mini" + etat + ".png";
                 break;
         }
+    }
+
+    //methode pour switch taille
+    private void switchTaille(){
+
     }
 
     protected void reloadImage(){
@@ -139,7 +134,6 @@ public class Individu extends Sprite {
                 this.compteurGuerison++;
                 if (compteurGuerison >= dureeContamination) {
                     this.gueri();
-                    
                 }
                 break;
             case "Recovered" :
@@ -151,5 +145,62 @@ public class Individu extends Sprite {
         }
     }
 
+    public String getEtat(){
+        return etat;
+    }
 
+    public void setEtat(String newEtat) {
+        this.etat = newEtat;
+    }
+
+    public void stop() {
+        this.saveXSpeed = X_SPEED;
+        this.saveYSpeed = Y_SPEED;
+        this.X_SPEED = 0;
+        this.Y_SPEED = 0;
+    }
+
+    public void go() {
+        this.X_SPEED = 1;
+        this.Y_SPEED = saveYSpeed;
+        saveXSpeed = 0;
+        saveYSpeed = 0;
+    }
+
+    public void goAlea() {
+        Random rand = new Random();
+        int tirage = rand.nextInt(4);
+        switch (tirage) {
+            case 0 :
+                this.X_SPEED = - saveXSpeed;
+                this.Y_SPEED = - saveYSpeed;
+                saveXSpeed = 0;
+                saveYSpeed = 0;
+                break;
+            case 1 :
+                this.X_SPEED = saveXSpeed;
+                this.Y_SPEED = - saveYSpeed;
+                saveXSpeed = 0;
+                saveYSpeed = 0;
+                break;
+            case 2 :
+                this.X_SPEED = - saveXSpeed;
+                this.Y_SPEED = saveYSpeed;
+                saveXSpeed = 0;
+                saveYSpeed = 0;
+                break;
+            case 3 :
+                this.X_SPEED = saveXSpeed;
+                this.Y_SPEED = saveYSpeed;
+                saveXSpeed = 0;
+                saveYSpeed = 0;
+                break;
+            default :
+                this.go();
+        }
+    }
+
+    public String getSpecification(){
+        return "Specification manquante";
+    }
 }
