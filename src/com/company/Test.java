@@ -3,18 +3,23 @@ package com.company;
 public class Test {
 
 	
-		private Vue view;
-		private Modele model;
-		private Controleur control;
+		private Reglage view;
+		
 		
 		public Test() {
-			view= new Vue();
+			view= new Reglage();
+			view.setVisible(true);
+			
+		}
+		public Test(int i, int j) {
+			view= new Reglage();
 			view.setVisible(true);
 			
 		}
 		
 		public static void main (String[]args) {
 			new Test();
+			//new Test(10, 10);
 
 		}
 	

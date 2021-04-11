@@ -8,7 +8,12 @@ import javax.swing.JComponent;
 public class CurveCanvas extends JComponent{
 	
 	private CurveFunction function = (x)->Math.sin(x);
+	private int nbInfect;
+
 	
+	CurveCanvas(int i){
+		this.nbInfect=i;
+	}
 	@Override
 	protected void paintComponent(Graphics g) {
 		// TODO Auto-generated method stub
@@ -27,10 +32,10 @@ public class CurveCanvas extends JComponent{
 		double step = 0.1;
 		g.setColor(new Color(125,0,255));
 		
-		int xDeb = xToPixel(-Math.PI);
-		int yDeb = yToPixel(function.compute(-Math.PI));
+		int xDeb = xToPixel(0);
+		int yDeb = yToPixel(function.compute(nbInfect));
 		
-		for(double lx = -Math.PI+step; lx<Math.PI+step; lx+=step) {
+		for(double lx = 0; lx<Math.PI+step; lx+=step) {
 			int x = xToPixel(lx);
 			int y = yToPixel(function.compute(lx));
 			

@@ -5,8 +5,8 @@ import java.util.Random;
 
 public class Individu extends Sprite {
 
-    public static final int BOARD_WIDTH = 500;
-    public static final int BOARD_HEIGHT = 400;
+    public static  int BOARD_WIDTH;
+    public static  int BOARD_HEIGHT;
     public int X_SPEED = 2;
     public int Y_SPEED = 2;
     public int cmptRebond;
@@ -26,7 +26,12 @@ public class Individu extends Sprite {
 
         initIndividu();
     }
+    public Individu(int x, int y, int h, int w) {
+        super(x, y);
 
+        initIndividu(h, w);
+    
+    }
     public static int getBOARD_WIDTH(){
         return BOARD_WIDTH;
     }
@@ -36,7 +41,15 @@ public class Individu extends Sprite {
     }
 
     private void initIndividu() {
-
+    	Individu.BOARD_HEIGHT=500;
+    	Individu.BOARD_WIDTH=500;
+        this.streamConstr();
+        loadImage(stream);
+        getImageDimensions();
+    }
+    private void initIndividu(int h, int w) {
+    	Individu.BOARD_HEIGHT=h;
+    	Individu.BOARD_WIDTH=w;
         this.streamConstr();
         loadImage(stream);
         getImageDimensions();
@@ -126,6 +139,7 @@ public class Individu extends Sprite {
                 this.compteurGuerison++;
                 if (compteurGuerison >= dureeContamination) {
                     this.gueri();
+                    
                 }
                 break;
             case "Recovered" :

@@ -116,6 +116,28 @@ public class Placeur extends Sprite {
         m = null;
 
     }
+    
+    public void placementIndividus(int nbr, int nbrI, boolean alea, int h, int w){
+        //place nbr cercles dans la fenetre et nbrI infectés
+        Individu m = new Individu(x,y, h,w);
+        int[][] coordonneesInit;
+        if (alea) {
+            coordonneesInit = genereCoordonnees(nbr + nbrI, m.getBOARD_WIDTH() - m.getBounds().width, m.getBOARD_HEIGHT() - m.getBounds().height);
+        }
+        else {
+            coordonneesInit = coordonneesBrutes(nbr + nbrI, m.getBOARD_WIDTH() - m.getBounds().width, m.getBOARD_HEIGHT() - m.getBounds().height);
+        }
+        int a = 0;
+        while (a < nbr) {
+            spawn(coordonneesInit[a][0], coordonneesInit[a][1]);
+            a++;
+        }
+        for (int b = a; b < nbr + nbrI; b++) {
+            spawnInfected(coordonneesInit[b][0], coordonneesInit[b][1]);
+        }
+        m = null;
+
+    }
 
     private int[][] coordonneesBrutesTot(int max_x, int max_y, Image image) {
         int[][] res = new int[0][2];

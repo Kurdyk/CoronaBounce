@@ -20,22 +20,26 @@ public class Board extends JPanel implements ActionListener {
    	 private boolean ingame;
    	 private final int ICRAFT_X = 40;
    	 private final int ICRAFT_Y = 60;
-   	 private final int B_WIDTH = 500;
-   	 private final int B_HEIGHT = 400;
+   	 private int B_WIDTH=this.getWidth();
+   	 private int B_HEIGHT=this.getHeight();
    	 private final int DELAY = 15;
    	 public int killRate = 13; //Determiner la mortalité du virus = killRate * 1 / 10000;
+   	 public int infect;
+   	 public int sain;
 
 
-
-	public Board() {
-	        initBoard();
-	}
-
+	
 	public Board(int i, int j) {
 		initBoard(i,j);
 	}
+	
+	public Board(int i, int j, int h) {
+		initBoard(i,j,h);
+	}
 
-	private void initBoard() {
+	private void initBoard(int i, int j) {
+		
+		
 		setFocusable(true);
 		setBackground(Color.BLACK);
 		ingame = true;
@@ -45,11 +49,11 @@ public class Board extends JPanel implements ActionListener {
 
 		timer = new Timer(DELAY, this);
         timer.start();
-        placeur.placementIndividus(20, 3, false);
+        placeur.placementIndividus(i, j, false);
     }
 
-    private void initBoard(int i, int j) {
-
+    private void initBoard(int i, int j,int h) {
+    	
         setFocusable(true);
         setBackground(Color.BLACK);
         ingame = true;
@@ -58,13 +62,11 @@ public class Board extends JPanel implements ActionListener {
 
         placeur = new Placeur(ICRAFT_X, ICRAFT_Y);
 
-
         timer = new Timer(DELAY, this);
         timer.start();
-        placeur.placementIndividus(i, j, false);
+        placeur.placementIndividus(i, j, false,this.B_HEIGHT, this.B_WIDTH);
 
 	}
-
 
 	@Override
 	public void paintComponent(Graphics g) {
@@ -76,7 +78,6 @@ public class Board extends JPanel implements ActionListener {
 	    }
 
 	private void drawObjects(Graphics g) {
-
 		List<Individu> ls = placeur.getIndividus();
 		for (Individu individu : ls) {
 			if (individu.isVisible()) {
@@ -148,9 +149,13 @@ public class Board extends JPanel implements ActionListener {
     protected void CheckContamination (Individu m, Individu m1) {
         if (m.etat.equals("Infected") && m1.etat.equals("Neutral")) {
             m1.contamine();
+            sain--;
+            infect++;
         }
         if (m1.etat.equals("Infected") && m.etat.equals("Neutral")) {
             m.contamine();
+            sain--;
+            infect++;
         }
     }
 
@@ -174,5 +179,8 @@ public class Board extends JPanel implements ActionListener {
     		individu.refresh();
     	}
     }
-
+    
+    int getInfect() {
+    return infect;
+    }
 }
