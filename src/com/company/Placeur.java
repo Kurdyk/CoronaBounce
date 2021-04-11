@@ -17,10 +17,35 @@ public class Placeur extends Sprite {
 
     private void initPlaceur() {
         individu = new ArrayList<>();
+        lieu = new ArrayList<>();
+    }
+
+    public List<Lieu> getLieu() {
+        return lieu;
     }
 
     public List<Individu> getIndividus() {
         return individu;
+    }
+
+    public List<Employe> getEmployes() {
+        List <Employe> res = new ArrayList<>();
+        for (Individu indiv : individu) {
+            if (indiv instanceof Employe) {
+                res.add((Employe) indiv);
+            }
+        }
+        return  res;
+    }
+
+    public List<Entreprise> getEntreprise() {
+        List <Entreprise> res = new ArrayList<>();
+        for (Lieu lie : lieu) {
+            if (lie instanceof Entreprise) {
+                res.add((Entreprise) lie);
+            }
+        }
+        return  res;
     }
 
     public void spawn(int x, int y) {
@@ -34,6 +59,21 @@ public class Placeur extends Sprite {
     public void spawnInfected(int x, int y) {
         //Fait apparaitre un infecté
         individu.add(new Individu(x, y));
+        individu.get(individu.size() - 1).etat = "Infected";
+        individu.get(individu.size() - 1).reloadImage();
+    }
+
+    public void spawnEmploye(int x, int y) {
+        Employe employe = new Employe(x, y);
+        employe.etat = "Neutral";
+        employe.reloadImage();
+        individu.add(employe);
+
+    }
+
+    public void spawnEmployeInfected(int x, int y) {
+        //Fait apparaitre un infecté
+        individu.add(new Employe(x, y));
         individu.get(individu.size() - 1).etat = "Infected";
         individu.get(individu.size() - 1).reloadImage();
     }
@@ -81,11 +121,11 @@ public class Placeur extends Sprite {
             res[cmpt][0] = i * 32;
             res[cmpt][1] = j * 32;
             i+= 2;
-            if ((i - 1) * 32 >= max_x) {
+            if ((i - 2) * 32 >= max_x) {
                 i = 0;
                 j+=2;
             }
-            if ((j - 1) * 32 >= max_y) {
+            if ((j - 2) * 32 >= max_y) {
                 System.out.println("Trop d'élements");
                 return res;
             }
@@ -107,29 +147,7 @@ public class Placeur extends Sprite {
         }
         int a = 0;
         while (a < nbr) {
-            spawn(coordonneesInit[a][0], coordonneesInit[a][1]);
-            a++;
-        }
-        for (int b = a; b < nbr + nbrI; b++) {
-            spawnInfected(coordonneesInit[b][0], coordonneesInit[b][1]);
-        }
-        m = null;
-
-    }
-    
-    public void placementIndividus(int nbr, int nbrI, boolean alea, int h, int w){
-        //place nbr cercles dans la fenetre et nbrI infectés
-        Individu m = new Individu(x,y, h,w);
-        int[][] coordonneesInit;
-        if (alea) {
-            coordonneesInit = genereCoordonnees(nbr + nbrI, m.getBOARD_WIDTH() - m.getBounds().width, m.getBOARD_HEIGHT() - m.getBounds().height);
-        }
-        else {
-            coordonneesInit = coordonneesBrutes(nbr + nbrI, m.getBOARD_WIDTH() - m.getBounds().width, m.getBOARD_HEIGHT() - m.getBounds().height);
-        }
-        int a = 0;
-        while (a < nbr) {
-            spawn(coordonneesInit[a][0], coordonneesInit[a][1]);
+            spawnEmploye(coordonneesInit[a][0], coordonneesInit[a][1]);
             a++;
         }
         for (int b = a; b < nbr + nbrI; b++) {
@@ -197,9 +215,10 @@ public class Placeur extends Sprite {
     }
 
     public void placeEntreprise(int x, int y, String name) {
-        lieu.add(new Entreprise (x, y));
-        lieu.get(lieu.size()).nom = name;
+        lieu.add(new Entreprise (x, y, name));
+        lieu.get(lieu.size() - 1).reloadImage();
     }
+
 
     private int[][] coordinatesEnt(int n) {
         switch (n) {
