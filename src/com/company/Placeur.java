@@ -4,14 +4,19 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-public class Placeur extends Sprite {
+import static java.lang.Integer.min;
+
+public class Placeur {
+
+    int bWidth;
+    int bHeight;
 
     private List<Individu> individu;
     private List<Lieu> lieu;
 
-    public Placeur(int x, int y) {
-        super(x, y);
-
+    public Placeur(int width, int height) {
+        this.bWidth = width;
+        this.bHeight = height;
         initPlaceur();
     }
 
@@ -46,6 +51,16 @@ public class Placeur extends Sprite {
             }
         }
         return  res;
+    }
+
+    public List<Home> getHomes() {
+        List <Home> res = new ArrayList<>();
+        for (Lieu l : lieu) {
+            if (l instanceof Home) {
+                res.add((Home) l);
+            }
+        }
+        return res;
     }
 
     public void spawn(int x, int y) {
@@ -137,7 +152,7 @@ public class Placeur extends Sprite {
 
     public void placementIndividus(int nbr, int nbrI, boolean alea){
         //place nbr cercles dans la fenetre et nbrI infectés
-        Individu m = new Individu(x,y);
+        Individu m = new Individu(-1,-1);
         int[][] coordonneesInit;
         if (alea) {
             coordonneesInit = genereCoordonnees(nbr + nbrI, m.getBOARD_WIDTH() - m.getBounds().width, m.getBOARD_HEIGHT() - m.getBounds().height);
@@ -182,7 +197,7 @@ public class Placeur extends Sprite {
         return res;
     }
 
-    int [] randomList(int nbr, int bound) {
+    int [] randomTab(int nbr, int bound) {
         ArrayList<Integer> list = new ArrayList<Integer>();
         for (int i=0; i < bound ; i++) {
             list.add(i);
@@ -197,7 +212,7 @@ public class Placeur extends Sprite {
 
     private int[][] chooseCoordinates(int nbrTot, int[][] choices) {
         int[][] res = new int[nbrTot][2];
-        int [] randList = randomList(nbrTot, nbrTot);
+        int [] randList = randomTab(nbrTot, nbrTot);
         int cmpt = 0;
         while (cmpt < nbrTot) {
             res[cmpt] = choices[randList[cmpt]];
@@ -219,22 +234,209 @@ public class Placeur extends Sprite {
         lieu.get(lieu.size() - 1).reloadImage();
     }
 
-
-    private int[][] coordinatesEnt(int n) {
-        switch (n) {
-            case 0:
-                return null;
-            case 1 :
-                return new int[][] {{128, 128}};
-            default : return new int[][] {{128, 128}, {256, 256}};
+    public void placeEntreprises(int nbr) {
+        ArrayList<int[]> coordonnees = coordinatesEnt(nbr);
+        String[] names = new String[] {"A", "B", "C", "D"};
+        for (int i = 0; i < nbr && i < 4; i++) {
+            int [] coor = coordonnees.get(i);
+            placeEntreprise(coor[0], coor[1], names[i]);
         }
     }
 
-    //debug
-
-    /*private void printList(int[][] tab) {
-        for (int i = 0; i < tab.length; i++) {
-            System.out.println(tab[i][0] + " et " + tab[i][1] + "\n");
+    private ArrayList<int[]> coordinatesEnt(int n) {
+        ArrayList<int[]> res = new ArrayList<>();
+        int midX = bWidth / 2;
+        int midY = bHeight / 2;
+        for (int i = 0; i < n && i < 4; i++) {
+            int[] temp = new int[2];
+            switch (i) {
+                case 0:
+                    temp[0] = midX - 128;
+                    temp[1] = midY - 128;
+                    res.add(temp);
+                    break;
+                case 1:
+                    temp[0] = midX;
+                    temp[1] = midY;
+                    res.add(temp);
+                    break;
+                case 2:
+                    temp[0] = midX - 128;
+                    temp[1] = midY;
+                    res.add(temp);
+                    break;
+                default:
+                    temp[0] = midX;
+                    temp[1] = midY - 128;
+                    res.add(temp);
+            }
         }
-    }*/
+        return res;
+    }
+
+
+    public void contaminationInitiale(int scale) {
+        int nbrContamines = (int) individu.size() * scale / 100;
+        int[] aContaminer = randomTab(nbrContamines, individu.size());
+        for (int elt : aContaminer) {
+            (individu.get(elt)).etat = "Infected";
+        }
+    }
+
+    public void choixEmployes(int nbr) {
+        int switcher = 1;
+        int[] aEmployer = randomTab(nbr, individu.size());
+        for (int i = 0; i < aEmployer.length; i++) {
+            Individu temp = individu.get(i);
+            individu.remove(i);
+            Employe newEmploye = new Employe(temp.x, temp.y);
+            newEmploye.etat = temp.etat;
+            if (switcher == 1) {
+                newEmploye.entrepriseName = "A";
+                newEmploye.reloadImage();
+                switcher *= -1;
+            } else {
+                newEmploye.entrepriseName = "B";
+                newEmploye.reloadImage();
+                switcher *= -1;
+            }
+            individu.add(i, newEmploye);
+            temp = null;
+        }
+    }
+
+
+    private ArrayList<int[]> coordonneesHome(int width, int height) {
+        ArrayList<int[]> res = new ArrayList<>();
+        int maxPerLigne = width / 96;
+        System.out.println(maxPerLigne);
+
+        for (int i = 0; i < maxPerLigne; i++) {
+            res.add(new int[] {i * 96, 0});
+        }
+        for (int j = 0; j < maxPerLigne; j++) {
+            res.add(new int[] {j * 96, height - 64});
+        }
+        return res;
+    }
+
+    private int min(int a, int b) {
+        if (a < b) {
+            return a;
+        }
+        return b;
+    }
+
+    public int placeHome(int nbr, int width, int height) {
+
+        ArrayList<int[]> coordonnees = coordonneesHome(width, height);
+        int nbrEffectif = min(coordonnees.size(), nbr);
+        for (int i = 0; i < nbrEffectif; i++) {
+            int[] coor = coordonnees.get(i);
+            Home newHome = new Home(coor[0], coor[1]);
+            newHome.setNumero(i);
+            newHome.reloadImage();
+            lieu.add(newHome);
+        }
+
+        return nbrEffectif;
+    }
+
+    public void placeInHome(int nbrI, int nbrH) {
+        /*On place les individus dans les maisons au début de la simulation, on suppose 4 max par maison*/
+        int nbrPerHome = nbrI / nbrH;
+        int reste = nbrI % nbrH;
+        int i = 0;
+        for (Lieu l : lieu) {
+            if (l instanceof Home) {
+                int lX = l.x;
+                int lY = l.y;
+                int lWidth = l.width;
+                int lHeight = l.height;
+
+                Rectangle NorthWest = new Rectangle(lX, lY, lWidth / 2, lHeight /2);
+                Rectangle NorthEast = new Rectangle(lX + lWidth / 2, lY, lWidth / 2, lHeight /2);
+                Rectangle SouthWest = new Rectangle(lX, lY + lHeight / 2, lWidth / 2, lHeight /2);
+                Rectangle SouthEast = new Rectangle(lX + lWidth / 2, lY + lHeight / 2, lWidth / 2, lHeight /2);
+
+                for (int j = 0; j < nbrPerHome && j < 4; j++) {
+                    Individu indiv = individu.get(i);
+                    indiv.setHouse(i);
+                    i++;
+                    indiv.size = 1;
+                    indiv.reloadImage();
+                    indiv.insideLieu = 2;
+                    indiv.X_SPEED = 1;
+                    indiv.Y_SPEED = 2;
+                    l.contenu.add(indiv);
+                    switch (j) {
+                        case 0 :
+                            indiv.x = NorthWest.x + 8;
+                            indiv.y = NorthWest.y + 8;
+                            indiv.cmptInside = 0;
+                            break;
+                        case 1 :
+                            indiv.x = NorthEast.x + 8;
+                            indiv.y = NorthEast.y + 8;
+                            indiv.cmptInside = 10;
+                            break;
+                        case 2 :
+                            indiv.x = SouthWest.x + 8;
+                            indiv.y = SouthWest.y + 8;
+                            indiv.cmptInside = 20;
+                            break;
+                        default :
+                            indiv.x = SouthEast.x + 8;
+                            indiv.y = SouthEast.y + 8;
+                            indiv.cmptInside = 30;
+                            break;
+                    }
+                }
+            }
+        }
+        placeReste(reste, nbrH, i);
+    }
+
+    private void placeReste(int nbrR, int nbrH, int start) {
+        int [] ordre = randomTab(nbrR, nbrH);
+        for (int i = 0; i < nbrR; i++) {
+            placeSoloInHome(individu.get(start + i), getHomes().get(ordre[i]));
+        }
+    }
+
+    private void placeSoloInHome(Individu individu, Home home) {
+        int nbrIn = home.contenu.size();
+        individu.size = 1;
+        individu.reloadImage();
+        individu.insideLieu = 2;
+        individu.X_SPEED = 1;
+        individu.Y_SPEED = 2;
+        home.contenu.add(individu);
+        switch (nbrIn) {
+            case 0 :
+                Rectangle NorthWest = new Rectangle(home.x, home.y, home.width / 2, home.height /2);
+                individu.x = NorthWest.x + 8;
+                individu.y = NorthWest.y + 8;
+                individu.cmptInside = 0;
+                break;
+            case 1 :
+                Rectangle NorthEast = new Rectangle(home.x + home.width / 2, home.y, home.width / 2, home.height /2);
+                individu.x = NorthEast.x + 8;
+                individu.y = NorthEast.y + 8;
+                individu.cmptInside = 20;
+                break;
+            case 2 :
+                Rectangle SouthWest = new Rectangle(home.x, home.y + home.height / 2, home.width / 2, home.height /2);
+                individu.x = SouthWest.x + 8;
+                individu.y = SouthWest.y + 8;
+                individu.cmptInside = 40;
+                break;
+            default :
+                Rectangle SouthEast = new Rectangle(home.x + home.width / 2, home.y + home.height / 2, home.width / 2, home.height /2);
+                individu.x = SouthEast.x + 8;
+                individu.y = SouthEast.y + 8;
+                individu.cmptInside = 60;
+                break;
+        }
+    }
 }

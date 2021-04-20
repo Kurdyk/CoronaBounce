@@ -17,7 +17,6 @@ public class Employe extends Individu {
     private void InitEmploye() {
         this.streamConstr();
         reloadImage();
-        System.out.println(this.stream);
     }
 
     protected void reloadImage(){
@@ -70,8 +69,19 @@ public class Employe extends Individu {
                 y += Y_SPEED;
                 break;
 
-            default :
+            case 2 :
+                if (limitSupX == homeX + homeWidth || limitSupX == homeX + homeWidth - 1 || x_temp == homeX || x_temp == homeX) {
+                    this.X_SPEED *= -1;
+                    this.cmptRebond = 1;
+                }
 
+                if (limitSupY == homeY + homeHeight || limitSupY == homeY + homeHeight - 1 || y_temp == homeY || y_temp == homeY) {
+                    this.Y_SPEED *= -1;
+                    this.cmptRebond = 1;
+                }
+                break;
+
+            default :
                  if (limitSupX == BOARD_WIDTH || limitSupX == BOARD_WIDTH - 1 || x_temp == 0 || x_temp == 1) {
                      this.X_SPEED *= -1;
                      this.cmptRebond = 1;
