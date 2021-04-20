@@ -10,10 +10,10 @@ public class Lieu extends Sprite {
     public String typeLieu;
     public String nom;
     private int[] entree;
-    public int tempsIn;
+    public int tempsIn = 100;
+    private int[] sortie;
 
-
-    private List<Individu> contenu;
+    public List<Individu> contenu;
     private List<Individu> attenteIn;
     private List<Individu> attenteOut;
 
@@ -52,9 +52,65 @@ public class Lieu extends Sprite {
         return res;
     }
 
-    public int []getSortie() {
-        int [] res = new int[2];
-        return res;
+
+    protected void setSortie(int bWidth, int bHeight) {
+        int[] res = new int[2];
+        Rectangle NorthWest = new Rectangle(0, 0, bWidth / 2, bHeight /2);
+        Rectangle NorthEast = new Rectangle(bWidth / 2, 0, bWidth / 2, bHeight /2);
+        Rectangle SouthWest = new Rectangle(0, bHeight / 2, bWidth / 2, bHeight /2);
+        Rectangle SouthEast = new Rectangle(bWidth / 2, bHeight / 2, bWidth / 2, bHeight /2);
+
+        if (this.getBounds().intersects(NorthWest)) {
+            int milieuY = (int) NorthWest.getCenterY();
+            res[0] = this.x + this.width / 2;
+            if (this.y < milieuY) {
+                res[1] = this.y + this.height + 1;
+            } else {
+                res[1] = this.y - 33; //pour assez de place pour indiv
+            }
+            this.sortie = res;
+            return;
+        }
+
+        if (this.getBounds().intersects(NorthEast)) {
+            int milieuX = (int) NorthEast.getCenterX();
+            int milieuY = (int) NorthEast.getCenterY();
+            res[0] = this.x + this.width / 2 ;
+            if (this.y < milieuY) {
+                res[1] = this.y + this.height + 1;
+            } else {
+                res[1] = this.y - 33;
+            }
+            this.sortie = res;
+            return;
+        }
+
+        if (this.getBounds().intersects(SouthWest)) {
+            int milieuX = (int) SouthWest.getCenterX();
+            int milieuY = (int) SouthWest.getCenterY();
+            res[0] = this.x + this.width / 2;
+            if (this.y < milieuY) {
+                res[1] = this.y + this.height + 1;
+            } else {
+                res[1] = this.y - 33;
+            }
+            this.sortie = res;
+            return;
+        }
+
+        if (this.getBounds().intersects(SouthEast)) {
+            int milieuX = (int) SouthEast.getCenterX();
+            int milieuY = (int) SouthEast.getCenterY();
+            res[0] = this.x + this.width / 2;
+            if (this.y < milieuY) {
+                res[1] = this.y + this.height + 1;
+            } else {
+                res[1] = this.y - 33;
+            }
+            this.sortie = res;
+            return;
+        }
+
     }
 
     public List<Individu> getContenu(){
@@ -76,11 +132,33 @@ public class Lieu extends Sprite {
         individu.go();
     }
 
+    public void sortAttente(List<Individu> individus) {
+        Individu individu = attenteOut.get(0);
+        if (placeDispoOut(individu, sortie[0], sortie[1], individus)) {
+            individu.size = 0;
+            individu.insideLieu = 0;
+            contenu.remove(individu);
+            attenteOut.remove(0);
+            individu.x = sortie[0];
+            individu.y = sortie[1];
+            individu.X_SPEED = 2;
+            individu.Y_SPEED = - 2;
+            individu.reloadImage();
+        }
+    }
+
     private void sortie(Individu individu) {
-        individu.size = 0;
-        individu.reloadImage();
-        individu.insideLieu = 0;
-        contenu.remove(individu);
+        attenteOut.add(individu);
+    }
+
+    boolean placeDispoOut(Sprite sprite, int x, int y, List<Individu> individus) {
+        Rectangle potentiel = new Rectangle(x, y, sprite.width, sprite.height);
+            for (Individu individu : individus) {
+                if (potentiel.intersects(individu.getBounds())) {
+                    return false;
+                }
+            }
+        return true;
     }
 
     boolean placeDispo(Sprite sprite, int x, int y) {
@@ -101,40 +179,47 @@ public class Lieu extends Sprite {
         if (placeDispo(individu, entree[0], entree[1])) {
             individu.size = 1;
             individu.reloadImage();
-            individu.insideLieu = 1;
+            individu.insideLieu = individu.objective;
+            individu.cmptInside = 0;
             contenu.add(individu);
             individu.x = entree[0];
             individu.y = entree[1];
+            individu.X_SPEED = 1;
+            individu.Y_SPEED = 2;
         }
         else {
-            System.out.println("ici");
             enAttenteEntree(individu);
         }
     }
 
-    public void updateAttente() {
+    public void updateAttente(List<Individu> individus) {
         if (attenteIn.size() != 0) {
             Individu individu = attenteIn.get(0);
             if (placeDispo(individu,entree[0],entree[1])) {
                 placeAttente();
             }
         }
+        if (attenteOut.size() != 0) {
+            sortAttente(individus);
+        }
     }
 
-    public void outside(Individu individu) {
-        //Trouver une place proche dans le bord et le sortir.
-    }
-
-    public void checkOut(){
-        for (Individu individu : contenu) {
-            if (individu.cmptInside >= tempsIn) {
-                outside(individu);
+    public void checkout () {
+        if (contenu.size() != 0) {
+            for (Individu individu : contenu) {
+                individu.cmptInside++;
+                if (individu.cmptInside >= this.tempsIn) {
+                    sortie(individu);
+                }
             }
         }
     }
 
 
-   /* public int[][] removeCase(int[][] array, int index) {
+   /* POUBELLE
+
+
+   public int[][] removeCase(int[][] array, int index) {
         int[][] copy = new int[array.length - 1][2];
 
         for (int i = 0, j = 0; i < array.length; i++) {
@@ -222,6 +307,6 @@ public class Lieu extends Sprite {
         }
         return null;
     }
-*/
+   */
 
 }

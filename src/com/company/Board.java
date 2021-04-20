@@ -18,11 +18,10 @@ public class Board extends JPanel implements ActionListener {
 	private Timer timer;
 	private Placeur placeur;
 	private boolean ingame;
-	private final int ICRAFT_X = 40;
-	private final int ICRAFT_Y = 60;
-	private int B_WIDTH=this.getWidth();
-	private int B_HEIGHT=this.getHeight();
-	private final int DELAY = 15;
+
+	private int B_WIDTH = 1000;
+	private int B_HEIGHT = 700;
+	private final int DELAY = 10; //Accelerateur potentiel
 	public int killRate = 13; //Determiner la mortalité du virus = killRate * 1 / 10000;
 	public int infect;
 	public int sain;
@@ -32,6 +31,13 @@ public class Board extends JPanel implements ActionListener {
 		initBoard(i,j);
 	}
 
+	public int getWidth() {
+		return B_WIDTH;
+	}
+
+	public int getHeight() {
+		return B_HEIGHT;
+	}
 
     private void initBoard(int i, int j) {
 
@@ -41,16 +47,19 @@ public class Board extends JPanel implements ActionListener {
 
         setPreferredSize(new Dimension(B_WIDTH, B_HEIGHT));
 
-        placeur = new Placeur(ICRAFT_X, ICRAFT_Y);
+        placeur = new Placeur(this.getWidth(), this.getHeight());
 
 
         timer = new Timer(DELAY, this);
         timer.start();
         placeur.placementIndividus(i, j, false);
-        System.out.println(i + j);
-		placeur.placeEntreprise(128, 128, "A");
-		placeur.placeEntreprise(256, 256, "B");
+		placeur.placeEntreprises(2);
+		placeur.choixEmployes(i + j);
+		int n = placeur.placeHome(500, this.getWidth(), this.getHeight());
+		placeur.placeInHome(i + j, n);
 		initLimiteEmploye();
+		initLimiteHome();
+		initSorties();
 
 	}
 
@@ -62,11 +71,11 @@ public class Board extends JPanel implements ActionListener {
 
 		setPreferredSize(new Dimension(B_WIDTH, B_HEIGHT));
 
-		placeur = new Placeur(ICRAFT_X, ICRAFT_Y);
+		placeur = new Placeur(this.getWidth(), this.getHeight());
 
 		timer = new Timer(DELAY, this);
 		timer.start();
-		placeur.placementIndividus(i, j, false,this.B_HEIGHT, this.B_WIDTH);
+		placeur.placementIndividus(i, j, false);
 
 	}
 
@@ -220,11 +229,35 @@ public class Board extends JPanel implements ActionListener {
 		}
 	}
 
-	private void updateLieux() {
-		List<Lieu> lieux = placeur.getLieu();
-		for (Lieu lieu : lieux) {
-			lieu.updateAttente();
+	public void initLimiteHome() {
+		List<Individu> individus = placeur.getIndividus();
+		List<Home> lsHome = placeur.getHomes();
+		if (individus != null && lsHome != null) {
+			for (Individu individu : individus) {
+				for (Home home : lsHome) {
+					if(individu.houseNumber == home.numero) {
+						individu.setHomeLimits(home);
+					}
+				}
+			}
 		}
 	}
+
+	private void initSorties() {
+		List<Lieu> lieux = placeur.getLieu();
+		for (Lieu lieu : lieux) {
+			lieu.setSortie(B_WIDTH, B_HEIGHT);
+		}
+	}
+
+	private void updateLieux() {
+		List<Lieu> lieux = placeur.getLieu();
+		List<Individu> individus = placeur.getIndividus();
+		for (Lieu lieu : lieux) {
+			lieu.updateAttente(individus);
+			lieu.checkout();
+		}
+	}
+
 
 }
