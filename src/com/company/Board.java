@@ -18,17 +18,19 @@ public class Board extends JPanel implements ActionListener {
 	private Timer timer;
 	private Placeur placeur;
 	private boolean ingame;
+	int maxtemps;
+	int temps = 0;
 
-	private int B_WIDTH = 1000;
-	private int B_HEIGHT = 700;
-	private final int DELAY = 10; //Accelerateur potentiel
-	public int killRate = 13; //Determiner la mortalité du virus = killRate * 1 / 10000;
+	private int B_WIDTH = 700;
+	private int B_HEIGHT = 800;
+	private int DELAY = 12; //Accelerateur potentiel
+	public int killRate = 0; //Determiner la mortalité du virus = killRate * 1 / 10000;
 	public int infect;
 	public int sain;
 
 
-	public Board(int i, int j) {
-		initBoard(i,j);
+	public Board(boolean[] tabBoolean, int[] tabVal) {
+		initBoard(tabBoolean, tabVal);
 	}
 
 	public int getWidth() {
@@ -63,7 +65,8 @@ public class Board extends JPanel implements ActionListener {
 
 	}
 
-	private void initBoard(int i, int j,int h) {
+	private void initBoard(boolean[] tabBoolean, int[] tabVal) {
+
 
 		setFocusable(true);
 		setBackground(Color.BLACK);
@@ -73,10 +76,55 @@ public class Board extends JPanel implements ActionListener {
 
 		placeur = new Placeur(this.getWidth(), this.getHeight());
 
+		int parcours = 0;
+
+		int popSaine = tabVal[parcours];
+		int popInf = tabVal[parcours + 1];
+		placeur.placementIndividus(popSaine, popInf, false);
+		parcours += 2;
+
+		int n = placeur.placeHome(500, this.getWidth(), this.getHeight());
+		placeur.choixEmployes(popInf + popSaine);
+		placeur.placeInHome(popInf + popSaine, n);
+
+		if(tabBoolean[parcours]) {
+			int nbrEntreprises = tabVal[parcours];
+			placeur.placeEntreprises(nbrEntreprises);
+			int tempsEntreprise = tabVal[parcours + 1];
+			for (Entreprise entreprise : placeur.getEntreprise()) {
+				entreprise.setTempsIn(tempsEntreprise);
+			}
+		}
+		parcours += 2;
+
+		if(tabBoolean[parcours]) {
+			this.killRate = tabVal[parcours];
+		}
+		parcours++;
+
+		int tempsImmu = tabVal[parcours];
+		int tempsConta = tabVal[parcours + 1];
+		for(Individu individu : placeur.getIndividus()) {
+			individu.setDuree(tempsImmu, tempsConta);
+		}
+		parcours += 2;
+
+
+		this.DELAY /= tabVal[parcours];
+		parcours++;
+
+		if(tabBoolean[parcours]) {
+			this.maxtemps = tabVal[parcours];
+		} else {
+			this.maxtemps = -1;
+		}
+
 		timer = new Timer(DELAY, this);
 		timer.start();
-		placeur.placementIndividus(i, j, false);
 
+		initLimiteEmploye();
+		initLimiteHome();
+		initSorties();
 	}
 
 
@@ -109,6 +157,7 @@ public class Board extends JPanel implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		temps++;
 		inGame();
 
 		updateIndividus();
@@ -141,7 +190,7 @@ public class Board extends JPanel implements ActionListener {
 
 	private void inGame() {
 
-		if (!ingame) {
+		if (!ingame || temps == maxtemps) {
 			timer.stop();
 		}
 	}

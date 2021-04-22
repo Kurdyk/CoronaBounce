@@ -308,14 +308,14 @@ public class Placeur {
 
     private ArrayList<int[]> coordonneesHome(int width, int height) {
         ArrayList<int[]> res = new ArrayList<>();
-        int maxPerLigne = width / 96;
+        int maxPerLigne = width / 128;
         System.out.println(maxPerLigne);
 
         for (int i = 0; i < maxPerLigne; i++) {
-            res.add(new int[] {i * 96, 0});
+            res.add(new int[] {i * 128, 0});
         }
         for (int j = 0; j < maxPerLigne; j++) {
-            res.add(new int[] {j * 96, height - 64});
+            res.add(new int[] {j * 128, height - 64});
         }
         return res;
     }
@@ -366,8 +366,7 @@ public class Placeur {
                     indiv.size = 1;
                     indiv.reloadImage();
                     indiv.insideLieu = 2;
-                    indiv.X_SPEED = 1;
-                    indiv.Y_SPEED = 2;
+                    indiv.goAlea();
                     l.contenu.add(indiv);
                     switch (j) {
                         case 0 :
@@ -378,17 +377,17 @@ public class Placeur {
                         case 1 :
                             indiv.x = NorthEast.x + 8;
                             indiv.y = NorthEast.y + 8;
-                            indiv.cmptInside = 10;
+                            indiv.cmptInside = 100;
                             break;
                         case 2 :
                             indiv.x = SouthWest.x + 8;
                             indiv.y = SouthWest.y + 8;
-                            indiv.cmptInside = 20;
+                            indiv.cmptInside = 200;
                             break;
                         default :
                             indiv.x = SouthEast.x + 8;
                             indiv.y = SouthEast.y + 8;
-                            indiv.cmptInside = 30;
+                            indiv.cmptInside = 300;
                             break;
                     }
                 }
@@ -409,8 +408,7 @@ public class Placeur {
         individu.size = 1;
         individu.reloadImage();
         individu.insideLieu = 2;
-        individu.X_SPEED = 1;
-        individu.Y_SPEED = 2;
+        individu.goAlea();
         home.contenu.add(individu);
         switch (nbrIn) {
             case 0 :
@@ -423,19 +421,19 @@ public class Placeur {
                 Rectangle NorthEast = new Rectangle(home.x + home.width / 2, home.y, home.width / 2, home.height /2);
                 individu.x = NorthEast.x + 8;
                 individu.y = NorthEast.y + 8;
-                individu.cmptInside = 20;
+                individu.cmptInside = 100;
                 break;
             case 2 :
                 Rectangle SouthWest = new Rectangle(home.x, home.y + home.height / 2, home.width / 2, home.height /2);
                 individu.x = SouthWest.x + 8;
                 individu.y = SouthWest.y + 8;
-                individu.cmptInside = 40;
+                individu.cmptInside = 200;
                 break;
             default :
                 Rectangle SouthEast = new Rectangle(home.x + home.width / 2, home.y + home.height / 2, home.width / 2, home.height /2);
                 individu.x = SouthEast.x + 8;
                 individu.y = SouthEast.y + 8;
-                individu.cmptInside = 60;
+                individu.cmptInside = 300;
                 break;
         }
     }

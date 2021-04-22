@@ -3,14 +3,15 @@ package com.company;
 public class Entreprise extends Lieu {
 
     public String nom; // A ou B pour le moment;
-    //public int tempsIn = 800;
 
 
     public Entreprise(int x, int y, String name) {
         super(x, y);
         this.nom = name;
+        this.tempsIn = 800;
         InitLieu();
     }
+
 
     protected void reloadImage(){
         this.streamConstr();

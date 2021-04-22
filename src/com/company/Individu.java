@@ -5,16 +5,16 @@ import java.util.Random;
 
 public class Individu extends Sprite {
 
-    public static final int BOARD_WIDTH = 600;
-    public static final int BOARD_HEIGHT = 600;
-    public int X_SPEED = 2;
-    public int Y_SPEED = 2;
+    public static final int BOARD_WIDTH = 700;
+    public static final int BOARD_HEIGHT = 800;
+    public int X_SPEED;
+    public int Y_SPEED;
     public int saveXSpeed;
     public int saveYSpeed;
     public int cmptRebond = 0;
 
     public int insideLieu = 0; //0 si hors d'un lieu, 1 entreprise, 2 si maison;
-    public int cmptInside = 0; //Utliser temps systeme;
+    public int cmptInside = 0;
     public int houseNumber;
     public int objective = 1; //1 si cherche un lieu de travail, 2 pour sa maison
     public int homeX;
@@ -28,9 +28,9 @@ public class Individu extends Sprite {
     public int size = 0; //défaut : 0 ; petit sprite : 1;
 
     public int compteurGuerison = 0;
-    public int dureeContamination = 500;
+    public int dureeContamination = 1000;
     public int compteurReinfection = 0;
-    public int dureeImmunite = 1000;
+    public int dureeImmunite = 1200;
 
 
     public Individu(int x, int y) {
@@ -51,6 +51,7 @@ public class Individu extends Sprite {
         this.streamConstr();
         loadImage(stream);
         getImageDimensions();
+        goAlea();
     }
 
     protected void streamConstr() {
@@ -189,35 +190,12 @@ public class Individu extends Sprite {
 
     public void goAlea() {
         Random rand = new Random();
-        int tirage = rand.nextInt(4);
-        switch (tirage) {
-            case 0 :
-                this.X_SPEED = - saveXSpeed;
-                this.Y_SPEED = - saveYSpeed;
-                saveXSpeed = 0;
-                saveYSpeed = 0;
-                break;
-            case 1 :
-                this.X_SPEED = saveXSpeed;
-                this.Y_SPEED = - saveYSpeed;
-                saveXSpeed = 0;
-                saveYSpeed = 0;
-                break;
-            case 2 :
-                this.X_SPEED = - saveXSpeed;
-                this.Y_SPEED = saveYSpeed;
-                saveXSpeed = 0;
-                saveYSpeed = 0;
-                break;
-            case 3 :
-                this.X_SPEED = saveXSpeed;
-                this.Y_SPEED = saveYSpeed;
-                saveXSpeed = 0;
-                saveYSpeed = 0;
-                break;
-            default :
-                this.go();
-        }
+        int tirageXSigne = rand.nextInt(2);
+        int tirageXval = rand.nextInt(2) + 1;
+        int tirageYSigne = rand.nextInt(2);
+        int tirageYval = rand.nextInt(2) + 1;
+        this.X_SPEED = (int) (Math.pow(-1, tirageXSigne) * tirageXval);
+        this.Y_SPEED = (int) (Math.pow(-1, tirageYSigne) * tirageYval);
     }
 
     public String getSpecification(){
@@ -234,4 +212,10 @@ public class Individu extends Sprite {
         this.homeHeight = home.height;
         this.homeWidth = home.width;
     }
+
+    public void setDuree(int i, int j) {
+        this.dureeImmunite = i;
+        this.dureeContamination = j;
+    }
+
 }

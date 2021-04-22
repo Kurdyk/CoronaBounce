@@ -2,7 +2,7 @@ package com.company;
 
 public class Employe extends Individu {
 
-    public String entrepriseName = "A";
+    public String entrepriseName;
 
     public int entrepriseX;
     public int entrepriseY;

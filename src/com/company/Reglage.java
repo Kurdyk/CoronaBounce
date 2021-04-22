@@ -60,7 +60,10 @@ public class Reglage extends JFrame{
 		int i=100-taux.getValue();
 		int x=p*s/100;
 		int y=p*i/100;
-		Vue view= new Vue(x,y);
+		boolean[] tabBoolean = new boolean[] {true, true, true, true, false, true, true, true, false};
+		int[] tabVal = new int[] {x, y, 2, 900, 1000, 500, 3000, 3, 10000};
+
+		Vue view= new Vue(tabBoolean, tabVal);
 		view.setVisible(true);
 		
 	}
