@@ -15,7 +15,9 @@ public class Reglage extends JFrame{ //class qui va créer la fenêtre menu pour
 
 	JPanel Spinner =new JPanel(); //objet qui va contenir
 	JPanel Button=new JPanel(); //objet qui contient des JButton laçant simulation et rénéatialiser les paramètres de la simulation
+
 	JSpinnerText population= new JSpinnerText("Population totale : ",40, 1); //objet crée par classe interne pour être utilisé
+
 	JSliderText taux= new JSliderText(0,100,25,5,"Taux sain :"); //objet crée par classe interne pour être utilisé
 
 	boolean act[]; //tableau qui indiquera quelles options l'utilisateur a voulu dans sa simulation
@@ -23,6 +25,7 @@ public class Reglage extends JFrame{ //class qui va créer la fenêtre menu pour
 
 	JButton b1= new JButton("Réinitialiser");
 	JButton b2= new JButton("GO");
+
 
 	Reglage(){ //constructeur de la fenêtre
 
@@ -44,6 +47,7 @@ public class Reglage extends JFrame{ //class qui va créer la fenêtre menu pour
 		this.panneau.add(Spinner,BorderLayout.NORTH); //ajoute l'objet qui va contenir les objets indiquants la population totale et le taux d'individu sain souhaité par l'utilisateur
 		this.panneau.add(Button,BorderLayout.SOUTH);  //ajoute l'objet qui va contenir les objets pour lancer et réinitialiser les paramètres de la simulation
 
+
 		this.Spinner.setLayout(new BorderLayout());
 		this.Spinner.add(population, BorderLayout.NORTH); //ajoute le spinnnerText indiquant le nombre d'individu totale souhaité par l'utilisateur
 		this.Spinner.add(taux,BorderLayout.CENTER);//ajoute le sliderText indiquant le taux d'individu sain désiré par l'utilisateur au panneau
@@ -52,13 +56,18 @@ public class Reglage extends JFrame{ //class qui va créer la fenêtre menu pour
 		b1.addActionListener((event)->{reinitialise();}); //permet de lancer la fonction reinitialise quand le JButton 1 est cliqué
 		b2.addActionListener((event)->{go();}); //permet de lancer la fonction go quand le JButton 2 est cliqué
 
+		
 	}
+
+
+
 
 	public void reinitialise() { //réinitialise tous les paramètres de la simulation à des valeurs par défaut
 		this.population.restart(); //remet la valeur du spinnerText a une valeur par défaut
 		this.taux.setValue(50);  //fixe la valeur du sliderText à 50
 
 	}
+
 
 	public void go() { //fonction qui va lancer la simulation
 		int p= population.getValue(); //récupération et traitement des valeurs de population et du taux de sain
@@ -67,14 +76,17 @@ public class Reglage extends JFrame{ //class qui va créer la fenêtre menu pour
 		int x=p*s/100;
 		int y=p*i/100;
 
+		
 		//
 
 		act = new boolean[9]; //initialision des tableaux contenant les options et valeurs souhaité par l'utilisateur
-        val = new int[9];
-        act[0] = true; //attribution des valeurs de population et taux de sain dans les tablaux
-        act[1] = true; //les deux premiers éléments du tableau d'option sont toujours considérés comme vrai car "option" par défauts de la simulation
-        val[0] = x;
-        val[1] = y;
+
+		act = new boolean[] {true, true, true, true, false, true, true, true, false};//initialision des tableaux contenant les options et valeurs souhaité par l'utilisateur
+		val = new int[] {x, y, 2, 900, 1000, 500, 3000, 3, 10000};
+
+        //attribution des valeurs de population et taux de sain dans les tablaux
+		// les deux premiers éléments du tableau d'option sont toujours considérés comme vrai car "option" par défauts de la simulation
+
 
 		Vue view= new Vue(act,val); //définition de la fenêtre contenant la simulation avec options désirées
 		view.setVisible(true); //rend la fenêtre de la simulation visible
@@ -82,6 +94,8 @@ public class Reglage extends JFrame{ //class qui va créer la fenêtre menu pour
 		courbe.setVisible(true); //rend la fenêtre graphique visible
 
 	}
+	
+
 
 	public class JSpinnerText extends JPanel { //classe interne permettant de créer des objets spinnerText
 	    JSpinner spinner;
@@ -94,6 +108,7 @@ public class Reglage extends JFrame{ //class qui va créer la fenêtre menu pour
 	        SpinnerModel chiffre = new SpinnerNumberModel(i/2, 0, i, j); //création du spinner avec les valeurs numérique en fonction du maximum donner
 	         spinner = addLabeledSpinner(this, s, chiffre);
 	        spinner.setEditor(new JSpinner.NumberEditor(spinner, "#"));
+
 
 	        ftf = getTextField(spinner); //définition de la zone de text
 	        if (ftf != null ) {
@@ -132,11 +147,15 @@ public class Reglage extends JFrame{ //class qui va créer la fenêtre menu pour
 	    	  this.spinner.setValue(i/2);
 	      } //fixe la valeur courante de l'attribut spinner
 
+		
 	}
+	
+
 
 	public class JSliderText extends JPanel{ //classe interne qui va permettre la création de slider avec du texte
 		JLabel sliderLabel; //texte désiré
 		JSlider slider; //slider auquel on va associé le texte
+
 
 		JSliderText(int min, int max,int M, int m,String s){ //constructeur de l'objet
 			this.sliderLabel= new JLabel(s, JLabel.CENTER); //création du label avec texte voulu

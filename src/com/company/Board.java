@@ -41,29 +41,7 @@ public class Board extends JPanel implements ActionListener {
 		return B_HEIGHT;
 	}
 
-    private void initBoard(int i, int j) {
 
-        setFocusable(true);
-        setBackground(Color.BLACK);
-        ingame = true;
-
-        setPreferredSize(new Dimension(B_WIDTH, B_HEIGHT));
-
-        placeur = new Placeur(this.getWidth(), this.getHeight());
-
-
-        timer = new Timer(DELAY, this);
-        timer.start();
-        placeur.placementIndividus(i, j, false);
-		placeur.placeEntreprises(2);
-		placeur.choixEmployes(i + j);
-		int n = placeur.placeHome(500, this.getWidth(), this.getHeight());
-		placeur.placeInHome(i + j, n);
-		initLimiteEmploye();
-		initLimiteHome();
-		initSorties();
-
-	}
 
 	private void initBoard(boolean[] tabBoolean, int[] tabVal) {
 
@@ -121,6 +99,9 @@ public class Board extends JPanel implements ActionListener {
 
 		timer = new Timer(DELAY, this);
 		timer.start();
+
+
+
 
 		initLimiteEmploye();
 		initLimiteHome();
