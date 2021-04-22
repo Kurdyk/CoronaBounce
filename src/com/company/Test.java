@@ -1,27 +1,15 @@
 package com.company;
 
-public class Test {
+public class Test { //classe qui va permettre l'éxécution du programme
+	private Reglage view; // fenêtre qui avec l'utilisateur va agir
 
-	
-		private Reglage view;
+	public Test() {
+		view= new Reglage(); //créer une nouvelle fenêtre réglage
+		view.setVisible(true); //rend la fenêtre visible
+	}
 		
-		
-		public Test() {
-			view= new Reglage();
-			view.setVisible(true);
-			
-		}
-		public Test(int i, int j) {
-			view= new Reglage();
-			view.setVisible(true);
-			
-		}
-		
-		public static void main (String[]args) {
-			new Test();
-			//new Test(10, 10);
-
-		}
-	
+	public static void main (String[]args) {
+		new Test(); //créer un nouveau test
+	}
 
 }

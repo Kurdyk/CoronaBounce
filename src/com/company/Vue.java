@@ -5,18 +5,17 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import java.awt.*;
-public class Vue extends JFrame{
-	Board board;
-	JPanel Graphique= new JPanel(); 
+public class Vue extends JFrame{ //classe qui créer la fenêtre contenant la simulation
+	Board board ;
+
 	
-	Vue(boolean[] tabBoolean, int[] tabVal){
-		this.setTitle("Corona");
-		this.setSize(1600, 900);
-		this.getContentPane().setLayout(new GridLayout());
-		this.board=new Board(tabBoolean, tabVal);
-		/*this.Graphique.setLayout(new BorderLayout());
-		this.Graphique.add(new CurveCanvas(1),BorderLayout.CENTER);*/
-		this.getContentPane().add(board,BorderLayout.CENTER);
-		//this.getContentPane().add(this.Graphique, BorderLayout.EAST);
+	Vue(boolean[] act, int[] val){ //constructeur qui va créer la fenêtre
+		this.setTitle("Simulation"); //fixe le titre de la fenêtre
+		this.setSize(600, 520); //fixe les dimensions de la fenêtre
+
+		this.board=new Board(val[0],val[1]); //créer la board avec les paramètre que l'utilisateurs a donné
+
+		this.getContentPane().add(board); //ajoute la board à la fenêtre
+
 	}
 }
