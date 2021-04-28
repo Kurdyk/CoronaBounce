@@ -15,16 +15,26 @@ public class Reglage extends JFrame{ //class qui va créer la fenêtre menu pour
 
 	JPanel Spinner =new JPanel(); //objet qui va contenir
 	JPanel Button=new JPanel(); //objet qui contient des JButton laçant simulation et rénéatialiser les paramètres de la simulation
+	JPanel checkBox = new JPanel();
 
 	JSpinnerText population= new JSpinnerText("Population totale : ",40, 1); //objet crée par classe interne pour être utilisé
-
 	JSliderText taux= new JSliderText(0,100,25,5,"Taux sain :"); //objet crée par classe interne pour être utilisé
+	
 
 	boolean act[]; //tableau qui indiquera quelles options l'utilisateur a voulu dans sa simulation
 	int []val; //tableau indiquant la valeur des options voulues si besoin est
 
 	JButton b1= new JButton("Réinitialiser");
 	JButton b2= new JButton("GO");
+	
+	JCheckBox entreprise = new JCheckBox("entreprise");
+	JCheckBox tauxmortalit� = new JCheckBox("mortalit�");
+	
+	JSliderText morta= new JSliderText(0,100,25,5,"Taux morta :");
+	JSpinnerText  nbentreprise = new JSpinnerText("Entreprise",4,1);
+	
+	
+	
 
 
 	Reglage(){ //constructeur de la fenêtre
@@ -43,8 +53,22 @@ public class Reglage extends JFrame{ //class qui va créer la fenêtre menu pour
 
 		this.Button.add(b1);//ajout de JButton à l'objet Button
 		this.Button.add(b2);
+		
+		//this.checkBox.setLayout(new BorderLayout());
+		//this.checkBox.setAlignmentX(CENTER_ALIGNMENT);
+		
+		this.checkBox.add(entreprise);
+		this.checkBox.add(tauxmortalit�);
+		this.checkBox.add(nbentreprise);
+		this.checkBox.add(morta);
+		
+		
+		//tauxmortalit�.addActionListener((event)->{slidermorta();});
+		
 
 		this.panneau.add(Spinner,BorderLayout.NORTH); //ajoute l'objet qui va contenir les objets indiquants la population totale et le taux d'individu sain souhaité par l'utilisateur
+		
+		this.panneau.add(checkBox,BorderLayout.CENTER);
 		this.panneau.add(Button,BorderLayout.SOUTH);  //ajoute l'objet qui va contenir les objets pour lancer et réinitialiser les paramètres de la simulation
 
 
@@ -55,17 +79,23 @@ public class Reglage extends JFrame{ //class qui va créer la fenêtre menu pour
 
 		b1.addActionListener((event)->{reinitialise();}); //permet de lancer la fonction reinitialise quand le JButton 1 est cliqué
 		b2.addActionListener((event)->{go();}); //permet de lancer la fonction go quand le JButton 2 est cliqué
-
+		
+		
 		
 	}
 
 
-
+	public void slidermorta() {
+		this.tauxmortalit�.add(morta);
+	}
 
 	public void reinitialise() { //réinitialise tous les paramètres de la simulation à des valeurs par défaut
 		this.population.restart(); //remet la valeur du spinnerText a une valeur par défaut
-		this.taux.setValue(50);  //fixe la valeur du sliderText à 50
-
+		this.taux.restart();  //fixe la valeur du sliderText à 50
+		this.morta.restart();
+		this.nbentreprise.restart();
+		this.tauxmortalit�.setSelected(false);
+		this.entreprise.setSelected(false);
 	}
 
 
@@ -75,14 +105,25 @@ public class Reglage extends JFrame{ //class qui va créer la fenêtre menu pour
 		int i=100-taux.getValue();
 		int x=p*s/100;
 		int y=p*i/100;
+		
+		
 
 		
 		//
 
 		act = new boolean[9]; //initialision des tableaux contenant les options et valeurs souhaité par l'utilisateur
+		
 
-		act = new boolean[] {true, true, true, true, false, true, true, true, false};//initialision des tableaux contenant les options et valeurs souhaité par l'utilisateur
-		val = new int[] {x, y, 2, 900, 1000, 500, 3000, 3, 10000};
+		act = new boolean[] {true, true, false, true, false, true, true, true, false};//initialision des tableaux contenant les options et valeurs souhaité par l'utilisateur
+		val = new int[] {x, y, 0, 900, 1000, 500, 3000, 3, 10000};
+		if(this.tauxmortalit�.isSelected()== true) {
+			this.act[4] = true;
+			this.val[4] = morta.getValue();
+		}
+		if(this.entreprise.isSelected()== true) {
+			this.act[2] = true;
+			this.val[2] = nbentreprise.getValue();
+		}
 
         //attribution des valeurs de population et taux de sain dans les tablaux
 		// les deux premiers éléments du tableau d'option sont toujours considérés comme vrai car "option" par défauts de la simulation
@@ -155,11 +196,13 @@ public class Reglage extends JFrame{ //class qui va créer la fenêtre menu pour
 	public class JSliderText extends JPanel{ //classe interne qui va permettre la création de slider avec du texte
 		JLabel sliderLabel; //texte désiré
 		JSlider slider; //slider auquel on va associé le texte
+		int r�ni;
 
 
 		JSliderText(int min, int max,int M, int m,String s){ //constructeur de l'objet
 			this.sliderLabel= new JLabel(s, JLabel.CENTER); //création du label avec texte voulu
 			slider= new JSlider(); //création du slider
+			this.r�ni=max;
 			this.slider.setMinimum(min);//paramétrage du slider
 			this.slider.setMaximum(max);
 			this.slider.setValue(max/2);
@@ -178,6 +221,9 @@ public class Reglage extends JFrame{ //class qui va créer la fenêtre menu pour
 		 int getValue() {
 			 return this.slider.getValue();
 		 } //récupère la valeur  courante du slider
+		 void restart() {
+			 this.setValue(r�ni/2);
+		 }
 	}
 
 }
