@@ -101,8 +101,6 @@ public class Board extends JPanel implements ActionListener {
 		timer.start();
 
 
-
-
 		initLimiteEmploye();
 		initLimiteHome();
 		initSorties();
@@ -141,8 +139,8 @@ public class Board extends JPanel implements ActionListener {
 		temps++;
 		inGame();
 
-		updateIndividus();
 		CheckCollisionsFutures();
+		updateIndividus();
 		refreshAll();
 
 		updateLieux();
@@ -167,6 +165,11 @@ public class Board extends JPanel implements ActionListener {
 			}
 		}
 		dieCheck();
+		updateEmployes();
+		if (temps % 500 == 0) {
+			reShuffle();
+		}
+
 	}
 
 	private void inGame() {
@@ -181,6 +184,8 @@ public class Board extends JPanel implements ActionListener {
 
 		List<Individu> ls = placeur.getIndividus();
 		List<Lieu> lieux = placeur.getLieu();
+		List<Home> homes = placeur.getHomes();
+		List<Entreprise> entreprises = placeur.getEntreprise();
 
 		for (Individu individu1 : ls) {
 
@@ -194,15 +199,28 @@ public class Board extends JPanel implements ActionListener {
 				if (individu1 != individu2 && r1.intersects(r2)) {
 					individu1.rebound();
 					CheckContamination(individu1, individu2);
+					break;
 				}
 			}
 
-			for (Lieu lieu : lieux) {
-				Rectangle r2 = lieu.getBounds();
-				if (individu1.insideLieu != 1 && r1.intersects(r2)) {
-					lieu.accueil(individu1);
+			if (individu1.insideLieu == 0) {
+				for (Home home : homes) {
+					Rectangle r2 = home.getBounds();
+					if (r1.intersects(r2)) {
+						home.accueil(individu1);
+						break;
+					}
+				}
+
+				for (Entreprise entreprise : entreprises) {
+					Rectangle r2 = entreprise.getBounds();
+					if (r1.intersects(r2)) {
+						entreprise.accueil(individu1);
+						break;
+					}
 				}
 			}
+
 		}
 	}
 
@@ -284,10 +302,25 @@ public class Board extends JPanel implements ActionListener {
 		List<Lieu> lieux = placeur.getLieu();
 		List<Individu> individus = placeur.getIndividus();
 		for (Lieu lieu : lieux) {
-			lieu.updateAttente(individus);
 			lieu.checkout();
+			lieu.updateAttente(individus);
 		}
 	}
 
+	private void reShuffle() {
+		List<Individu> individus = placeur.getIndividus();
+		for (Individu individu : individus) {
+			if(individu.X_SPEED != 0) {
+				individu.goAlea();
+			}
+		}
+	}
+
+	private void updateEmployes() {
+		List<Employe> employes = placeur.getEmployes();
+		for (Employe employe : employes) {
+			employe.updateTempsOut();
+		}
+	}
 
 }

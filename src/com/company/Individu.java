@@ -9,14 +9,15 @@ public class Individu extends Sprite {
     public static final int BOARD_HEIGHT = 800;
     public int X_SPEED;
     public int Y_SPEED;
-    public int saveXSpeed;
-    public int saveYSpeed;
+
     public int cmptRebond = 0;
 
     public int insideLieu = 0; //0 si hors d'un lieu, 1 entreprise, 2 si maison;
     public int cmptInside = 0;
-    public int houseNumber;
+
     public int objective = 1; //1 si cherche un lieu de travail, 2 pour sa maison
+
+    public int houseNumber;
     public int homeX;
     public int homeY;
     public int homeHeight;
@@ -94,12 +95,12 @@ public class Individu extends Sprite {
                 break;
 
             case 2 :
-                if (limitSupX == homeX + homeWidth || limitSupX == homeX + homeWidth - 1 || x_temp == homeX || x_temp == homeX) {
+                if (limitSupX == homeX + homeWidth || limitSupX == homeX + homeWidth - 1 || x_temp == homeX || x_temp == homeX + 1) {
                     this.X_SPEED *= -1;
                     this.cmptRebond = 1;
                 }
 
-                if (limitSupY == homeY + homeHeight || limitSupY == homeY + homeHeight - 1 || y_temp == homeY || y_temp == homeY) {
+                if (limitSupY == homeY + homeHeight || limitSupY == homeY + homeHeight - 1 || y_temp == homeY || y_temp == homeY + 1) {
                     this.Y_SPEED *= -1;
                     this.cmptRebond = 1;
                 }
@@ -175,18 +176,10 @@ public class Individu extends Sprite {
     }
 
     public void stop() {
-        this.saveXSpeed = X_SPEED;
-        this.saveYSpeed = Y_SPEED;
         this.X_SPEED = 0;
         this.Y_SPEED = 0;
     }
 
-    public void go() {
-        this.X_SPEED = 1;
-        this.Y_SPEED = saveYSpeed;
-        saveXSpeed = 0;
-        saveYSpeed = 0;
-    }
 
     public void goAlea() {
         Random rand = new Random();
@@ -217,5 +210,7 @@ public class Individu extends Sprite {
         this.dureeImmunite = i;
         this.dureeContamination = j;
     }
+
+
 
 }

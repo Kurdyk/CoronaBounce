@@ -3,6 +3,7 @@ package com.company;
 public class Employe extends Individu {
 
     public String entrepriseName;
+    private int tempsOut = 0;
 
     public int entrepriseX;
     public int entrepriseY;
@@ -79,6 +80,9 @@ public class Employe extends Individu {
                     this.Y_SPEED *= -1;
                     this.cmptRebond = 1;
                 }
+                x += X_SPEED;
+                y += Y_SPEED;
+
                 break;
 
             default :
@@ -106,4 +110,13 @@ public class Employe extends Individu {
         return entrepriseName;
     }
 
+    public void updateTempsOut() {
+        if (this.insideLieu == 0) {
+            tempsOut++;
+            if (tempsOut > 1500) {
+                this.objective = 1;
+                tempsOut = 0;
+            }
+        }
+    }
 }
