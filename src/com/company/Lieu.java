@@ -10,8 +10,9 @@ public class Lieu extends Sprite {
     public String typeLieu;
     public String nom;
     private int[] entree;
-    public int tempsIn = 500;
+    public int tempsIn;
     private int[] sortie;
+    private int nombreEntree = 0;
 
     public List<Individu> contenu;
     private List<Individu> attenteIn;
@@ -32,12 +33,18 @@ public class Lieu extends Sprite {
         attenteIn = new ArrayList<>();
         attenteOut = new ArrayList<>();
 
+        System.out.println("taille de contenu : " + contenu.size());
+        System.out.println("taille de attenteIn : " + attenteIn.size());
+        System.out.println("taille de attenteOut : " + attenteOut.size());
+
+
         streamConstr();
         loadImage(stream);
         getImageDimensions();
         this.entree = this.getCentre();
 
     }
+
 
     protected void reloadImage() {
         this.streamConstr();
@@ -129,10 +136,8 @@ public class Lieu extends Sprite {
     }
 
     public void placeAttente() {
-        Individu individu = attenteIn.get(0);
+        inside(attenteIn.get(0));
         attenteIn.remove(0);
-        inside(individu);
-        individu.go();
     }
 
     public void sortAttente(List<Individu> individus) {
@@ -140,6 +145,7 @@ public class Lieu extends Sprite {
         if (placeDispoOut(individu, sortie[0], sortie[1], individus)) {
             individu.size = 0;
             individu.insideLieu = 0;
+            individu.cmptInside = 0;
             contenu.remove(individu);
             attenteOut.remove(0);
             individu.x = sortie[0];
@@ -154,7 +160,7 @@ public class Lieu extends Sprite {
     }
 
     boolean placeDispoOut(Sprite sprite, int x, int y, List<Individu> individus) {
-        Rectangle potentiel = new Rectangle(x, y, 32, 32);
+        Rectangle potentiel = new Rectangle(x - 16, y - 16, 48, 48);
         for (Individu individu : individus) {
             if (potentiel.intersects(individu.getBounds())) {
                 return false;
@@ -163,13 +169,13 @@ public class Lieu extends Sprite {
         return true;
     }
 
-    boolean placeDispo(Sprite sprite, int x, int y) {
+    boolean placeDispo(int x, int y) {
         if (contenu == null) {
             return true;
         }
-        Rectangle potentiel = new Rectangle(x, y, 8, 8);
-        for (Sprite spriteIn : contenu) {
-            Rectangle r = spriteIn.getBounds();
+        Rectangle potentiel = new Rectangle(x, y,8, 8);
+        for (Individu individu : contenu) {
+            Rectangle r = individu.getBounds();
             if (r.intersects(potentiel)) {
                 return false;
             }
@@ -178,7 +184,7 @@ public class Lieu extends Sprite {
     }
 
     public void inside(Individu individu) {
-        if (placeDispo(individu, entree[0], entree[1])) {
+        if (placeDispo(entree[0], entree[1]) && nombreEntree == 0) {
             individu.size = 1;
             individu.reloadImage();
             individu.insideLieu = individu.objective;
@@ -187,6 +193,8 @@ public class Lieu extends Sprite {
             individu.x = entree[0];
             individu.y = entree[1];
             individu.goAlea();
+
+            nombreEntree = 1;
         } else {
             enAttenteEntree(individu);
         }
@@ -194,21 +202,21 @@ public class Lieu extends Sprite {
 
     public void updateAttente(List<Individu> individus) {
         if (attenteIn.size() != 0) {
-            Individu individu = attenteIn.get(0);
-            if (placeDispo(individu, entree[0], entree[1])) {
+            if (placeDispo(entree[0], entree[1])) {
                 placeAttente();
             }
         }
         if (attenteOut.size() != 0) {
             sortAttente(individus);
         }
+        nombreEntree = 0;
     }
 
     public void checkout() {
         if (contenu.size() != 0) {
             for (Individu individu : contenu) {
                 individu.cmptInside++;
-                if (individu.cmptInside >= this.tempsIn) {
+                if (individu.cmptInside >= this.tempsIn && !attenteOut.contains(individu)) {
                     sortie(individu);
                 }
             }

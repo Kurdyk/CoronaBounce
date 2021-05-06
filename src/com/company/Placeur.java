@@ -308,14 +308,13 @@ public class Placeur {
 
     private ArrayList<int[]> coordonneesHome(int width, int height) {
         ArrayList<int[]> res = new ArrayList<>();
-        int maxPerLigne = width / 128;
-        System.out.println(maxPerLigne);
+        int maxPerLigne = width / 160;
 
         for (int i = 0; i < maxPerLigne; i++) {
-            res.add(new int[] {i * 128, 0});
+            res.add(new int[] {i * 160, 0});
         }
         for (int j = 0; j < maxPerLigne; j++) {
-            res.add(new int[] {j * 128, height - 64});
+            res.add(new int[] {j * 160, height - 64});
         }
         return res;
     }
@@ -347,52 +346,50 @@ public class Placeur {
         int nbrPerHome = nbrI / nbrH;
         int reste = nbrI % nbrH;
         int i = 0;
-        for (Lieu l : lieu) {
-            if (l instanceof Home) {
-                int lX = l.x;
-                int lY = l.y;
-                int lWidth = l.width;
-                int lHeight = l.height;
+        for (Home home : getHomes()) {
+            int lX = home.x;
+            int lY = home.y;
+            int lWidth = home.width;
+            int lHeight = home.height;
 
-                Rectangle NorthWest = new Rectangle(lX, lY, lWidth / 2, lHeight /2);
-                Rectangle NorthEast = new Rectangle(lX + lWidth / 2, lY, lWidth / 2, lHeight /2);
-                Rectangle SouthWest = new Rectangle(lX, lY + lHeight / 2, lWidth / 2, lHeight /2);
-                Rectangle SouthEast = new Rectangle(lX + lWidth / 2, lY + lHeight / 2, lWidth / 2, lHeight /2);
+            Rectangle NorthWest = new Rectangle(lX, lY, lWidth / 2, lHeight /2);
+            Rectangle NorthEast = new Rectangle(lX + lWidth / 2, lY, lWidth / 2, lHeight /2);
+            Rectangle SouthWest = new Rectangle(lX, lY + lHeight / 2, lWidth / 2, lHeight /2);
+            Rectangle SouthEast = new Rectangle(lX + lWidth / 2, lY + lHeight / 2, lWidth / 2, lHeight /2);
 
-                for (int j = 0; j < nbrPerHome && j < 4; j++) {
-                    Individu indiv = individu.get(i);
-                    indiv.setHouse(i);
-                    i++;
-                    indiv.size = 1;
-                    indiv.reloadImage();
-                    indiv.insideLieu = 2;
-                    indiv.goAlea();
-                    l.contenu.add(indiv);
-                    switch (j) {
-                        case 0 :
-                            indiv.x = NorthWest.x + 8;
-                            indiv.y = NorthWest.y + 8;
-                            indiv.cmptInside = 0;
-                            break;
-                        case 1 :
-                            indiv.x = NorthEast.x + 8;
-                            indiv.y = NorthEast.y + 8;
-                            indiv.cmptInside = 100;
-                            break;
-                        case 2 :
-                            indiv.x = SouthWest.x + 8;
-                            indiv.y = SouthWest.y + 8;
-                            indiv.cmptInside = 200;
-                            break;
-                        default :
-                            indiv.x = SouthEast.x + 8;
-                            indiv.y = SouthEast.y + 8;
-                            indiv.cmptInside = 300;
-                            break;
+            for (int j = 0; j < nbrPerHome && j < 4; j++) {
+                Individu indiv = individu.get(i);
+                indiv.setHouse(home.numero);
+                i++;
+                indiv.size = 1;
+                indiv.reloadImage();
+                indiv.insideLieu = 2;
+                indiv.goAlea();
+                home.contenu.add(indiv);
+                switch (j) {
+                    case 0 :
+                        indiv.x = NorthWest.x + 8;
+                        indiv.y = NorthWest.y + 8;
+                        indiv.cmptInside = 0;
+                        break;
+                    case 1 :
+                        indiv.x = NorthEast.x + 8;
+                        indiv.y = NorthEast.y + 8;
+                        indiv.cmptInside = 100;
+                        break;
+                    case 2 :
+                        indiv.x = SouthWest.x + 8;
+                        indiv.y = SouthWest.y + 8;
+                        indiv.cmptInside = 200;
+                        break;
+                    default :
+                        indiv.x = SouthEast.x + 8;
+                        indiv.y = SouthEast.y + 8;
+                        indiv.cmptInside = 300;
+                        break;
                     }
                 }
             }
-        }
         placeReste(reste, nbrH, i);
     }
 
@@ -406,9 +403,9 @@ public class Placeur {
     private void placeSoloInHome(Individu individu, Home home) {
         int nbrIn = home.contenu.size();
         individu.size = 1;
+        individu.setHouse(home.numero);
         individu.reloadImage();
         individu.insideLieu = 2;
-        individu.goAlea();
         home.contenu.add(individu);
         switch (nbrIn) {
             case 0 :

@@ -8,7 +8,7 @@ public class Home extends Lieu {
         super(x, y);
 
         InitLieu();
-
+        tempsIn = 600;
     }
 
     protected void setNumero(int i) {

@@ -3,6 +3,7 @@ package com.company;
 public class Employe extends Individu {
 
     public String entrepriseName;
+    private int tempsOut = 0;
 
     public int entrepriseX;
     public int entrepriseY;
@@ -70,15 +71,18 @@ public class Employe extends Individu {
                 break;
 
             case 2 :
-                if (limitSupX == homeX + homeWidth || limitSupX == homeX + homeWidth - 1 || x_temp == homeX || x_temp == homeX) {
+                if (limitSupX == homeX + homeWidth || limitSupX == homeX + homeWidth - 1 || x_temp == homeX || x_temp == homeX + 1) {
                     this.X_SPEED *= -1;
                     this.cmptRebond = 1;
                 }
 
-                if (limitSupY == homeY + homeHeight || limitSupY == homeY + homeHeight - 1 || y_temp == homeY || y_temp == homeY) {
+                if (limitSupY == homeY + homeHeight || limitSupY == homeY + homeHeight - 1 || y_temp == homeY || y_temp == homeY + 1) {
                     this.Y_SPEED *= -1;
                     this.cmptRebond = 1;
                 }
+                x += X_SPEED;
+                y += Y_SPEED;
+
                 break;
 
             default :
@@ -106,4 +110,13 @@ public class Employe extends Individu {
         return entrepriseName;
     }
 
+    public void updateTempsOut() {
+        if (this.insideLieu == 0) {
+            tempsOut++;
+            if (tempsOut > 1500) {
+                this.objective = 1;
+                tempsOut = 0;
+            }
+        }
+    }
 }
