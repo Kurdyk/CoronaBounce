@@ -24,7 +24,7 @@ public class Entreprise extends Lieu {
     }
 
     public void accueil(Individu individu) {
-        //regarde si l'indivi du peut entrer sinon .rebound();
+        //regarde si l'individu du peut entrer sinon .rebound();
         if (individu instanceof Employe && individu.getSpecification().equals(nom) && individu.objective == 1) {
             this.inside(individu);
             individu.objective = 2;

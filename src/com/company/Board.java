@@ -21,8 +21,8 @@ public class Board extends JPanel implements ActionListener {
 	int maxtemps;
 	int temps = 0;
 
-	private int B_WIDTH = 700;
-	private int B_HEIGHT = 800;
+	private int B_WIDTH = 800;
+	private int B_HEIGHT = 775;
 	private int DELAY = 12; //Accelerateur potentiel
 	public int killRate = 0; //Determiner la mortalité du virus = killRate * 1 / 10000;
 	public int infect;
@@ -164,8 +164,10 @@ public class Board extends JPanel implements ActionListener {
 				ls.remove(i);
 			}
 		}
+
 		dieCheck();
 		updateEmployes();
+
 		if (temps % 500 == 0) {
 			reShuffle();
 		}
@@ -183,7 +185,6 @@ public class Board extends JPanel implements ActionListener {
 	private void CheckCollisionsFutures() {
 
 		List<Individu> ls = placeur.getIndividus();
-		List<Lieu> lieux = placeur.getLieu();
 		List<Home> homes = placeur.getHomes();
 		List<Entreprise> entreprises = placeur.getEntreprise();
 
@@ -203,23 +204,23 @@ public class Board extends JPanel implements ActionListener {
 				}
 			}
 
-			if (individu1.insideLieu == 0) {
-				for (Home home : homes) {
-					Rectangle r2 = home.getBounds();
-					if (r1.intersects(r2)) {
-						home.accueil(individu1);
-						break;
-					}
-				}
 
-				for (Entreprise entreprise : entreprises) {
-					Rectangle r2 = entreprise.getBounds();
-					if (r1.intersects(r2)) {
-						entreprise.accueil(individu1);
-						break;
-					}
+			for (Home home : homes) {
+				Rectangle r2 = home.getBounds();
+				if (individu1.insideLieu != 2 && r1.intersects(r2)) {
+					home.accueil(individu1);
+					break;
 				}
 			}
+
+			for (Entreprise entreprise : entreprises) {
+				Rectangle r2 = entreprise.getBounds();
+				if (individu1.insideLieu != 1 && r1.intersects(r2)) {
+					entreprise.accueil(individu1);
+					break;
+				}
+			}
+
 
 		}
 	}

@@ -5,8 +5,8 @@ import java.util.Random;
 
 public class Individu extends Sprite {
 
-    public static final int BOARD_WIDTH = 700;
-    public static final int BOARD_HEIGHT = 800;
+    public static final int BOARD_WIDTH = 800;
+    public static final int BOARD_HEIGHT = 775;
     public int X_SPEED;
     public int Y_SPEED;
 

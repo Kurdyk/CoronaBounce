@@ -71,12 +71,12 @@ public class Employe extends Individu {
                 break;
 
             case 2 :
-                if (limitSupX == homeX + homeWidth || limitSupX == homeX + homeWidth - 1 || x_temp == homeX || x_temp == homeX) {
+                if (limitSupX == homeX + homeWidth || limitSupX == homeX + homeWidth - 1 || x_temp == homeX || x_temp == homeX + 1) {
                     this.X_SPEED *= -1;
                     this.cmptRebond = 1;
                 }
 
-                if (limitSupY == homeY + homeHeight || limitSupY == homeY + homeHeight - 1 || y_temp == homeY || y_temp == homeY) {
+                if (limitSupY == homeY + homeHeight || limitSupY == homeY + homeHeight - 1 || y_temp == homeY || y_temp == homeY + 1) {
                     this.Y_SPEED *= -1;
                     this.cmptRebond = 1;
                 }

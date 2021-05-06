@@ -308,13 +308,13 @@ public class Placeur {
 
     private ArrayList<int[]> coordonneesHome(int width, int height) {
         ArrayList<int[]> res = new ArrayList<>();
-        int maxPerLigne = width / 128;
+        int maxPerLigne = width / 160;
 
         for (int i = 0; i < maxPerLigne; i++) {
-            res.add(new int[] {i * 128, 0});
+            res.add(new int[] {i * 160, 0});
         }
         for (int j = 0; j < maxPerLigne; j++) {
-            res.add(new int[] {j * 128, height - 64});
+            res.add(new int[] {j * 160, height - 64});
         }
         return res;
     }
