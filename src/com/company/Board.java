@@ -41,7 +41,9 @@ public class Board extends JPanel implements ActionListener {
 		return B_HEIGHT;
 	}
 
-
+	public Placeur getPlaceur(){
+		return this.placeur;
+	}
 
 	private void initBoard(boolean[] tabBoolean, int[] tabVal) {
 
