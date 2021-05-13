@@ -25,6 +25,7 @@ public class Reglage extends JFrame{
 
 	JButton b1= new JButton("Reinitialiser");
 	JButton b2= new JButton("GO");
+	JButton b3 = new JButton(("Courbe"));
 	
 	JCheckBox entreprise = new JCheckBox("entreprise");
 	JCheckBox tempsentreprise = new JCheckBox("Temps de travail");
@@ -41,6 +42,10 @@ public class Reglage extends JFrame{
 	JSpinnerText Vitessesimulation  = new JSpinnerText("Vitesse de la simulation",1,3,1);
 	JSpinnerText TempsTotale = new JSpinnerText("Temps totale",1000,10000,1000);
 	JSliderText morta= new JSliderText(0,100,25,5,"Taux morta :");
+
+	private int x;
+	private int y;
+
 
 	/**
 	 * constructeur de la fenetre
@@ -61,6 +66,7 @@ public class Reglage extends JFrame{
 
 		this.Button.add(b1);//ajout de JButton a l'objet Button
 		this.Button.add(b2);
+		this.Button.add(b3);
 		
 		this.checkBox.add(entreprise);
 		this.checkBox.add(tempsentreprise);
@@ -93,9 +99,7 @@ public class Reglage extends JFrame{
 		b1.addActionListener((event)->{reinitialise();}); //permet de lancer la fonction reinitialise quand le JButton 1 est cliqué
 		b2.addActionListener((event)->{go();}); //permet de lancer la fonction go quand le JButton 2 est cliqué
 		b3.addActionListener((event)->{afficheCourbe();});
-		
-		
-		
+
 	}
 
 	/**
@@ -179,11 +183,8 @@ public class Reglage extends JFrame{
 		// les deux premiers elements du tableau d'option sont toujours consideres comme vrai car "option" par defauts de la simulation
 
 
-		Vue view= new Vue(act,val); //definition de la fenetre contenant la simulation avec options desirees
+		view = new Vue(act,val); //definition de la fenetre contenant la simulation avec options desirees
 		view.setVisible(true); //rend la fenetre de la simulation visible
-		Courbe courbe= new Courbe(); //definition de la fenetre contenant le graphique resume de la simulation
-		courbe.setVisible(true); //rend la fenetre graphique visible
-
 
 	}
 
