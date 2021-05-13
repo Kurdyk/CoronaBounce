@@ -35,26 +35,49 @@ public class Board extends JPanel implements ActionListener {
 	public List<Entreprise> entreprises;
 
 
+	/**
+	 * Constructeur de la Board
+	 * @param tabBoolean Tableau de valeurs booleennes pour l'initialisation des fonctions de la Board
+	 * @param tabVal Tableau de valeurs numeriques pour l'initialisation des parametres de la Board
+	 */
 	public Board(boolean[] tabBoolean, int[] tabVal) {
 		initBoard(tabBoolean, tabVal);
 	}
 
+	/**
+	 * @return La largueur de la Board
+	 */
 	public int getWidth() {
 		return B_WIDTH;
 	}
 
+	/**
+	 * @return La hauteur de la Board
+	 */
 	public int getHeight() {
 		return B_HEIGHT;
 	}
 
+	/**
+	 * @return Le placeur lie a la Board
+	 */
 	public Placeur getPlaceur(){
 		return this.placeur;
 	}
 
+	/**
+	 * La listSain est actuallisee regulierement avec le nombre d'individus sains pour faire la courbe
+	 * @return Cette listSain
+	 */
 	public List<Double> getListSain() {
 		return listSain;
 	}
 
+	/**
+	 * Initialise les fonctions et valeurs de la Board
+	 * @param tabBoolean Tableau de valeurs booleennes pour l'initialisation des fonctions de la Board
+	 * @param tabVal Tableau de valeurs numeriques pour l'initialisation des parametres de la Board
+	 */
 	private void initBoard(boolean[] tabBoolean, int[] tabVal) {
 
 
@@ -121,7 +144,10 @@ public class Board extends JPanel implements ActionListener {
 		entreprises = placeur.getEntreprise();
 	}
 
-
+	/**
+	 * Dessine l'aspect general de la board
+	 * @param g Le g graphique de base de Java
+	 */
 	@Override
 	public void paintComponent(Graphics g) {
 
@@ -131,6 +157,10 @@ public class Board extends JPanel implements ActionListener {
 
 	    }
 
+	/**
+	 * Dessine chaque objet dans la Board
+ 	 * @param g Le g graphique de base de Java
+	 */
 	private void drawObjects(Graphics g) {
 
 		List<Individu> ls = placeur.getIndividus();
@@ -149,6 +179,10 @@ public class Board extends JPanel implements ActionListener {
 	}
 
 
+	/**
+	 * Actualise l'etat de la Board
+	 * @param e Le e ActionEvent de Java
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		temps++;
@@ -163,6 +197,9 @@ public class Board extends JPanel implements ActionListener {
 		repaint();
 	}
 
+	/**
+	 * Deplace les Individus, verifie les morts a effectuer, actualise le nombre d'individus sain, fait avancer les compteurs lies aux Individus
+	 */
 	private void updateIndividus() {
 
 		List<Individu> ls = placeur.getIndividus();
@@ -194,13 +231,10 @@ public class Board extends JPanel implements ActionListener {
 
 	}
 
-	/*private void inGame() {
-
-		if (!ingame || temps == maxtemps) {
-			timer.stop();
-		}
-	}*/
-
+	/**
+	 * Verifie que le temps max n'est pas ecoule, sinon arrete le timer
+	 * @return true si la Board peur continuer, false sinon
+	 */
 	public boolean inGame() {
 
 		if (!ingame || temps == maxtemps) {
@@ -210,6 +244,9 @@ public class Board extends JPanel implements ActionListener {
 		return true;
 	}
 
+	/**
+	 * Verifie les collisions à venir entre Individus et avec les lieux, declanche les accueils
+	 */
 	private void CheckCollisionsFutures() {
 
 		List<Individu> ls = placeur.getIndividus();
@@ -257,7 +294,11 @@ public class Board extends JPanel implements ActionListener {
 		}
 	}
 
-
+	/**
+	 * En cas de collisions entre deux Individus verifie si une contamination a lieu
+	 * @param m Le premier Individu de la collision
+	 * @param m1 Le second Individu de la collision
+	 */
     protected void CheckContamination (Individu m, Individu m1) {
         if (m.etat.equals("Infected") && m1.etat.equals("Neutral")) {
             m1.contamine();
@@ -271,7 +312,9 @@ public class Board extends JPanel implements ActionListener {
         }
     }
 
-
+	/**
+	 * Verifie si un Individu doit mourir, si oui, le tue
+	 */
     protected void dieCheck() {
         for (Individu indiv : placeur.getIndividus()) {
             if (indiv.etat == "Infected") {
@@ -284,7 +327,10 @@ public class Board extends JPanel implements ActionListener {
         }
     }
 
-    private void refreshAll(){
+	/**
+	 * Remet a 0 les compteurs de collision
+	 */
+	private void refreshAll(){
     	List<Individu> ls = placeur.getIndividus();
     	for (int i = 0; i < ls.size(); i++) {
     		Individu individu = ls.get(i);
@@ -292,7 +338,10 @@ public class Board extends JPanel implements ActionListener {
     	}
     }
 
-    public void initLimiteEmploye() {
+	/**
+	 * Initialise les limites des Entreprises pour les Employes correspodants
+	 */
+	public void initLimiteEmploye() {
 		List<Employe> ls = placeur.getEmployes();
 		List<Entreprise> lsEntreprise = placeur.getEntreprise();
 
@@ -310,6 +359,9 @@ public class Board extends JPanel implements ActionListener {
 		}
 	}
 
+	/**
+	 * Initialise les limites des Homes pour les individus correpondants
+	 */
 	public void initLimiteHome() {
 		List<Individu> individus = placeur.getIndividus();
 		List<Home> lsHome = placeur.getHomes();
@@ -324,6 +376,9 @@ public class Board extends JPanel implements ActionListener {
 		}
 	}
 
+	/**
+	 * Initialise les sorties pour les Lieux
+	 */
 	private void initSorties() {
 		List<Lieu> lieux = placeur.getLieu();
 		for (Lieu lieu : lieux) {
@@ -331,6 +386,9 @@ public class Board extends JPanel implements ActionListener {
 		}
 	}
 
+	/**
+	 * Pour chaque Lieu, update les listes d'attente et les compteurs de sortie pour les Individus dedans
+	 */
 	private void updateLieux() {
 		List<Lieu> lieux = placeur.getLieu();
 		List<Individu> individus = placeur.getIndividus();
@@ -340,6 +398,9 @@ public class Board extends JPanel implements ActionListener {
 		}
 	}
 
+	/**
+	 * Donne une nouvelle vitesse aleatoire a chaque Individu
+	 */
 	private void reShuffle() {
 		List<Individu> individus = placeur.getIndividus();
 		for (Individu individu : individus) {
@@ -349,6 +410,9 @@ public class Board extends JPanel implements ActionListener {
 		}
 	}
 
+	/**
+	 * Incremente les compteurs pour les Employes hors d'un Lieu, pour leurs permettre d'y retourner si necessaire
+	 */
 	private void updateEmployes() {
 		List<Employe> employes = placeur.getEmployes();
 		for (Employe employe : employes) {
@@ -356,6 +420,10 @@ public class Board extends JPanel implements ActionListener {
 		}
 	}
 
+	/**
+	 * Compte le nombre d'Individus sains
+	 * @return Le nombre d'Individus sains
+	 */
 	private int nbSain(){
 		int nb=0;
 		for (Individu indiv : placeur.getIndividus()) {
