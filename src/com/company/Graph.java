@@ -11,8 +11,6 @@ import java.awt.RenderingHints;
 import java.awt.Stroke;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
@@ -35,6 +33,7 @@ public class Graph extends JPanel {
         private int infect;
         private Placeur p;
         private List<Individu> individu;
+        private List<Double> listSain;
 
         public Graph(Vue view, int sain, int infect) {
                 board = view.board;
@@ -42,6 +41,7 @@ public class Graph extends JPanel {
                 this.infect = infect;
                 p = board.getPlaceur();
                 individu = p.getIndividus();
+                this.listSain = board.getListSain();
         }
 
         @Override
@@ -50,16 +50,26 @@ public class Graph extends JPanel {
                 Graphics2D g2 = (Graphics2D) g;
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-                double xScale = ((double) getWidth() - (2 * padding) - labelPad) / (individu.size() - 1);
-                double yScale = ((double) getHeight() - (2 * padding) - labelPad) / infect;
+                double xScale = ((double) getWidth() - (2 * padding) - labelPad) / (listSain.size() - 1);
+                double yScale = ((double) getHeight() - (2 * padding) - labelPad) / (infect+sain);
+
+                for(int i = 0; i<listSain.size();i++){
+                        System.out.println(listSain.get(i));
+                }
 
 
-                /*List<Point> graphPoints = new ArrayList<>();
-                for (int i = 0; i < individu.size(); i++) {
+                List<Point> graphPoints = new ArrayList<>();
+                for (int i = 0; i < listSain.size(); i++) {
                         int x1 = (int) (i * xScale + padding + labelPad);
-                        int y1 = (int) ((sain+infect) * yScale + padding);
+                        int y1 = (int) (getMaxSain()-(listSain.get(i) * yScale) + padding);
+                        System.out.println(listSain.get(i));
                         graphPoints.add(new Point(x1, y1));
-                } a changer par des tics du board*/
+                }
+
+                for (int i=0;i<graphPoints.size();i++) {
+                        //System.out.println(graphPoints.get(i));
+
+                }
 
 
 
@@ -76,7 +86,7 @@ public class Graph extends JPanel {
                 Stroke oldStroke = g2.getStroke();
                 g2.setColor(lineColor);
                 g2.setStroke(Graph_Stroke);
-                /*for (int i = 0; i < graphPoints.size() - 1; i++) {
+                for (int i = 0; i < graphPoints.size() - 1; i++) {
                         int x1 = graphPoints.get(i).x;
                         int y1 = graphPoints.get(i).y;
                         int x2 = graphPoints.get(i + 1).x;
@@ -86,14 +96,35 @@ public class Graph extends JPanel {
 
                 g2.setStroke(oldStroke);
                 g2.setColor(pointColor);
+
+
                 for (int i = 0; i < graphPoints.size(); i++) {
                         int x = graphPoints.get(i).x - pointWidth / 2;
                         int y = graphPoints.get(i).y - pointWidth / 2;
                         int ovalW = pointWidth;
                         int ovalH = pointWidth;
                         g2.fillOval(x, y, ovalW, ovalH);
-                }*/
+                }
 
         }
+
+        private double getMinSain() {
+                double minSain = Double.MAX_VALUE;
+                for (Double sain : listSain) {
+                        minSain = Math.min(minSain, sain);
+                }
+                return minSain;
+        }
+
+        private double getMaxSain() {
+                double maxSain = Double.MIN_VALUE;
+                for (Double sain : listSain) {
+                        maxSain = Math.max(maxSain, sain);
+                }
+                return maxSain;
+        }
+
+
+
 
 }
