@@ -6,7 +6,10 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-public class Courbe extends JFrame{ //classe qui permettre de créer une fenêtre contenant le graphique résumé de la simulation
+/**
+ * classe qui permettre de créer une fenêtre contenant le graphique résumé de la simulation
+ */
+public class Courbe extends JFrame{
 	JPanel Graphique= new JPanel();  //créer l'objet qui va contenir le graphique
 
 	Courbe(Vue view,int x, int y){
