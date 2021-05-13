@@ -23,13 +23,16 @@ public class Board extends JPanel implements ActionListener {
 	int temps = 0;
 
 	private int B_WIDTH = 800;
-	private int B_HEIGHT = 775;
-	private int DELAY = 12; //Accelerateur potentiel
+	private int B_HEIGHT = 760;
+	private int DELAY = 12;
 	public int killRate = 0; //Determiner la mortalité du virus = killRate * 1 / 10000;
 	public int infect;
 	public int sain;
 	private List<Double> listSain = new ArrayList<Double>();
 
+
+	public List<Home> homes;
+	public List<Entreprise> entreprises;
 
 
 	public Board(boolean[] tabBoolean, int[] tabVal) {
@@ -113,6 +116,9 @@ public class Board extends JPanel implements ActionListener {
 		initLimiteEmploye();
 		initLimiteHome();
 		initSorties();
+
+		homes = placeur.getHomes();
+		entreprises = placeur.getEntreprise();
 	}
 
 
@@ -158,7 +164,6 @@ public class Board extends JPanel implements ActionListener {
 	}
 
 	private void updateIndividus() {
-
 
 		List<Individu> ls = placeur.getIndividus();
 
@@ -208,8 +213,6 @@ public class Board extends JPanel implements ActionListener {
 	private void CheckCollisionsFutures() {
 
 		List<Individu> ls = placeur.getIndividus();
-		List<Home> homes = placeur.getHomes();
-		List<Entreprise> entreprises = placeur.getEntreprise();
 
 		for (Individu individu1 : ls) {
 
@@ -217,20 +220,13 @@ public class Board extends JPanel implements ActionListener {
 			r1.x += individu1.X_SPEED;
 			r1.y += individu1.Y_SPEED;
 
-			for (Individu individu2 : ls) {
-				Rectangle r2 = individu2.getBounds();
-
-				if (individu1 != individu2 && r1.intersects(r2)) {
-					individu1.rebound();
-					CheckContamination(individu1, individu2);
-					break;
-				}
-			}
-
 
 			for (Home home : homes) {
 				Rectangle r2 = home.getBounds();
-				if (individu1.insideLieu != 2 && r1.intersects(r2)) {
+				if (individu1.insideLieu == 2) {
+					break;
+				}
+				if (r1.intersects(r2)) {
 					home.accueil(individu1);
 					break;
 				}
@@ -238,13 +234,26 @@ public class Board extends JPanel implements ActionListener {
 
 			for (Entreprise entreprise : entreprises) {
 				Rectangle r2 = entreprise.getBounds();
-				if (individu1.insideLieu != 1 && r1.intersects(r2)) {
+				if (individu1.insideLieu == 1) {
+					break;
+				}
+				if (r1.intersects(r2)) {
 					entreprise.accueil(individu1);
 					break;
 				}
 			}
 
+			for (Individu individu2 : ls) {
+				if (!individu1.equals(individu2)) {
+					Rectangle r2 = individu2.getBounds();
 
+					if (r1.intersects(r2)) {
+						individu1.rebound();
+						CheckContamination(individu1, individu2);
+						break;
+					}
+				}
+			}
 		}
 	}
 

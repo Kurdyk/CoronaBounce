@@ -10,22 +10,31 @@ public class Employe extends Individu {
     public int entrepriseHeight;
     public int entrepriseWidth;
 
+    /**
+     * Constucteur de la classe Employe
+     * @param x Premier coordonnee initiale de l'Employe
+     * @param y Seconde coordonnee initiale de l'Employe
+     */
     public Employe (int x, int y) {
         super(x, y);
         InitEmploye();
     }
 
+    /**
+     * Initialise l'image de l'Employe
+     */
     private void InitEmploye() {
         this.streamConstr();
         reloadImage();
     }
 
-    protected void reloadImage(){
-        this.streamConstr();
-        loadImage(stream);
-        getImageDimensions();
-    }
-
+    /**
+     * Initialise les limites de deplacement de l'Employe quand il est en Entreprise
+     * @param x Premiere coordornee de l'Entreprise de l'Employe
+     * @param y Seconde coordornee de l'Entreprise de l'Employe
+     * @param height Hauteur de l'Entreprise de l'Employe
+     * @param width Largeur coordornee de l'Entreprise de l'Employe
+     */
     public void initEntrepriseDim(int x, int y, int height, int width){
          this.entrepriseX = x;
          this.entrepriseY = y;
@@ -33,6 +42,10 @@ public class Employe extends Individu {
          this.entrepriseWidth = width;
     }
 
+    /**
+     * Construit le chemin d'acces pour l'image de l'Employe
+     */
+    @Override
     protected void streamConstr() {
         switch (size) {
             case 0 :
@@ -44,9 +57,11 @@ public class Employe extends Individu {
         }
     }
 
-
+    /**
+     * Gere les mouvements d'un Individu de classe Employe
+     */
+    @Override
     public void move() {
-        //Gere les rebonds sur le bord du tableau
         int x_temp = x + X_SPEED;
         int y_temp = y + Y_SPEED;
 
@@ -102,14 +117,17 @@ public class Employe extends Individu {
         }
     }
 
-    public void setEtat(String newEtat){
-        this.etat = newEtat;
-    }
-
+    /**
+     * Permet d'obtenir le nom de l'Entreprise de l'Employe
+     * @return Le nom de l'Entreprise de l'Employe
+     */
     public String getSpecification() {
         return entrepriseName;
     }
 
+    /**
+     * Si l'Employe passe trop de temps dehors sans retourner chez lui, lui permet un retour en Entreprise
+     */
     public void updateTempsOut() {
         if (this.insideLieu == 0) {
             tempsOut++;
