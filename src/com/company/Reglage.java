@@ -1,97 +1,84 @@
 package com.company;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
 import java.awt.*;
 
-public class Reglage extends JFrame{ //class qui va creer la feneªtre menu pour l'utilisateur
+/**
+ * class qui va creer la fenetre menu pour l'utilisateur
+ */
+public class Reglage extends JFrame{
 
 	JPanel panneau= new JPanel(); //objet qui va contenir les differents objets avec lesquels l'utilisateur va agir
 
-	Vue view;  //feneªtre qui va contenir la simulation
-	Courbe courbe; //feneªtre qui va contenir le graphique resume de la simulation
+	Vue view;  //fenetre qui va contenir la simulation
+	Courbe courbe; //fenetre qui va contenir le graphique resume de la simulation
 
 	JPanel Spinner =new JPanel(); //objet qui va contenir
-	JPanel Button=new JPanel(); //objet qui contient des JButton lae§ant simulation et reneatialiser les parametres de la simulation
+	JPanel Button=new JPanel(); //objet qui contient des JButton lancer simulation et reneatialiser les parametres de la simulation
 	JPanel checkBox = new JPanel();
 
-	JSpinnerText population= new JSpinnerText("Population totale : ", 0,40, 1); //objet cree par classe interne pour eªtre utilise
-	JSliderText taux= new JSliderText(0,100,25,5,"Taux sain :"); //objet cree par classe interne pour eªtre utilise
-	
+	JSpinnerText population= new JSpinnerText("Population totale : ", 0,40, 1); //objet cree par classe interne pour etre utilise
+	JSliderText taux= new JSliderText(0,100,25,5,"Taux sain :"); //objet cree par classe interne pour etre utilise
 
 	boolean act[]; //tableau qui indiquera quelles options l'utilisateur a voulu dans sa simulation
 	int []val; //tableau indiquant la valeur des options voulues si besoin est
 
-	JButton b1= new JButton("REinitialiser");
+	JButton b1= new JButton("Reinitialiser");
 	JButton b2= new JButton("GO");
 	
 	JCheckBox entreprise = new JCheckBox("entreprise");
 	JCheckBox tempsentreprise = new JCheckBox("Temps de travail");
-	JCheckBox tauxmortalité = new JCheckBox("mortalité");
-	JCheckBox tauxImun = new JCheckBox("Immunité");
-	JCheckBox tauxguéri = new JCheckBox("guéri");
+	JCheckBox tauxmortalite = new JCheckBox("mortalite");
+	JCheckBox tauxImun = new JCheckBox("Immunite");
+	JCheckBox tauxgueri = new JCheckBox("gueri");
 	JCheckBox vitesseSimu = new JCheckBox("Vitesse");
 	JCheckBox Tempstotale = new JCheckBox("Totale");
-	
-	
+
 	JSpinnerText  nbentreprise = new JSpinnerText("Nombre D'Entreprise",0,2,1);
 	JSpinnerText tpsentreprise= new JSpinnerText("Temps en entreprise",500,1500,100);
-	JSpinnerText  Immun  = new JSpinnerText("Taux Immunité",500,5000,100);
-	JSpinnerText TempsGuérison  = new JSpinnerText("Temps de guérison",500,5000,100);
+	JSpinnerText  Immun  = new JSpinnerText("Taux Immunite",500,5000,100);
+	JSpinnerText TempsGuerison  = new JSpinnerText("Temps de guerison",500,5000,100);
 	JSpinnerText Vitessesimulation  = new JSpinnerText("Vitesse de la simulation",1,3,1);
 	JSpinnerText TempsTotale = new JSpinnerText("Temps totale",1000,10000,1000);
-
-	
 	JSliderText morta= new JSliderText(0,100,25,5,"Taux morta :");
-	
-	
 
-	Reglage(){ //constructeur de la feneªtre
+	/**
+	 * constructeur de la fenetre
+	 */
+	Reglage(){
 
-		this.setTitle("Corona"); //definit nom de la feneªtre
-		this.setSize(700, 500); //definition taille feneªtre
+		this.setTitle("Corona"); //definit nom de la fenetre
+		this.setSize(700, 500); //definition taille fenetre
+		this.setLocationRelativeTo(null); //positionne la fenetre au centre de l'ecran en position par defaut
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE); //arrete le programme quand la fenetre est ferme
 
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE); //arreªte le programme quand la feneªtre est ferme
-
-		this.getContentPane().setLayout(new GridLayout()); //definition de differentes zones de la feneªtre oe¹ on pourra ajouter des objets
-		this.getContentPane().add(panneau, BorderLayout.CENTER);//ajoute l'objet panneau au centre de la feneªtre
-
-
-		this.panneau.setLayout(new BorderLayout()); //definit differente zones dans l'objet panneau oe¹ on pourra integrer d'autres objets
+		this.getContentPane().setLayout(new GridLayout()); //definition de differentes zones de la fenetre  on pourra ajouter des objets
+		this.getContentPane().add(panneau, BorderLayout.CENTER);//ajoute l'objet panneau au centre de la fenetre
 
 
-		this.Button.add(b1);//ajout de JButton e  l'objet Button
+		this.panneau.setLayout(new BorderLayout()); //definit differente zones dans l'objet panneau ou on pourra integrer d'autres objets
+
+
+		this.Button.add(b1);//ajout de JButton a l'objet Button
 		this.Button.add(b2);
 		
-		//this.checkBox.setLayout(new BorderLayout());
-		//this.checkBox.setAlignmentX(CENTER_ALIGNMENT);
-		
-		this.checkBox.add(entreprise); // sa marche
-		this.checkBox.add(tempsentreprise);//sa marche
-		this.checkBox.add(tauxmortalité); // sa marche
-		this.checkBox.add(tauxImun);// .???
-		this.checkBox.add(tauxguéri);//sa marche
-		this.checkBox.add(vitesseSimu);//sa marche
-		this.checkBox.add(Tempstotale);// ??
-		
-		
-		
+		this.checkBox.add(entreprise);
+		this.checkBox.add(tempsentreprise);
+		this.checkBox.add(tauxmortalite);
+		this.checkBox.add(tauxImun);
+		this.checkBox.add(tauxgueri);
+		this.checkBox.add(vitesseSimu);
+		this.checkBox.add(Tempstotale);
 		
 		this.checkBox.add(nbentreprise);
 		this.checkBox.add(tpsentreprise);
 		this.checkBox.add(morta);
 		this.checkBox.add(Immun);
-		this.checkBox.add(TempsGuérison);
+		this.checkBox.add(TempsGuerison);
 		this.checkBox.add(Vitessesimulation);
 		this.checkBox.add(TempsTotale);
-		
-		
-		
-		
-		tauxmortalité.addActionListener((event)->{slidermorta();});
-		
+
+		tauxmortalite.addActionListener((event)->{slidermorta();});
 
 		this.panneau.add(Spinner,BorderLayout.NORTH); //ajoute l'objet qui va contenir les objets indiquants la population totale et le taux d'individu sain souhaite par l'utilisateur
 		
@@ -106,40 +93,49 @@ public class Reglage extends JFrame{ //class qui va creer la feneªtre menu pour 
 
 		b1.addActionListener((event)->{reinitialise();}); //permet de lancer la fonction reinitialise quand le JButton 1 est clique
 		b2.addActionListener((event)->{go();}); //permet de lancer la fonction go quand le JButton 2 est clique
-		
-		
-		
 	}
 
-
+	/**
+	 *
+	 */
 	public void slidermorta() {
 		this.Spinner.add(morta);
 	}
 
-	public void reinitialise() { //reinitialise tous les parametres de la simulation e  des valeurs par defaut
+	/**
+	 * reinitialise tous les parametres de la simulation a des valeurs par defaut
+	 */
+	public void reinitialise() {
 		this.population.restart(); //remet la valeur du spinnerText a une valeur par defaut
-		this.taux.restart();  //fixe la valeur du sliderText e  50
+		this.taux.restart();  //fixe la valeur du sliderText a 50
 		this.morta.restart();
 		this.nbentreprise.restart();
-		this.tauxmortalité.setSelected(false);
+		this.Immun.restart();
+		this.TempsGuerison.restart();
+		this.TempsTotale.restart();
+		this.Vitessesimulation.restart();
+		this.tpsentreprise.restart();
+
+		this.tauxmortalite.setSelected(false);
 		this.entreprise.setSelected(false);
+		this.tempsentreprise.setSelected(false);
+		this.tauxmortalite.setSelected(false);
+		this.tauxImun.setSelected(false);
+		this.tauxgueri.setSelected(false);
+		this.vitesseSimu.setSelected(false);
+		this.Tempstotale.setSelected(false);
+
 	}
 
-
-	public void go() { //fonction qui va lancer la simulation
+	/**
+	 * fonction qui va lancer la simulation
+	 */
+	public void go() {
 		int p= population.getValue(); //recuperation et traitement des valeurs de population et du taux de sain
 		int s= taux.getValue();
 		int i=100-taux.getValue();
 		int x=p*s/100;
 		int y=p*i/100;
-		
-		
-
-		
-		//
-
-		act = new boolean[9]; //initialision des tableaux contenant les options et valeurs souhaite par l'utilisateur
-		
 
 		act = new boolean[] {true, true, false, false, false, true, true, true, false};//initialision des tableaux contenant les options et valeurs souhaite par l'utilisateur
 		val = new int[] {x, y, 0, 900, 1000, 500, 3000, 1, 10000};
@@ -152,7 +148,7 @@ public class Reglage extends JFrame{ //class qui va creer la feneªtre menu pour 
 			this.val[3] = tpsentreprise.getValue();
 		}
 
-		if(this.tauxmortalité.isSelected()== true) {
+		if(this.tauxmortalite.isSelected()== true) {
 			this.act[4] = true;
 			this.val[4] = morta.getValue();
 		}
@@ -161,9 +157,9 @@ public class Reglage extends JFrame{ //class qui va creer la feneªtre menu pour 
 			this.act[5] = true;
 			this.val[5] = Immun.getValue();
 		}
-		if(this.tauxguéri.isSelected()==true) {
+		if(this.tauxgueri.isSelected()==true) {
 			this.act[6]= true;
-			this.val[6] = TempsGuérison.getValue();
+			this.val[6] = TempsGuerison.getValue();
 		}
 		if(this.vitesseSimu.isSelected()==true) {
 			this.act[7]= true;
@@ -178,21 +174,31 @@ public class Reglage extends JFrame{ //class qui va creer la feneªtre menu pour 
 		// les deux premiers elements du tableau d'option sont toujours consideres comme vrai car "option" par defauts de la simulation
 
 
-		Vue view= new Vue(act,val); //definition de la feneªtre contenant la simulation avec options desirees
-		view.setVisible(true); //rend la feneªtre de la simulation visible
-		Courbe courbe= new Courbe(); //definition de la feneªtre contenant le graphique resume de la simulation
-		courbe.setVisible(true); //rend la feneªtre graphique visible
+		Vue view= new Vue(act,val); //definition de la fenetre contenant la simulation avec options desirees
+		view.setVisible(true); //rend la fenetre de la simulation visible
+		Courbe courbe= new Courbe(); //definition de la fenetre contenant le graphique resume de la simulation
+		courbe.setVisible(true); //rend la fenetre graphique visible
 
 	}
-	
 
 
-	public class JSpinnerText extends JPanel { //classe interne permettant de creer des objets spinnerText
+	/**
+	 * classe interne permettant de creer des objets spinnerText
+	 */
+	public class JSpinnerText extends JPanel {
 	    JSpinner spinner;
-	    int i; //permet de garder le maximum voulu
-		public JSpinnerText(String s, int i, int j, int k) { //constructeur qui va permettre de construire un spinner avec text associe et un maximum definit
+	    int reni; //permet de garder la valeur pour reinitialiser la valeur numerique de l'objet
+
+		/**
+		 * constructeur qui va permettre de construire un spinner avec text associe et un maximum definit
+		 * @param s texte associÃ© a l'objet
+		 * @param i valeur minimum du spinner
+		 * @param j valeur maximum du spinner
+		 * @param k pas du spinner
+		 */
+		public JSpinnerText(String s, int i, int j, int k) {
 	        super();
-	        this.i=i;
+	        this.reni=j;
 	        JFormattedTextField ftf = null; //va permettre de ajouter du texte au spinner associe
 
 	        SpinnerModel chiffre = new SpinnerNumberModel(j/2, i, j, k); //creation du spinner avec les valeurs numerique en fonction du maximum donner
@@ -207,7 +213,12 @@ public class Reglage extends JFrame{ //class qui va creer la feneªtre menu pour 
 	        	}
 	        }
 
-	    public JFormattedTextField getTextField(JSpinner spinner) { //permet au spinner d'avoir un zone de texte
+		/**
+		 * permet au spinner d'avoir un zone de texte
+		 * @param spinner spinner auquel on veut ajoute une zone de texte
+		 * @return spinner avec une zone de texte ou null si echoue
+		 */
+	    public JFormattedTextField getTextField(JSpinner spinner) {
 	        JComponent editor = spinner.getEditor();
 	        if (editor instanceof JSpinner.DefaultEditor) {
 	            return ((JSpinner.DefaultEditor)editor).getTextField();
@@ -219,7 +230,14 @@ public class Reglage extends JFrame{ //class qui va creer la feneªtre menu pour 
 	        }
 	    }
 
-	     protected JSpinner addLabeledSpinner(Container c, String label, SpinnerModel model) { //associe un spinner et un texte
+		/**
+		 * associe un spinnermodel et un label
+		 * @param c ensemble qui va contenir un label et un spinner model
+		 * @param label
+		 * @param model
+		 * @return retourne un spinner avec un label
+		 */
+	     protected JSpinner addLabeledSpinner(Container c, String label, SpinnerModel model) {
 	        JLabel l = new JLabel(label);
 	        c.add(l);
 
@@ -230,28 +248,42 @@ public class Reglage extends JFrame{ //class qui va creer la feneªtre menu pour 
 	        return spinner;
 	    }
 
-	      int getValue() {
-	    	 return (int)this.spinner.getValue();
-	     } //renvoie la valeur courante de l'attribut spinner
-	      void restart() {
-	    	  this.spinner.setValue(i/2);
-	      } //fixe la valeur courante de l'attribut spinner
+		/**
+		 * renvoie la valeur courante de l'attribut spinner
+		 * @return la valeur
+		 */
+		int getValue() {
+			return (int) this.spinner.getValue();
+		}
 
-		
+		/**
+		 * fixe la valeur courante de l'attribut spinner
+		 */
+		void restart() {
+			this.spinner.setValue(reni/2);
+		}
 	}
-	
 
-
-	public class JSliderText extends JPanel{ //classe interne qui va permettre la creation de slider avec du texte
+	/**
+	 * classe interne qui va permettre la creation de slider avec du texte
+	 */
+	public class JSliderText extends JPanel{
 		JLabel sliderLabel; //texte desire
 		JSlider slider; //slider auquel on va associe le texte
-		int réni;
+		int reni;
 
-
-		JSliderText(int min, int max,int M, int m,String s){ //constructeur de l'objet
+		/**
+		 * constructeur de l'objet
+		 * @param min valeur minimale du slider
+		 * @param max valeur maximale du slider
+		 * @param M	valeur de l'espacement du tick majeur
+		 * @param m valeur de l'espancement du tick mineur
+		 * @param s texte associe au slider
+		 */
+		JSliderText(int min, int max,int M, int m,String s){
 			this.sliderLabel= new JLabel(s, JLabel.CENTER); //creation du label avec texte voulu
 			slider= new JSlider(); //creation du slider
-			this.réni=max;
+			this.reni=max;
 			this.slider.setMinimum(min);//parametrage du slider
 			this.slider.setMaximum(max);
 			this.slider.setValue(max/2);
@@ -260,19 +292,31 @@ public class Reglage extends JFrame{ //class qui va creer la feneªtre menu pour 
 			this.slider.setPaintTicks(true);
 			this.slider.setPaintLabels(true);
 			this.sliderLabel.setAlignmentY(Component.TOP_ALIGNMENT);
-			this.add(sliderLabel); //ajout du label e  l'objet
-			this.add(slider); //ajout du slider e  l'objet
+			this.add(sliderLabel); //ajout du label a l'objet
+			this.add(slider); //ajout du slider a l'objet
 		}
 
-		 void setValue(int n) {
+		/**
+		 * //fixe la valeur courante du slider de l'objet
+		 * @param n valeur qui deviendra courante
+		 */
+		void setValue(int n) {
 			 this.slider.setValue(n);
-		 } //fixe la valeur courante du slider de l'objet
-		 int getValue() {
-			 return this.slider.getValue();
-		 } //recupere la valeur  courante du slider
-		 void restart() {
-			 this.setValue(réni/2);
-		 }
-	}
+		}
 
+		/**
+		 * recupere la valeur  courante du slider
+ 		 * @return valeur numerique courante
+		 */
+		int getValue() {
+			return this.slider.getValue();
+		}
+
+		/**
+		 * fixe la valeur du slider a une valeur par defaut
+		 */
+		void restart() {
+			 this.setValue(reni/2);
+		}
+	}
 }
