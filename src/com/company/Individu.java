@@ -6,7 +6,7 @@ import java.util.Random;
 public class Individu extends Sprite {
 
     public static final int BOARD_WIDTH = 800;
-    public static final int BOARD_HEIGHT = 775;
+    public static final int BOARD_HEIGHT = 760;
     public int X_SPEED;
     public int Y_SPEED;
 
@@ -26,7 +26,7 @@ public class Individu extends Sprite {
 
     public String etat; //Infected, Recovered ou Neutral;
     public String stream;
-    public int size = 0; //défaut : 0 ; petit sprite : 1;
+    public int size = 0; //defaut : 0 ; petit sprite : 1;
 
     public int compteurGuerison = 0;
     public int dureeContamination = 1000;
@@ -167,13 +167,6 @@ public class Individu extends Sprite {
         }
     }
 
-    public String getEtat(){
-        return etat;
-    }
-
-    public void setEtat(String newEtat) {
-        this.etat = newEtat;
-    }
 
     public void stop() {
         this.X_SPEED = 0;
