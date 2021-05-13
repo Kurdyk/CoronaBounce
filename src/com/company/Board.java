@@ -7,6 +7,7 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import javax.swing.JPanel;
@@ -27,6 +28,8 @@ public class Board extends JPanel implements ActionListener {
 	public int killRate = 0; //Determiner la mortalité du virus = killRate * 1 / 10000;
 	public int infect;
 	public int sain;
+	private List<Double> listSain = new ArrayList<Double>();
+
 
 	public List<Home> homes;
 	public List<Entreprise> entreprises;
@@ -46,6 +49,10 @@ public class Board extends JPanel implements ActionListener {
 
 	public Placeur getPlaceur(){
 		return this.placeur;
+	}
+
+	public List<Double> getListSain() {
+		return listSain;
 	}
 
 	private void initBoard(boolean[] tabBoolean, int[] tabVal) {
@@ -175,22 +182,32 @@ public class Board extends JPanel implements ActionListener {
 		dieCheck();
 		updateEmployes();
 
+		if(temps%100==0){
+			double nb = (double) nbSain();
+			listSain.add(nb);
+		}
+
 		if (temps % 500 == 0) {
 			reShuffle();
+
 		}
 
 	}
 
-	private void inGame() {
+	/*private void inGame() {
 
 		if (!ingame || temps == maxtemps) {
 			timer.stop();
 		}
-	}
+	}*/
 
-	public void debug() {
-		List<Individu> liste = placeur.getIndividus();
+	public boolean inGame() {
 
+		if (!ingame || temps == maxtemps) {
+			timer.stop();
+			return false;
+		}
+		return true;
 	}
 
 	private void CheckCollisionsFutures() {
@@ -339,4 +356,13 @@ public class Board extends JPanel implements ActionListener {
 		}
 	}
 
+	private int nbSain(){
+		int nb=0;
+		for (Individu indiv : placeur.getIndividus()) {
+			if (indiv.etat == "Neutral") {
+				nb=nb+1;
+			}
+		}
+		return nb;
+	}
 }

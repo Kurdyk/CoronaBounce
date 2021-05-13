@@ -26,12 +26,17 @@ public class Reglage extends JFrame{ //class qui va créer la fenêtre menu pour
 
 	JButton b1= new JButton("Réinitialiser");
 	JButton b2= new JButton("GO");
+	JButton b3 = new JButton(("Courbe"));
 	
 	JCheckBox entreprise = new JCheckBox("entreprise");
 	JCheckBox tauxmortalite = new JCheckBox("mortalite");
 	
 	JSliderText morta= new JSliderText(0,100,25,5,"Taux morta :");
 	JSpinnerText  nbentreprise = new JSpinnerText("Entreprise",4,1);
+
+	private int x;
+	private int y;
+
 	
 	
 	
@@ -54,6 +59,7 @@ public class Reglage extends JFrame{ //class qui va créer la fenêtre menu pour
 
 		this.Button.add(b1);//ajout de JButton à l'objet Button
 		this.Button.add(b2);
+		this.Button.add(b3);
 		
 		//this.checkBox.setLayout(new BorderLayout());
 		//this.checkBox.setAlignmentX(CENTER_ALIGNMENT);
@@ -80,6 +86,7 @@ public class Reglage extends JFrame{ //class qui va créer la fenêtre menu pour
 
 		b1.addActionListener((event)->{reinitialise();}); //permet de lancer la fonction reinitialise quand le JButton 1 est cliqué
 		b2.addActionListener((event)->{go();}); //permet de lancer la fonction go quand le JButton 2 est cliqué
+		b3.addActionListener((event)->{afficheCourbe();});
 		
 		
 		
@@ -104,8 +111,8 @@ public class Reglage extends JFrame{ //class qui va créer la fenêtre menu pour
 		int p= population.getValue(); //récupération et traitement des valeurs de population et du taux de sain
 		int s= taux.getValue();
 		int i=100-taux.getValue();
-		int x=p*s/100;
-		int y=p*i/100;
+		this.x=p*s/100;
+		this.y=p*i/100;
 		
 		
 
@@ -130,11 +137,15 @@ public class Reglage extends JFrame{ //class qui va créer la fenêtre menu pour
 		// les deux premiers éléments du tableau d'option sont toujours considérés comme vrai car "option" par défauts de la simulation
 
 
-		Vue view= new Vue(act,val); //définition de la fenêtre contenant la simulation avec options désirées
+		view= new Vue(act,val); //définition de la fenêtre contenant la simulation avec options désirées
 		view.setVisible(true); //rend la fenêtre de la simulation visible
+
+
+	}
+
+	public void afficheCourbe(){
 		Courbe courbe= new Courbe(view, x,y); //définition de la fenêtre contenant le graphique résumé de la simulation
 		courbe.setVisible(true); //rend la fenêtre graphique visible
-
 	}
 	
 
