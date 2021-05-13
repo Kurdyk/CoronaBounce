@@ -4,8 +4,9 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-import static java.lang.Integer.min;
-
+/**
+ * La classe Placeur permet de gerer l'initialisation des objets sur la Board, elle contient aussi la liste de tous les Individus et Lieux
+ */
 public class Placeur {
 
     int bWidth;
@@ -14,25 +15,42 @@ public class Placeur {
     private List<Individu> individu;
     private List<Lieu> lieu;
 
+    /**
+     * Constructeur de la classe Placeur
+     * @param width Limite en largueur (en x) de la Board qui utilise ce placeur
+     * @param height Limite en hauteur (en y) de la Board qui utilise ce placeur
+     */
     public Placeur(int width, int height) {
         this.bWidth = width;
         this.bHeight = height;
         initPlaceur();
     }
 
+    /**
+     * Initialise les listes contentant les Individus et les Lieux
+     */
     private void initPlaceur() {
         individu = new ArrayList<>();
         lieu = new ArrayList<>();
     }
 
+    /**
+     * @return La liste des Lieux places sur la Board
+     */
     public List<Lieu> getLieu() {
         return lieu;
     }
 
+    /**
+     * @return La liste des Individus places sur la Board
+     */
     public List<Individu> getIndividus() {
         return individu;
     }
 
+    /**
+     * @return La liste des Employes places sur la Board
+     */
     public List<Employe> getEmployes() {
         List <Employe> res = new ArrayList<>();
         for (Individu indiv : individu) {
@@ -43,6 +61,9 @@ public class Placeur {
         return  res;
     }
 
+    /**
+     * @return La liste des Entreprises placees sur la Board
+     */
     public List<Entreprise> getEntreprise() {
         List <Entreprise> res = new ArrayList<>();
         for (Lieu lie : lieu) {
@@ -53,6 +74,9 @@ public class Placeur {
         return  res;
     }
 
+    /**
+     * @return La liste des Homes places sur la Board
+     */
     public List<Home> getHomes() {
         List <Home> res = new ArrayList<>();
         for (Lieu l : lieu) {
@@ -63,21 +87,34 @@ public class Placeur {
         return res;
     }
 
+    /**
+     * Initialise un Individu
+     * @param x Première coordonnee initiale
+     * @param y Seconde coordonnee initiale
+     */
     public void spawn(int x, int y) {
-        //Fait apparaitre un missile sur une coordonnee.
         individu.add(new Individu(x, y));
         individu.get(individu.size() - 1).etat = "Neutral";
         individu.get(individu.size() - 1).reloadImage();
 
     }
 
+    /**
+     * Initialise un Individu infecte
+     * @param x Première coordonnee initiale
+     * @param y Seconde coordonnee initiale
+     */
     public void spawnInfected(int x, int y) {
-        //Fait apparaitre un infecté
         individu.add(new Individu(x, y));
         individu.get(individu.size() - 1).etat = "Infected";
         individu.get(individu.size() - 1).reloadImage();
     }
 
+    /**
+     * Initialise un Employe
+     * @param x Première coordonnee initiale
+     * @param y Seconde coordonnee initiale
+     */
     public void spawnEmploye(int x, int y) {
         Employe employe = new Employe(x, y);
         employe.etat = "Neutral";
@@ -86,15 +123,26 @@ public class Placeur {
 
     }
 
+    /**
+     * Initialise un Employe infecte
+     * @param x Première coordonnee initiale
+     * @param y Seconde coordonnee initiale
+     */
     public void spawnEmployeInfected(int x, int y) {
-        //Fait apparaitre un infecté
+        //Fait apparaitre un infecte
         individu.add(new Employe(x, y));
         individu.get(individu.size() - 1).etat = "Infected";
         individu.get(individu.size() - 1).reloadImage();
     }
 
+    /**
+     * Genere un tableau de coordonnees aleatoires pour placer des individus
+     * @param nbr Nombre d'Individus à placer
+     * @param max_x Largeur de la board
+     * @param max_y Hauteur de la Board
+     * @return Le tableau fait pour initialiser les Individus sans maison
+     */
     private int[][] genereCoordonnees(int nbr, int max_x, int max_y) {
-        //Genere un tableau de coordonnees aleatoire entre le min et le max, peut en generer au meme endroit = pas bien
         int [][] tabCoordinates = new int[nbr][2];
         Set<int[]> SetCoordonnesPrises = new HashSet<>();
         int randomNum_x = -1;
@@ -104,7 +152,7 @@ public class Placeur {
 
         for (int i = 0; i < nbr; i++) {
             do {
-                randomNum_x = rand.nextInt(max_x - 3) + 2; //Faut pas générer 0 ou 1;
+                randomNum_x = rand.nextInt(max_x - 3) + 2; //Il ne faut pas generer 0 ou 1;
                 randomNum_y = rand.nextInt(max_y - 3) + 2; //Idem
                 a[0] = randomNum_x;
                 a[1] = randomNum_y;
@@ -121,10 +169,17 @@ public class Placeur {
                 }
             }
         }
-        //printList(tabCoordinates);
+
         return tabCoordinates;
     }
 
+    /**
+     * Genere un tableau de coordonnees non aleatoire pour placer des individus
+     * @param nbr Nombre d'Individus à placer
+     * @param max_x Largeur de la board
+     * @param max_y Hauteur de la Board
+     * @return Le tableau fait pour initialiser les Individus sans maison
+     */
     private int[][] coordonneesBrutes(int nbr, int max_x, int max_y) {
         int[][] res = new int[nbr][2];
 
@@ -141,7 +196,7 @@ public class Placeur {
                 j+=2;
             }
             if ((j - 2) * 32 >= max_y) {
-                System.out.println("Trop d'élements");
+                System.out.println("Trop d'elements");
                 return res;
             }
             cmpt++;
@@ -150,8 +205,13 @@ public class Placeur {
         return res;
     }
 
+    /**
+     * Place les Individus sur la Board
+     * @param nbr Nombre voulu d'Individus
+     * @param nbrI Nombre d'infectes voulu
+     * @param alea Placement aleatoire (true) ou non (false)
+     */
     public void placementIndividus(int nbr, int nbrI, boolean alea){
-        //place nbr cercles dans la fenetre et nbrI infectés
         Individu m = new Individu(-1,-1);
         int[][] coordonneesInit;
         if (alea) {
@@ -172,31 +232,12 @@ public class Placeur {
 
     }
 
-    private int[][] coordonneesBrutesTot(int max_x, int max_y, Image image) {
-        int[][] res = new int[0][2];
-
-        int i = 1;
-        int j = 1;
-        int cmpt = 0;
-        int height = image.getHeight(null);
-        int width = image.getWidth(null);
-
-        while(i * width < max_x && j * height < max_y) {
-            res[cmpt][0] = i * width;
-            res[cmpt][1] = j * height;
-            i += 3;
-            if ((i - 1) * width >= max_x - 5) {
-                i = 0;
-                j += 3;
-            }
-            if ((j - 1) * height >= max_y - 5) {
-                return res;
-            }
-            cmpt++;
-        }
-        return res;
-    }
-
+    /**
+     * Generateur de sequence aleatoire d'entiers positifs sans doublon
+     * @param nbr Nombre de nombres voulu
+     * @param bound Limite superieure des entiers
+     * @return La sequence aleatoire de taille nbr et majoree par bound
+     */
     int [] randomTab(int nbr, int bound) {
         ArrayList<Integer> list = new ArrayList<Integer>();
         for (int i=0; i < bound ; i++) {
@@ -210,44 +251,40 @@ public class Placeur {
         return res;
     }
 
-    private int[][] chooseCoordinates(int nbrTot, int[][] choices) {
-        int[][] res = new int[nbrTot][2];
-        int [] randList = randomTab(nbrTot, nbrTot);
-        int cmpt = 0;
-        while (cmpt < nbrTot) {
-            res[cmpt] = choices[randList[cmpt]];
-        }
-        return res;
-    }
-
-    private int getIndice(Individu indiv) {
-        for (int i = 0; i < individu.size(); i++) {
-            if (individu.get(i) == indiv) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
+    /**
+     * Place une Entreprise sur la Board et lui donne son nom
+     * @param x Première coordonnee du placement
+     * @param y Seconde coordonnee du placement
+     * @param name Nom à donner à l'Entreprise placee
+     */
     public void placeEntreprise(int x, int y, String name) {
         lieu.add(new Entreprise (x, y, name));
         lieu.get(lieu.size() - 1).reloadImage();
     }
 
+    /**
+     * Place les Entreprises sur la Board
+     * @param nbr Le nombre d'Entreprises voulu
+     */
     public void placeEntreprises(int nbr) {
         ArrayList<int[]> coordonnees = coordinatesEnt(nbr);
-        String[] names = new String[] {"A", "B", "C", "D"};
-        for (int i = 0; i < nbr && i < 4; i++) {
+        String[] names = new String[] {"A", "B"};
+        for (int i = 0; i < nbr && i < 2; i++) {
             int [] coor = coordonnees.get(i);
             placeEntreprise(coor[0], coor[1], names[i]);
         }
     }
 
+    /**
+     * Cherche les coordonnees pour placer les Entreprises
+     * @param n Le nombre d'Entreprises voulu
+     * @return La liste des coordonees pour placer les Entreprises
+     */
     private ArrayList<int[]> coordinatesEnt(int n) {
         ArrayList<int[]> res = new ArrayList<>();
         int midX = bWidth / 2;
         int midY = bHeight / 2;
-        for (int i = 0; i < n && i < 4; i++) {
+        for (int i = 0; i < n && i < 2; i++) {
             int[] temp = new int[2];
             switch (i) {
                 case 0:
@@ -260,15 +297,6 @@ public class Placeur {
                     temp[1] = midY;
                     res.add(temp);
                     break;
-                case 2:
-                    temp[0] = midX - 128;
-                    temp[1] = midY;
-                    res.add(temp);
-                    break;
-                default:
-                    temp[0] = midX;
-                    temp[1] = midY - 128;
-                    res.add(temp);
             }
         }
         return res;
@@ -283,6 +311,10 @@ public class Placeur {
         }
     }
 
+    /**
+     * Permet de transformer des Individus en Employes de l'entreprise A ou B
+     * @param nbr Nombre d'Employes voulu
+     */
     public void choixEmployes(int nbr) {
         int switcher = 1;
         int[] aEmployer = randomTab(nbr, individu.size());
@@ -305,21 +337,31 @@ public class Placeur {
         }
     }
 
-
+    /**
+     * Genere une liste de coordonnees pour placer les Homes avec un espacement entre chaque Home
+     * @param width Largeur de la Board
+     * @param height Hauteur de la Board
+     * @return La liste des coordonnees pour placer les Homes
+     */
     private ArrayList<int[]> coordonneesHome(int width, int height) {
         ArrayList<int[]> res = new ArrayList<>();
-        int maxPerLigne = width / 128;
-        System.out.println(maxPerLigne);
+        int maxPerLigne = width / 160;
 
         for (int i = 0; i < maxPerLigne; i++) {
-            res.add(new int[] {i * 128, 0});
+            res.add(new int[] {i * 160, 0});
         }
         for (int j = 0; j < maxPerLigne; j++) {
-            res.add(new int[] {j * 128, height - 64});
+            res.add(new int[] {j * 160, height - 64});
         }
         return res;
     }
 
+    /**
+     * Compare deux int a et b
+     * @param a Premier int
+     * @param b Second int
+     * @return Le plus petit des deux
+     */
     private int min(int a, int b) {
         if (a < b) {
             return a;
@@ -327,6 +369,13 @@ public class Placeur {
         return b;
     }
 
+    /**
+     * Place les Home sur la Board
+     * @param nbr Nombre voulu
+     * @param width Largeur de la Board
+     * @param height Hauteur de la Board
+     * @return Le nombre de Homes places au final
+     */
     public int placeHome(int nbr, int width, int height) {
 
         ArrayList<int[]> coordonnees = coordonneesHome(width, height);
@@ -342,60 +391,68 @@ public class Placeur {
         return nbrEffectif;
     }
 
+    /**
+     * On place les Individus dans les maisons et on les lie entre eux
+     * @param nbrI Nombre d'Individus
+     * @param nbrH Nombre de Homes
+     */
     public void placeInHome(int nbrI, int nbrH) {
-        /*On place les individus dans les maisons au début de la simulation, on suppose 4 max par maison*/
         int nbrPerHome = nbrI / nbrH;
         int reste = nbrI % nbrH;
         int i = 0;
-        for (Lieu l : lieu) {
-            if (l instanceof Home) {
-                int lX = l.x;
-                int lY = l.y;
-                int lWidth = l.width;
-                int lHeight = l.height;
+        for (Home home : getHomes()) {
+            int lX = home.x;
+            int lY = home.y;
+            int lWidth = home.width;
+            int lHeight = home.height;
 
-                Rectangle NorthWest = new Rectangle(lX, lY, lWidth / 2, lHeight /2);
-                Rectangle NorthEast = new Rectangle(lX + lWidth / 2, lY, lWidth / 2, lHeight /2);
-                Rectangle SouthWest = new Rectangle(lX, lY + lHeight / 2, lWidth / 2, lHeight /2);
-                Rectangle SouthEast = new Rectangle(lX + lWidth / 2, lY + lHeight / 2, lWidth / 2, lHeight /2);
+            Rectangle NorthWest = new Rectangle(lX, lY, lWidth / 2, lHeight /2);
+            Rectangle NorthEast = new Rectangle(lX + lWidth / 2, lY, lWidth / 2, lHeight /2);
+            Rectangle SouthWest = new Rectangle(lX, lY + lHeight / 2, lWidth / 2, lHeight /2);
+            Rectangle SouthEast = new Rectangle(lX + lWidth / 2, lY + lHeight / 2, lWidth / 2, lHeight /2);
 
-                for (int j = 0; j < nbrPerHome && j < 4; j++) {
-                    Individu indiv = individu.get(i);
-                    indiv.setHouse(i);
-                    i++;
-                    indiv.size = 1;
-                    indiv.reloadImage();
-                    indiv.insideLieu = 2;
-                    indiv.goAlea();
-                    l.contenu.add(indiv);
-                    switch (j) {
-                        case 0 :
-                            indiv.x = NorthWest.x + 8;
-                            indiv.y = NorthWest.y + 8;
-                            indiv.cmptInside = 0;
-                            break;
-                        case 1 :
-                            indiv.x = NorthEast.x + 8;
-                            indiv.y = NorthEast.y + 8;
-                            indiv.cmptInside = 100;
-                            break;
-                        case 2 :
-                            indiv.x = SouthWest.x + 8;
-                            indiv.y = SouthWest.y + 8;
-                            indiv.cmptInside = 200;
-                            break;
-                        default :
-                            indiv.x = SouthEast.x + 8;
-                            indiv.y = SouthEast.y + 8;
-                            indiv.cmptInside = 300;
-                            break;
+            for (int j = 0; j < nbrPerHome && j < 4; j++) {
+                Individu indiv = individu.get(i);
+                indiv.setHouse(home.numero);
+                i++;
+                indiv.size = 1;
+                indiv.reloadImage();
+                indiv.insideLieu = 2;
+                indiv.goAlea();
+                home.contenu.add(indiv);
+                switch (j) {
+                    case 0 :
+                        indiv.x = NorthWest.x + 8;
+                        indiv.y = NorthWest.y + 8;
+                        indiv.cmptInside = 0;
+                        break;
+                    case 1 :
+                        indiv.x = NorthEast.x + 8;
+                        indiv.y = NorthEast.y + 8;
+                        indiv.cmptInside = 100;
+                        break;
+                    case 2 :
+                        indiv.x = SouthWest.x + 8;
+                        indiv.y = SouthWest.y + 8;
+                        indiv.cmptInside = 200;
+                        break;
+                    default :
+                        indiv.x = SouthEast.x + 8;
+                        indiv.y = SouthEast.y + 8;
+                        indiv.cmptInside = 300;
+                        break;
                     }
                 }
             }
-        }
         placeReste(reste, nbrH, i);
     }
 
+    /**
+     * Place les Individus restans à placer après le premier passage de PlaceInHome
+     * @param nbrR Le nombre d'Individus à placer
+     * @param nbrH Le nombre de Homes total
+     * @param start A quel Individu de la liste individus commencer
+     */
     private void placeReste(int nbrR, int nbrH, int start) {
         int [] ordre = randomTab(nbrR, nbrH);
         for (int i = 0; i < nbrR; i++) {
@@ -403,12 +460,17 @@ public class Placeur {
         }
     }
 
+    /**
+     * Place un Individu donne dans un Home donne
+     * @param individu L'individu à placer
+     * @param home La maison dans laquelle le placer
+     */
     private void placeSoloInHome(Individu individu, Home home) {
         int nbrIn = home.contenu.size();
         individu.size = 1;
+        individu.setHouse(home.numero);
         individu.reloadImage();
         individu.insideLieu = 2;
-        individu.goAlea();
         home.contenu.add(individu);
         switch (nbrIn) {
             case 0 :

@@ -90,9 +90,12 @@ public class Reglage extends JFrame{
 		this.Spinner.add(population, BorderLayout.NORTH); //ajoute le spinnnerText indiquant le nombre d'individu totale souhaite par l'utilisateur
 		this.Spinner.add(taux,BorderLayout.CENTER);//ajoute le sliderText indiquant le taux d'individu sain desire par l'utilisateur au panneau
 
-
-		b1.addActionListener((event)->{reinitialise();}); //permet de lancer la fonction reinitialise quand le JButton 1 est clique
-		b2.addActionListener((event)->{go();}); //permet de lancer la fonction go quand le JButton 2 est clique
+		b1.addActionListener((event)->{reinitialise();}); //permet de lancer la fonction reinitialise quand le JButton 1 est cliqué
+		b2.addActionListener((event)->{go();}); //permet de lancer la fonction go quand le JButton 2 est cliqué
+		b3.addActionListener((event)->{afficheCourbe();});
+		
+		
+		
 	}
 
 	/**
@@ -134,8 +137,10 @@ public class Reglage extends JFrame{
 		int p= population.getValue(); //recuperation et traitement des valeurs de population et du taux de sain
 		int s= taux.getValue();
 		int i=100-taux.getValue();
-		int x=p*s/100;
-		int y=p*i/100;
+		this.x=p*s/100;
+		this.y=p*i/100;
+		
+		
 
 		act = new boolean[] {true, true, false, false, false, true, true, true, false};//initialision des tableaux contenant les options et valeurs souhaite par l'utilisateur
 		val = new int[] {x, y, 0, 900, 1000, 500, 3000, 1, 10000};
@@ -179,6 +184,12 @@ public class Reglage extends JFrame{
 		Courbe courbe= new Courbe(); //definition de la fenetre contenant le graphique resume de la simulation
 		courbe.setVisible(true); //rend la fenetre graphique visible
 
+
+	}
+
+	public void afficheCourbe(){
+		Courbe courbe= new Courbe(view, x,y); //définition de la fenêtre contenant le graphique résumé de la simulation
+		courbe.setVisible(true); //rend la fenêtre graphique visible
 	}
 
 
