@@ -13,25 +13,65 @@ import java.util.Random;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-
+/**
+ * La classe Board est celle qui contient la simulation
+ */
 public class Board extends JPanel implements ActionListener {
-
+	/**
+	 * Le timer Swing de la simulation
+	 */
 	private Timer timer;
+	/**
+	 * Le Placeur qui va initialiser la simulation
+	 */
 	private Placeur placeur;
+	/**
+	 * Determine si la simulation continue ou doit s'arreter
+	 */
 	private boolean ingame;
+	/**
+	 * Si besoin, la duree maximale de la simulation
+	 */
 	int maxtemps;
+	/**
+	 * Le temps courant dans la simulation
+	 */
 	int temps = 0;
-
+	/**
+	 * Largeur de la Board
+	 */
 	private int B_WIDTH = 800;
+	/**
+	 * Hauteur de la Board
+	 */
 	private int B_HEIGHT = 760;
+	/**
+	 * Delai initial du timer Swing
+	 */
 	private int DELAY = 12;
+	/**
+	 * Determine le taux de mortalite du virus
+	 */
 	public int killRate = 0; //Determiner la mortalité du virus = killRate * 1 / 10000;
+	/**
+	 * Nombre d'Individus infectes
+	 */
 	public int infect;
+	/**
+	 * Nombre d'Individus sains
+	 */
 	public int sain;
+	/**
+	 * Contient le nombre d'Individus sains tous les 100 ticks
+	 */
 	private List<Double> listSain = new ArrayList<Double>();
-
-
+	/**
+	 * La liste de tous les Homes de la simulation
+	 */
 	public List<Home> homes;
+	/**
+	 * La liste de toutes les Entreprises de la simulation
+	 */
 	public List<Entreprise> entreprises;
 
 

@@ -4,14 +4,34 @@ import java.awt.*;
 import javax.swing.ImageIcon;
 
 
-
+/**
+ * Classe mere de tous les objets affiches dans la Board
+ */
 public class Sprite {
 
+    /**
+     * Premiere coordonnee du Sprite
+     */
     protected int x;
+    /**
+     * Seconde coordonne du Sprite
+     */
     protected int y;
+    /**
+     * Largeur de l'image du Sprite
+     */
     protected int width;
+    /**
+     * Hauteur de l'image du Sprite
+     */
     protected int height;
+    /**
+     * 0 si l'image est hors du cadre (ou permet de tuer des Individus,), 1 sinon
+     */
     protected boolean visible;
+    /**
+     * L'image liee au Sprite
+     */
     protected Image image;
 
     /**

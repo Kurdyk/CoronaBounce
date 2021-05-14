@@ -302,7 +302,10 @@ public class Placeur {
         return res;
     }
 
-
+    /**
+     * Contamine les sujets 0 de l'infection
+     * @param scale Determine le pourcentage d'Individu a contamine
+     */
     public void contaminationInitiale(int scale) {
         int nbrContamines = (int) individu.size() * scale / 100;
         int[] aContaminer = randomTab(nbrContamines, individu.size());

@@ -1,13 +1,33 @@
 package com.company;
 
+/**
+ * La classe Employe est une sous classe d'Individu, chaque Employe est lie a une Entreprise
+ */
 public class Employe extends Individu {
 
+    /**
+     * Le nom de l'Entreprise liee a l'employe
+     */
     public String entrepriseName;
+    /**
+     * Le temps passe hors d'un Lieu de l'Employe, se reinistialise quand il rentre dans un Lieu
+     */
     private int tempsOut = 0;
-
+    /**
+     * Premiere coordonnee de l'Entreprise liee l'Employe
+     */
     public int entrepriseX;
+    /**
+     * Seconde coordonnee de l'Entreprise liee l'Employe
+     */
     public int entrepriseY;
+    /**
+     * Hauteur de l'Entreprise liee l'Employe
+     */
     public int entrepriseHeight;
+    /**
+     * Largeur de l'Entreprise liee l'Employe
+     */
     public int entrepriseWidth;
 
     /**

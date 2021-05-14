@@ -1,8 +1,14 @@
 package com.company;
 
+/**
+ * La classe Entreprise represente les entreprises de la ville representees par la Board
+ */
 public class Entreprise extends Lieu {
 
-    public String nom; // A ou B pour le moment;
+    /**
+     * A ou B, determine l'aspect de l'Entreprise et les Employes compatibles
+     */
+    public String nom;
 
     /**
      * Constructeur de la classe Entreprise

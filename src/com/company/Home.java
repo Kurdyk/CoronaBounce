@@ -1,7 +1,12 @@
 package com.company;
 
+/**
+ * La classe Home represente les maisons des Individus, leur point de depart sur la Board
+ */
 public class Home extends Lieu {
-
+    /**
+     * Numero de maison du Home, comme un numero de rue
+     */
     public int numero;
 
     /**
