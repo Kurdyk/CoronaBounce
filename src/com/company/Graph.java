@@ -31,11 +31,12 @@ public class Graph extends JPanel {
         private Board board;
         private int sain;
         private int infect;
+        private int total;
         private Placeur p;
         private List<Individu> individu;
         private List<Double> listSain;
 
-        public Graph(Vue view, int sain, int infect) {
+        public Graph(Vue view, int sain, int infect, int total) {
                 board = view.board;
                 this.sain = sain;
                 this.infect = infect;

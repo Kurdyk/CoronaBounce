@@ -7,8 +7,10 @@ import java.awt.*;
  * class qui va creer la fenetre menu pour l'utilisateur
  */
 public class Reglage extends JFrame{
-
-	JPanel panneau= new JPanel(); //objet qui va contenir les differents objets avec lesquels l'utilisateur va agir
+	/**
+	 * objet qui va contenir les differents objets avec lesquels l'utilisateur va agir
+	 */
+	JPanel panneau= new JPanel();
 
 	Vue view;  //fenetre qui va contenir la simulation
 	Courbe courbe; //fenetre qui va contenir le graphique resume de la simulation
@@ -27,24 +29,22 @@ public class Reglage extends JFrame{
 	JButton b2= new JButton("GO");
 	JButton b3 = new JButton(("Courbe"));
 	
-	JCheckBox entreprise = new JCheckBox("entreprise");
-	JCheckBox tempsentreprise = new JCheckBox("Temps de travail");
-	JCheckBox tauxmortalite = new JCheckBox("mortalite");
-	JCheckBox tauxImun = new JCheckBox("Immunite");
-	JCheckBox tauxgueri = new JCheckBox("gueri");
-	JCheckBox vitesseSimu = new JCheckBox("Vitesse");
-	JCheckBox Tempstotale = new JCheckBox("Totale");
+	JCheckBox entreprise = new JCheckBox("Entreprise(s)");
+	JCheckBox mortalite = new JCheckBox("Mortalite");
+	JCheckBox tempsTotale = new JCheckBox("Limiteur temporel");
 
-	JSpinnerText  nbentreprise = new JSpinnerText("Nombre D'Entreprise",0,2,1);
-	JSpinnerText tpsentreprise= new JSpinnerText("Temps en entreprise",500,1500,100);
-	JSpinnerText  Immun  = new JSpinnerText("Taux Immunite",500,5000,100);
-	JSpinnerText TempsGuerison  = new JSpinnerText("Temps de guerison",500,5000,100);
-	JSpinnerText Vitessesimulation  = new JSpinnerText("Vitesse de la simulation",1,3,1);
-	JSpinnerText TempsTotale = new JSpinnerText("Temps totale",1000,10000,1000);
-	JSliderText morta= new JSliderText(0,100,25,5,"Taux morta :");
+	JSpinnerText nbEntreprise = new JSpinnerText("Nombre d'entreprise(s)",0,2,1);
+	JSpinnerText tpsEntreprise= new JSpinnerText("Temps en entreprise",500,1500,100);
+	JSliderText tauxMortalite= new JSliderText(0,100,25,5,"Taux mortalite :");
+	JSpinnerText tauxImmunite = new JSpinnerText("Taux immunite",500,5000,100);
+	JSpinnerText tempsGuerison  = new JSpinnerText("Temps de guerison",500,5000,100);
+	JSpinnerText VitesseSimulation  = new JSpinnerText("Vitesse de la simulation",1,3,1);
+	JSpinnerText tempsMax = new JSpinnerText("Temps maximum",1000,10000,1000);
+
 
 	private int x;
 	private int y;
+	private int p;
 
 
 	/**
@@ -69,22 +69,18 @@ public class Reglage extends JFrame{
 		this.Button.add(b3);
 		
 		this.checkBox.add(entreprise);
-		this.checkBox.add(tempsentreprise);
-		this.checkBox.add(tauxmortalite);
-		this.checkBox.add(tauxImun);
-		this.checkBox.add(tauxgueri);
-		this.checkBox.add(vitesseSimu);
-		this.checkBox.add(Tempstotale);
+		this.checkBox.add(mortalite);
+		this.checkBox.add(tempsTotale);
 		
-		this.checkBox.add(nbentreprise);
-		this.checkBox.add(tpsentreprise);
-		this.checkBox.add(morta);
-		this.checkBox.add(Immun);
-		this.checkBox.add(TempsGuerison);
-		this.checkBox.add(Vitessesimulation);
-		this.checkBox.add(TempsTotale);
+		this.checkBox.add(nbEntreprise);
+		this.checkBox.add(tpsEntreprise);
+		this.checkBox.add(tauxMortalite);
+		this.checkBox.add(tauxImmunite);
+		this.checkBox.add(tempsGuerison);
+		this.checkBox.add(VitesseSimulation);
+		this.checkBox.add(tempsMax);
 
-		tauxmortalite.addActionListener((event)->{slidermorta();});
+
 
 		this.panneau.add(Spinner,BorderLayout.NORTH); //ajoute l'objet qui va contenir les objets indiquants la population totale et le taux d'individu sain souhaite par l'utilisateur
 		
@@ -102,12 +98,7 @@ public class Reglage extends JFrame{
 
 	}
 
-	/**
-	 *
-	 */
-	public void slidermorta() {
-		this.Spinner.add(morta);
-	}
+
 
 	/**
 	 * reinitialise tous les parametres de la simulation a des valeurs par defaut
@@ -115,22 +106,19 @@ public class Reglage extends JFrame{
 	public void reinitialise() {
 		this.population.restart(); //remet la valeur du spinnerText a une valeur par defaut
 		this.taux.restart();  //fixe la valeur du sliderText a 50
-		this.morta.restart();
-		this.nbentreprise.restart();
-		this.Immun.restart();
-		this.TempsGuerison.restart();
-		this.TempsTotale.restart();
-		this.Vitessesimulation.restart();
-		this.tpsentreprise.restart();
+		this.nbEntreprise.restart();
+		this.tpsEntreprise.restart();
+		this.tauxMortalite.restart();
+		this.tauxImmunite.restart();
+		this.tempsGuerison.restart();
+		this.VitesseSimulation.restart();
+		this.tempsMax.restart();
 
-		this.tauxmortalite.setSelected(false);
-		this.entreprise.setSelected(false);
-		this.tempsentreprise.setSelected(false);
-		this.tauxmortalite.setSelected(false);
-		this.tauxImun.setSelected(false);
-		this.tauxgueri.setSelected(false);
-		this.vitesseSimu.setSelected(false);
-		this.Tempstotale.setSelected(false);
+
+
+		this.entreprise.setSelected(false);//deselctionne toutes les checkboxes
+		this.mortalite.setSelected(false);
+		this.tempsTotale.setSelected(false);
 
 	}
 
@@ -138,7 +126,7 @@ public class Reglage extends JFrame{
 	 * fonction qui va lancer la simulation
 	 */
 	public void go() {
-		int p= population.getValue(); //recuperation et traitement des valeurs de population et du taux de sain
+		p= population.getValue(); //recuperation et traitement des valeurs de population et du taux de sain
 		int s= taux.getValue();
 		int i=100-taux.getValue();
 		this.x=p*s/100;
@@ -146,37 +134,27 @@ public class Reglage extends JFrame{
 		
 		
 
-		act = new boolean[] {true, true, false, false, false, true, true, true, false};//initialision des tableaux contenant les options et valeurs souhaite par l'utilisateur
+		act = new boolean[] {true, true, false, true, false, true, true, true, false};//initialision des tableaux contenant les options et valeurs souhaite par l'utilisateur
 		val = new int[] {x, y, 0, 900, 1000, 500, 3000, 1, 10000};
 		if(this.entreprise.isSelected()== true) {
 			this.act[2] = true;
-			this.val[2] = nbentreprise.getValue();
-		}
-		if(this.tempsentreprise.isSelected()==true) {
-			this.act[3] = true;
-			this.val[3] = tpsentreprise.getValue();
+			this.val[2] = nbEntreprise.getValue();
 		}
 
-		if(this.tauxmortalite.isSelected()== true) {
+		this.val[3] = tpsEntreprise.getValue();
+
+		if(this.mortalite.isSelected()== true) {
 			this.act[4] = true;
-			this.val[4] = morta.getValue();
+			this.val[4] = tauxMortalite.getValue();
 		}
-	
-		if(this.tauxImun.isSelected()==true) {
-			this.act[5] = true;
-			this.val[5] = Immun.getValue();
-		}
-		if(this.tauxgueri.isSelected()==true) {
-			this.act[6]= true;
-			this.val[6] = TempsGuerison.getValue();
-		}
-		if(this.vitesseSimu.isSelected()==true) {
-			this.act[7]= true;
-			this.val[7] =  Vitessesimulation.getValue();
-		}
-		if(this.Tempstotale.isSelected()==true) {
+
+		this.val[5] = tauxImmunite.getValue();
+		this.val[6] = tempsGuerison.getValue();
+		this.val[7] =  VitesseSimulation.getValue();
+
+		if(this.tempsTotale.isSelected()==true) {
 			this.act[8]=true;
-			this.val[8] = TempsTotale.getValue();
+			this.val[8] = tempsMax.getValue();
 		}
 		
         //attribution des valeurs de population et taux de sain dans les tablaux
@@ -189,7 +167,7 @@ public class Reglage extends JFrame{
 	}
 
 	public void afficheCourbe(){
-		Courbe courbe= new Courbe(view, x,y); //définition de la fenêtre contenant le graphique résumé de la simulation
+		Courbe courbe= new Courbe(view, x,y,p); //définition de la fenêtre contenant le graphique résumé de la simulation
 		courbe.setVisible(true); //rend la fenêtre graphique visible
 	}
 
