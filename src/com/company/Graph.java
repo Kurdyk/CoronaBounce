@@ -45,6 +45,7 @@ public class Graph extends JPanel {
                 this.listSain = board.getListSain();
         }
 
+
         @Override
         protected void paintComponent(Graphics g) {
                 super.paintComponent(g);

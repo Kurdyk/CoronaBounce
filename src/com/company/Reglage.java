@@ -11,40 +11,106 @@ public class Reglage extends JFrame{
 	 * objet qui va contenir les differents objets avec lesquels l'utilisateur va agir
 	 */
 	JPanel panneau= new JPanel();
-
-	Vue view;  //fenetre qui va contenir la simulation
-	Courbe courbe; //fenetre qui va contenir le graphique resume de la simulation
-
-	JPanel Spinner =new JPanel(); //objet qui va contenir
-	JPanel Button=new JPanel(); //objet qui contient des JButton lancer simulation et reneatialiser les parametres de la simulation
+	/**
+	 * fenetre qui va contenir la simulation
+	 */
+	Vue view;
+	/**
+	 * fenetre qui va contenir le graphique resume de la simulation
+	 */
+	Courbe courbe;
+	/**
+	 * objet qui va contenir
+	 */
+	JPanel Spinner =new JPanel();
+	/**
+	 *objet qui contient des JButton lancer simulation et reneatialiser les parametres de la simulation
+	 */
+	JPanel Button=new JPanel();
+	/**
+	 * objet qui contient des JCheckBox pour parametrer la simulation
+	 */
 	JPanel checkBox = new JPanel();
-
-	JSpinnerText population= new JSpinnerText("Population totale : ", 0,40, 1); //objet cree par classe interne pour etre utilise
-	JSliderText taux= new JSliderText(0,100,25,5,"Taux sain :"); //objet cree par classe interne pour etre utilise
-
-	boolean act[]; //tableau qui indiquera quelles options l'utilisateur a voulu dans sa simulation
-	int []val; //tableau indiquant la valeur des options voulues si besoin est
-
+	/**
+	 * objet cree par classe interne pour etre utilise
+	 */
+	JSpinnerText population= new JSpinnerText("Population totale : ", 0,40, 1);
+	/**
+	 * objet cree par classe interne pour etre utilise
+	 */
+	JSliderText taux= new JSliderText(0,100,25,5,"Taux sain :");
+	/**
+	 * tableau qui indiquera quelles options l'utilisateur a voulu dans sa simulation
+	 */
+	boolean act[];
+	/**
+	 * tableau indiquant la valeur des options voulues si besoin est
+	 */
+	int []val;
+	/**
+	 * creer le bouton reinitialiser
+	 */
 	JButton b1= new JButton("Reinitialiser");
+	/**
+	 * creer le bouton GO
+	 */
 	JButton b2= new JButton("GO");
-	JButton b3 = new JButton(("Courbe"));
-	
+	/**
+	 * creer le bouton Courbe
+	 */
+	JButton b3 = new JButton("Courbe");
+	/**
+	 * creer la checkboxe Entreprise(s)
+	 */
 	JCheckBox entreprise = new JCheckBox("Entreprise(s)");
+	/**
+	 * creer la checkboxe Mortalite
+	 */
 	JCheckBox mortalite = new JCheckBox("Mortalite");
+	/**
+	 * creer la checkboxe Limiteur temporel
+	 */
 	JCheckBox tempsTotale = new JCheckBox("Limiteur temporel");
-
+	/**
+	 * creer  un SpinnerText Nombre d'entrepise(s)
+	 */
 	JSpinnerText nbEntreprise = new JSpinnerText("Nombre d'entreprise(s)",0,2,1);
+	/**
+	 * creer  un SpinnerText Temps en entreprise
+	 */
 	JSpinnerText tpsEntreprise= new JSpinnerText("Temps en entreprise",500,1500,100);
+	/**
+	 * creer  un SpinnerText Taux mortalite
+	 */
 	JSliderText tauxMortalite= new JSliderText(0,100,25,5,"Taux mortalite :");
+	/**
+	 *	creer  un SpinnerText Taux immunite
+	 */
 	JSpinnerText tauxImmunite = new JSpinnerText("Taux immunite",500,5000,100);
+	/**
+	 * creer  un SpinnerText Temps en guerison
+	 */
 	JSpinnerText tempsGuerison  = new JSpinnerText("Temps de guerison",500,5000,100);
+	/**
+	 * creer  un SpinnerText Vitesse de la simulation
+	 */
 	JSpinnerText VitesseSimulation  = new JSpinnerText("Vitesse de la simulation",1,3,1);
+	/**
+	 * creer  un SpinnerText Temps maximum
+	 */
 	JSpinnerText tempsMax = new JSpinnerText("Temps maximum",1000,10000,1000);
-
-
-	private int x;
-	private int y;
+	/**
+	 * variable qui indique la population totale a T0
+	 */
 	private int p;
+	/**
+	 *  variable qui indique la population saine a T0
+	 */
+	private int x;
+	/**
+	 * variable qui indique la population infecte a T0
+	 */
+	private int y;
 
 
 	/**
