@@ -39,7 +39,7 @@ public class Courbe extends JFrame{
 		/**
 		 * ajoute une courbe a l'objet graphique
 		 */
-		this.Graphique.add(new Graph(view,x,y,p));
+		this.Graphique.add(new Graph(view,p));
 		/**
 		 * ajoute l'objet graphique a la fenetre
 		 */
