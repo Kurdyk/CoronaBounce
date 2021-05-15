@@ -93,9 +93,9 @@ public class Graph extends JPanel {
                 for (int i = 0; i < listSain.size(); i++) {
                         int x1 = (int) (i * xScale + padding + labelPad);
                         int y1 = (int) (getMaxSain() -(listSain.get(i) * yScale) + padding);
-                        //System.out.println(listSain.get(i));
+
                         graphPoints.add(new Point(x1, y1));
-                        //System.out.println(y1);
+                        
                 }
 
                 for (int i=0;i<graphPoints.size();i++) {
