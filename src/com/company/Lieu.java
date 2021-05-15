@@ -4,18 +4,55 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
+/**
+ * Les Lieux representent des lieux d'interet pour les Individus, leur maison ou lieu de travail
+ */
 public class Lieu extends Sprite {
 
+    /**
+     * Chemin d'acces a l'image du Lieu
+     */
     public String stream;
+    /**
+     * Permet de construire le chemin d'acces a l'image
+     */
     public String typeLieu;
+    /**
+     * Permet de differencier des Lieux de meme classe
+     */
     public String nom;
+    /**
+     * Les coordonnees de l'entree du batiment
+     */
     private int[] entree;
+    /**
+     * Les coordonnees de l'entree secondaire du batiment
+     */
+    private int[] entreeSecours;
+    /**
+     * Le temps que passent les Individus a l'interieur
+     */
     public int tempsIn;
+    /**
+     * Les coordonnees de la sortie du batiment
+     */
     private int[] sortie;
+    /**
+     * Le nombre d'entree(s) effectuees dans le Lieu dans le tour de boucle courant
+     */
     private int nombreEntree = 0;
 
+    /**
+     * La liste des Individus dans le Lieu
+     */
     public List<Individu> contenu;
+    /**
+     * La liste des Individus qui attendent de rentrer dans le Lieu
+     */
     private List<Individu> attenteIn;
+    /**
+     * La liste des Individus qui attendent de sortir du Lieu
+     */
     private List<Individu> attenteOut;
 
     /**
@@ -48,7 +85,7 @@ public class Lieu extends Sprite {
         loadImage(stream);
         getImageDimensions();
         this.entree = this.getCentre();
-
+        this.entreeSecours = new int[] {entree[0] + 8, entree[1] + 8};
     }
 
     /**
@@ -245,7 +282,22 @@ public class Lieu extends Sprite {
             individu.goAlea();
 
             nombreEntree = 1;
-        } else {
+            return;
+        }
+        if (placeDispo(entreeSecours[0], entreeSecours[1]) && nombreEntree == 0){
+            individu.size = 1;
+            individu.reloadImage();
+            individu.insideLieu = individu.objective;
+            individu.cmptInside = 0;
+            contenu.add(individu);
+            individu.x = entreeSecours[0];
+            individu.y = entreeSecours[1];
+            individu.goAlea();
+
+            nombreEntree = 1;
+            return;
+        }
+        else {
             enAttenteEntree(individu);
         }
     }
