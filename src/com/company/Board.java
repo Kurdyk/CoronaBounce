@@ -52,7 +52,7 @@ public class Board extends JPanel implements ActionListener {
 	/**
 	 * Determine le taux de mortalite du virus
 	 */
-	public int killRate = 0; //Determiner la mortalité du virus = killRate * 1 / 10000;
+	public int killRate = 0;
 	/**
 	 * Nombre d'Individus infectes
 	 */
@@ -133,7 +133,8 @@ public class Board extends JPanel implements ActionListener {
 
 		int popSaine = tabVal[parcours];
 		int popInf = tabVal[parcours + 1];
-		placeur.placementIndividus(popSaine, popInf, false);
+		placeur.placementIndividus(popSaine + popInf);
+		placeur.contaminationInitiale(popInf);
 		parcours += 2;
 
 		int n = placeur.placeHome(500, this.getWidth(), this.getHeight());
@@ -151,7 +152,8 @@ public class Board extends JPanel implements ActionListener {
 		parcours += 2;
 
 		if(tabBoolean[parcours]) {
-			this.killRate = tabVal[parcours];
+			this.killRate = (int) (100 * tabVal[parcours]) / tabVal[parcours + 2] ;
+			System.out.println(killRate);
 		}
 		parcours++;
 
@@ -359,7 +361,7 @@ public class Board extends JPanel implements ActionListener {
         for (Individu indiv : placeur.getIndividus()) {
             if (indiv.etat == "Infected") {
                 Random rand = new Random();
-                int tirage = rand.nextInt(10000);
+                int tirage = rand.nextInt(100);
                 if (tirage < killRate) {
                     indiv.visible = false;
                 }
