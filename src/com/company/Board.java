@@ -152,8 +152,9 @@ public class Board extends JPanel implements ActionListener {
 		parcours += 2;
 
 		if(tabBoolean[parcours]) {
-			this.killRate = (int) (100 * tabVal[parcours]) / tabVal[parcours + 2] ;
+			this.killRate = (100 * tabVal[parcours]) / tabVal[parcours + 2] ;
 			System.out.println(killRate);
+			System.out.println(tabVal[parcours + 2]);
 		}
 		parcours++;
 
@@ -361,7 +362,7 @@ public class Board extends JPanel implements ActionListener {
         for (Individu indiv : placeur.getIndividus()) {
             if (indiv.etat == "Infected") {
                 Random rand = new Random();
-                int tirage = rand.nextInt(100);
+                int tirage = rand.nextInt(10000);
                 if (tirage < killRate) {
                     indiv.visible = false;
                 }
