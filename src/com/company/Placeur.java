@@ -208,28 +208,18 @@ public class Placeur {
     /**
      * Place les Individus sur la Board
      * @param nbr Nombre voulu d'Individus
-     * @param nbrI Nombre d'infectes voulu
-     * @param alea Placement aleatoire (true) ou non (false)
      */
-    public void placementIndividus(int nbr, int nbrI, boolean alea){
+    public void placementIndividus(int nbr){
         Individu m = new Individu(-1,-1);
         int[][] coordonneesInit;
-        if (alea) {
-            coordonneesInit = genereCoordonnees(nbr + nbrI, m.getBOARD_WIDTH() - m.getBounds().width, m.getBOARD_HEIGHT() - m.getBounds().height);
-        }
-        else {
-            coordonneesInit = coordonneesBrutes(nbr + nbrI, m.getBOARD_WIDTH() - m.getBounds().width, m.getBOARD_HEIGHT() - m.getBounds().height);
-        }
+
+        coordonneesInit = coordonneesBrutes(nbr, m.getBOARD_WIDTH() - m.getBounds().width, m.getBOARD_HEIGHT() - m.getBounds().height);
         int a = 0;
+
         while (a < nbr) {
-            spawnEmploye(coordonneesInit[a][0], coordonneesInit[a][1]);
+            spawn(coordonneesInit[a][0], coordonneesInit[a][1]);
             a++;
         }
-        for (int b = a; b < nbr + nbrI; b++) {
-            spawnInfected(coordonneesInit[b][0], coordonneesInit[b][1]);
-        }
-        m = null;
-
     }
 
     /**
@@ -304,13 +294,13 @@ public class Placeur {
 
     /**
      * Contamine les sujets 0 de l'infection
-     * @param scale Determine le pourcentage d'Individu a contamine
+     * @param nbr Le nombre de d'Individus a contaminer
      */
-    public void contaminationInitiale(int scale) {
-        int nbrContamines = (int) individu.size() * scale / 100;
-        int[] aContaminer = randomTab(nbrContamines, individu.size());
+    public void contaminationInitiale(int nbr) {
+        int[] aContaminer = randomTab(nbr, individu.size());
         for (int elt : aContaminer) {
             (individu.get(elt)).etat = "Infected";
+            individu.get(elt).reloadImage();
         }
     }
 
