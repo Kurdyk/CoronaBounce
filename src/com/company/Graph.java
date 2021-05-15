@@ -1,9 +1,7 @@
 package com.company;
 
 import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FontMetrics;
+import java.awt.Color;;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -12,40 +10,73 @@ import java.awt.Stroke;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
+
+/**
+ * Classe du graphique
+ */
 public class Graph extends JPanel {
-        private int width = 800;
-        private int height = 400;
+        /**
+         * nombre de "rembourage"
+         */
         private int padding = 25;
+        /**
+         * nombre de "rembourage" des étiquettes
+         */
         private int labelPad = 25;
+        /**
+         * donne un contour a la fenetre de dessin
+         */
         private static final Stroke Graph_Stroke = new BasicStroke(2f);
+        /**
+         * taille diametre d'un point
+         */
         private int pointWidth = 4;
+        /**
+         * nombre de division de la hauteur Y
+         */
         private int numberYDiv = 10;
 
+        /**
+         * couleur de ligne
+         */
         private Color lineColor = new Color(44, 102, 230, 180);
+        /**
+         * couleur des points
+         */
         private Color pointColor = new Color(100, 100, 100, 180);
-        private Color gridColor = new Color(200, 200, 200, 200);
 
 
+
+        /**
+         * variable liee a la bord en cours
+         */
         private Board board;
-        private int sain;
-        private int infect;
-        private int total;
-        private Placeur p;
-        private List<Individu> individu;
+        /**
+         * nombre de population
+         */
+        private int population;
+
+        /**
+         * liste d'individu sain
+         */
         private List<Double> listSain;
 
-        public Graph(Vue view, int sain, int infect, int total) {
+        /**
+         * constructeur de la classe graphique
+         * @param view classe vue pour pouvoir recuperer la board courante
+         * @param population nombre de population total (pas encore pu servir)
+         */
+        public Graph(Vue view, int population) {
                 board = view.board;
-                this.sain = sain;
-                this.infect = infect;
-                p = board.getPlaceur();
-                individu = p.getIndividus();
+                this.population = population;
                 this.listSain = board.getListSain();
         }
 
-
+        /**
+         * dessine la courbe et les axes du graphique
+         * @param g le g graphique de base de Java
+         */
         @Override
         protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -53,25 +84,26 @@ public class Graph extends JPanel {
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
                 double xScale = ((double) getWidth() - (2 * padding) - labelPad) / (listSain.size() - 1);
-                double yScale = ((double) getHeight() - (2 * padding) - labelPad) / (infect+sain);
+                double yScale = ((double) getHeight() - (2 * padding) - labelPad) / (getMaxSain() - getMinSain());
 
-                for(int i = 0; i<listSain.size();i++){
-                        System.out.println(listSain.get(i));
-                }
+
 
 
                 List<Point> graphPoints = new ArrayList<>();
                 for (int i = 0; i < listSain.size(); i++) {
                         int x1 = (int) (i * xScale + padding + labelPad);
-                        int y1 = (int) (getMaxSain()-(listSain.get(i) * yScale) + padding);
-                        System.out.println(listSain.get(i));
+                        int y1 = (int) (getMaxSain() -(listSain.get(i) * yScale) + padding);
+                        //System.out.println(listSain.get(i));
                         graphPoints.add(new Point(x1, y1));
+                        //System.out.println(y1);
                 }
 
                 for (int i=0;i<graphPoints.size();i++) {
-                        //System.out.println(graphPoints.get(i));
-
                 }
+
+                g2.setColor(Color.WHITE);
+                g2.fillRect(padding + labelPad, padding, getWidth() - (2 * padding) - labelPad, getHeight() - 2 * padding - labelPad);
+                g2.setColor(Color.BLACK);
 
 
 
@@ -82,6 +114,7 @@ public class Graph extends JPanel {
                         int y1 = y0;
                         g2.drawLine(x0, y0, x1, y1);
                 }
+
                 g2.drawLine(padding + labelPad, getHeight() - padding - labelPad, padding + labelPad, padding);
                 g2.drawLine(padding + labelPad, getHeight() - padding - labelPad, getWidth() - padding, getHeight() - padding - labelPad);
 
@@ -110,7 +143,11 @@ public class Graph extends JPanel {
 
         }
 
-        private double getMinSain() {
+        /**
+         * donne le nombre d'individu minimum de la liste sain
+         * @return en double le nombre minimum d'individu sain de la liste
+         */
+       private double getMinSain() {
                 double minSain = Double.MAX_VALUE;
                 for (Double sain : listSain) {
                         minSain = Math.min(minSain, sain);
@@ -118,6 +155,10 @@ public class Graph extends JPanel {
                 return minSain;
         }
 
+        /**
+         * donne le nombre d'individu maximum de la liste sain
+         * @return en double le nombre maximum d'individu sain de la liste
+         */
         private double getMaxSain() {
                 double maxSain = Double.MIN_VALUE;
                 for (Double sain : listSain) {
@@ -125,8 +166,5 @@ public class Graph extends JPanel {
                 }
                 return maxSain;
         }
-
-
-
 
 }
