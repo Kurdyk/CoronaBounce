@@ -15,7 +15,7 @@ public class Courbe extends JFrame{
 	 */
 	JPanel Graphique= new JPanel();
 
-	Courbe(Vue view,int valDeb){
+	Courbe(Vue view){
 		/**
 		 * Fixe le titre de la fenetre
 		 */
@@ -39,7 +39,7 @@ public class Courbe extends JFrame{
 		/**
 		 * Ajoute une courbe a l'objet graphique
 		 */
-		this.Graphique.add(new Graph(view, valDeb));
+		this.Graphique.add(new Graph(view));
 		/**
 		 * Ajoute l'objet graphique a la fenetre
 		 */
