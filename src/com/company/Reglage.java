@@ -2,6 +2,9 @@ package com.company;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 
 /**
  * class qui va creer la fenetre menu pour l'utilisateur
@@ -111,7 +114,22 @@ public class Reglage extends JFrame{
 	 * variable qui indique la population infecte a T0
 	 */
 	private int y;
-
+	/**
+	 * JPanel qui va contenir des boites pour ameliorer l'ergonomie
+	 */
+	JPanel Gbox= new JPanel();
+	/**
+	 * boite pour ergonie numero 1
+	 */
+	JPanel box1= new JPanel();
+	/**
+	 * boite pour ergonie numero 1
+	 */
+	JPanel box2= new JPanel();
+	/**
+	 * boite pour ergonie numero 1
+	 */
+	JPanel box3= new JPanel();
 
 	/**
 	 * constructeur de la fenetre
@@ -133,18 +151,23 @@ public class Reglage extends JFrame{
 		this.Button.add(b1);//ajout de JButton a l'objet Button
 		this.Button.add(b2);
 		this.Button.add(b3);
-		
-		this.checkBox.add(entreprise);
-		this.checkBox.add(mortalite);
-		this.checkBox.add(tempsTotale);
-		
-		this.checkBox.add(nbEntreprise);
+
+		this.Gbox.setLayout(new BorderLayout());//fixe un Layout a Gbox
+		this.box1.add(entreprise);//ajout des elements a box1
+		this.box1.add(nbEntreprise);
+		this.box2.add(mortalite);//ajout des elements a box2
+		this.box2.add(tauxMortalite);
+		this.box3.add(tempsTotale);//ajout des elements a box3
+		this.box3.add(tempsMax);
+
+		this.Gbox.add(box1, BorderLayout.NORTH);// ajout de box1 en haut de Gbox
+		this.Gbox.add(box2, BorderLayout.CENTER);// ajout de box2 au centre de Gbox
+		this.Gbox.add(box3, BorderLayout.SOUTH);// ajout de box2 en bas de Gbox
+		this.checkBox.add(Gbox);// ajout des differents elements a checkBox
 		this.checkBox.add(tpsEntreprise);
-		this.checkBox.add(tauxMortalite);
 		this.checkBox.add(tauxImmunite);
 		this.checkBox.add(tempsGuerison);
 		this.checkBox.add(VitesseSimulation);
-		this.checkBox.add(tempsMax);
 
 
 
@@ -154,13 +177,25 @@ public class Reglage extends JFrame{
 		this.panneau.add(Button,BorderLayout.SOUTH);  //ajoute l'objet qui va contenir les objets pour lancer et reinitialiser les parametres de la simulation
 
 
-		this.Spinner.setLayout(new BorderLayout());
+		this.Spinner.setLayout(new BorderLayout()); //fixe un Layout a Spinner
 		this.Spinner.add(population, BorderLayout.NORTH); //ajoute le spinnnerText indiquant le nombre d'individu totale souhaite par l'utilisateur
 		this.Spinner.add(taux,BorderLayout.CENTER);//ajoute le sliderText indiquant le taux d'individu sain desire par l'utilisateur au panneau
 
-		b1.addActionListener((event)->{reinitialise();}); //permet de lancer la fonction reinitialise quand le JButton 1 est cliqué
-		b2.addActionListener((event)->{go();}); //permet de lancer la fonction go quand le JButton 2 est cliqué
-		b3.addActionListener((event)->{afficheCourbe();});
+		b1.addActionListener((event)->{reinitialise();}); //permet de lancer la fonction reinitialise quand le JButton 1 est clique
+		b2.addActionListener((event)->{go();}); //permet de lancer la fonction go quand le JButton 2 est clique
+		b3.addActionListener((event)->{afficheCourbe();}); //permet de lancer la fonction afficheCourbe quand le JButton 3 est clique
+
+		/*entreprise.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent actionEvent) {
+				JCheckBox tmp= (JCheckBox) actionEvent.getSource();
+
+				if(tmp.isSelected()){this.box1.add(entreprise);}
+				else{
+					this.box1.remove(entreprise);
+				}
+			}
+		});*/
 
 	}
 
