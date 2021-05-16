@@ -1,7 +1,7 @@
 package com.company;
 
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
 import javax.swing.JPanel;
 
@@ -53,15 +53,29 @@ public class Graph extends JPanel {
          * Liste d'individu sain
          */
         private List<Double> listSain;
+        /***
+         * Liste d'individu mort
+         */
+        private List<Double> listMort = new ArrayList<>();
+        /***
+         * Nombre du nombre de mort
+         */
+        private int nbMort;
+        /***
+         * Nombre de population de depart
+         */
+        private int valDeb;
 
         /**
          * Constructeur de la classe graphique
          * @param view classe vue pour pouvoir recuperer la board courante
          */
-        public Graph(Vue view) {
+        public Graph(Vue view, int valDeb) {
                 board = view.board;
                 this.population = board.getPlaceur().getIndividus().size();
                 this.listSain = board.getListSain();
+                this.valDeb=valDeb;
+                nbMort=0;
         }
 
         /**
@@ -79,8 +93,16 @@ public class Graph extends JPanel {
 
 
 
+                if(!dieCheck()){
+                        nbMort=valDeb-population;
+                        addListMort(nbMort);
+                }
+                else{
+                        addListMort(nbMort);
+                }
+
+
                 List<Point> graphPoints = new ArrayList<>();
-                System.out.println(listSain.size());
                 for (int i = 0; i < listSain.size(); i++) {
                         int x1 = (int) (i * xScale + padding + labelPad);
                         int inf = (int) (population - listSain.get(i));
@@ -92,6 +114,16 @@ public class Graph extends JPanel {
                         
                 }
 
+                List<Point> graphPointsMort = new ArrayList<>();
+                for (int i = 0; i < listMort.size(); i++) {
+                        int x1 = (int) (i * xScale + padding + labelPad);
+                        int mort = valDeb-population;
+                        int y = getHeight() - 2 * padding;
+                        int y1 = (y-mort * (int)yScale) ;
+
+                        graphPointsMort.add(new Point(x1, y1));
+
+                }
 
                 g2.setColor(Color.WHITE);
                 g2.fillRect(padding + labelPad, padding, getWidth() - (2 * padding) - labelPad, getHeight() - 2 * padding - labelPad);
@@ -109,7 +141,6 @@ public class Graph extends JPanel {
 
                                 g2.drawLine(padding + labelPad + 1 + pointWidth, y0, getWidth() - padding, y1);
                                 g2.setColor(Color.BLACK);
-                               // String yLabel = ((int) ((getMinSain() + (getMaxSain() - getMinSain()) * ((i * 1.0) / numberYDiv)) * 100)) / 100.0 + "";
                                 String yLabel = (population/10)*i +"";
                                 FontMetrics metrics = g2.getFontMetrics();
                                 int labelWidth = metrics.stringWidth(yLabel);
@@ -124,12 +155,25 @@ public class Graph extends JPanel {
                 g2.setColor(lineColor);
                 g2.setStroke(Graph_Stroke);
 
+
+
+
                 for (int i = 0; i < graphPoints.size() - 1; i++) {
 
                         int x1 = graphPoints.get(i).x;
                         int y1 = graphPoints.get(i).y;
                         int x2 = graphPoints.get(i + 1).x;
                         int y2 = graphPoints.get(i + 1).y;
+                        g2.drawLine(x1, y1, x2, y2);
+
+                }
+
+                for (int i = 0; i < graphPointsMort.size() - 1; i++) {
+
+                        int x1 = graphPointsMort.get(i).x;
+                        int y1 = graphPointsMort.get(i).y;
+                        int x2 = graphPointsMort.get(i + 1).x;
+                        int y2 = graphPointsMort.get(i + 1).y;
                         g2.drawLine(x1, y1, x2, y2);
 
                 }
@@ -145,7 +189,34 @@ public class Graph extends JPanel {
                         int ovalH = pointWidth;
                         g2.fillOval(x, y, ovalW, ovalH);
                 }
+
+                for (int i = 0; i < graphPointsMort.size(); i++) {
+                        int x = graphPointsMort.get(i).x - pointWidth / 2;
+                        int y = graphPointsMort.get(i).y - pointWidth / 2;
+                        int ovalW = pointWidth;
+                        int ovalH = pointWidth;
+                        g2.fillOval(x, y, ovalW, ovalH);
+                }
+
+
                 repaint();
+        }
+
+
+        /***
+         * Ajoute a la liste de mort le nombre de mort
+         * @param nbMort nombre de mort a l'appel de la fonction
+         */
+        private void addListMort(int nbMort){
+                listMort.add((double)nbMort);
+        }
+
+        /***
+         * Verifie si il y a des morts en faisant la difference du nombre de population initiale et le nombre d'individu a l'instant T
+         * @return le boolean de la verification de s'il y a des morts
+         */
+        private boolean dieCheck(){
+                return population-valDeb ==0;
         }
 
 }
