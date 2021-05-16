@@ -1,12 +1,6 @@
 package com.company;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.RenderingHints;
-import java.awt.Stroke;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
@@ -46,8 +40,6 @@ public class Graph extends JPanel {
          */
         private Color pointColor = new Color(100, 100, 100, 180);
 
-
-
         /**
          * variable liee a la bord en cours
          */
@@ -65,11 +57,10 @@ public class Graph extends JPanel {
         /**
          * constructeur de la classe graphique
          * @param view classe vue pour pouvoir recuperer la board courante
-         * @param population nombre de population total (pas encore pu servir)
          */
-        public Graph(Vue view, int population) {
+        public Graph(Vue view) {
                 board = view.board;
-                this.population = population;
+                this.population = board.getPlaceur().getIndividus().size();
                 this.listSain = board.getListSain();
         }
 
@@ -84,33 +75,32 @@ public class Graph extends JPanel {
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
                 double xScale = ((double) getWidth() - (2 * padding) - labelPad) / (listSain.size() - 1);
-                double yScale = ((double) getHeight() - (2 * padding) - labelPad) / (getMaxSain() - getMinSain());
-
-
+                //double yScale = ((double) getHeight() - (2 * padding) - labelPad) / (getMaxSain() - getMinSain());
 
 
                 List<Point> graphPoints = new ArrayList<>();
+                System.out.println(listSain.size());
                 for (int i = 0; i < listSain.size(); i++) {
                         int x1 = (int) (i * xScale + padding + labelPad);
-                        int y1 = (int) (getMaxSain() -(listSain.get(i) * yScale) + padding);
+
+                        int inf = (int) (population - listSain.get(i));
+                        int y = getHeight() - 2 * padding;
+                        int y1 = y - inf * 10;
 
                         graphPoints.add(new Point(x1, y1));
                         
                 }
 
-                for (int i=0;i<graphPoints.size();i++) {
-                }
 
                 g2.setColor(Color.WHITE);
                 g2.fillRect(padding + labelPad, padding, getWidth() - (2 * padding) - labelPad, getHeight() - 2 * padding - labelPad);
                 g2.setColor(Color.BLACK);
 
 
-
                 for (int i = 0; i < numberYDiv + 1; i++) {
                         int x0 = padding+labelPad;
                         int x1 = pointWidth+padding+labelPad;
-                        int y0=getHeight() - ((i * (getHeight() - padding * 2 - labelPad)) / numberYDiv + padding + labelPad);
+                        int y0 = getHeight() - ((i * (getHeight() - padding * 2 - labelPad)) / numberYDiv + padding + labelPad);
                         int y1 = y0;
                         g2.drawLine(x0, y0, x1, y1);
                 }
@@ -121,12 +111,15 @@ public class Graph extends JPanel {
                 Stroke oldStroke = g2.getStroke();
                 g2.setColor(lineColor);
                 g2.setStroke(Graph_Stroke);
+
                 for (int i = 0; i < graphPoints.size() - 1; i++) {
+
                         int x1 = graphPoints.get(i).x;
                         int y1 = graphPoints.get(i).y;
                         int x2 = graphPoints.get(i + 1).x;
                         int y2 = graphPoints.get(i + 1).y;
                         g2.drawLine(x1, y1, x2, y2);
+
                 }
 
                 g2.setStroke(oldStroke);
@@ -140,7 +133,7 @@ public class Graph extends JPanel {
                         int ovalH = pointWidth;
                         g2.fillOval(x, y, ovalW, ovalH);
                 }
-
+                repaint();
         }
 
         /**

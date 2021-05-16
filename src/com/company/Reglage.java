@@ -75,6 +75,10 @@ public class Reglage extends JFrame{
 	 */
 	JCheckBox tempsTotale = new JCheckBox("Limiteur temporel");
 	/**
+	 * Creer la checkbox qui determine s'il ont veut plusieurs potentielles vagues
+	 */
+	JCheckBox reinfection = new JCheckBox("Reinfection");
+	/**
 	 * creer  un SpinnerText Nombre d'entrepise(s)
 	 */
 	JSpinnerText nbEntreprise = new JSpinnerText("Nombre d'entreprise(s)",0,2,1);
@@ -89,7 +93,7 @@ public class Reglage extends JFrame{
 	/**
 	 *	creer  un SpinnerText Taux immunite
 	 */
-	JSpinnerText tauxImmunite = new JSpinnerText("Taux immunite",500,5000,100);
+	JSpinnerText tauxImmunite = new JSpinnerText("Temps d'immunite",500,5000,100);
 	/**
 	 * creer  un SpinnerText Temps en guerison
 	 */
@@ -168,6 +172,7 @@ public class Reglage extends JFrame{
 		this.checkBox.add(tauxImmunite);
 		this.checkBox.add(tempsGuerison);
 		this.checkBox.add(VitesseSimulation);
+		this.checkBox.add(reinfection);
 
 
 
@@ -215,11 +220,10 @@ public class Reglage extends JFrame{
 		this.VitesseSimulation.restart();
 		this.tempsMax.restart();
 
-
-
 		this.entreprise.setSelected(false);//deselctionne toutes les checkboxes
 		this.mortalite.setSelected(false);
 		this.tempsTotale.setSelected(false);
+		this.reinfection.setSelected(false);
 
 	}
 
@@ -235,8 +239,8 @@ public class Reglage extends JFrame{
 		
 		
 
-		act = new boolean[] {true, true, false, true, false, true, true, true, false};//initialision des tableaux contenant les options et valeurs souhaite par l'utilisateur
-		val = new int[] {x, y, 0, 900, 1000, 500, 3000, 1, 10000};
+		act = new boolean[] {true, true, false, true, false, true, true, true, false, false};//initialision des tableaux contenant les options et valeurs souhaite par l'utilisateur
+		val = new int[] {x, y, 0, 900, 1000, 500, 3000, 1, 10000, 0};
 		if(this.entreprise.isSelected()== true) {
 			this.act[2] = true;
 			this.val[2] = nbEntreprise.getValue();
@@ -257,6 +261,9 @@ public class Reglage extends JFrame{
 			this.act[8]=true;
 			this.val[8] = tempsMax.getValue();
 		}
+
+		this.act[9] = reinfection.isSelected();
+
 		
         //attribution des valeurs de population et taux de sain dans les tablaux
 		// les deux premiers elements du tableau d'option sont toujours consideres comme vrai car "option" par defauts de la simulation
@@ -268,7 +275,7 @@ public class Reglage extends JFrame{
 	}
 
 	public void afficheCourbe(){
-		Courbe courbe= new Courbe(view, x,y,p); //définition de la fenêtre contenant le graphique résumé de la simulation
+		Courbe courbe= new Courbe(view); //définition de la fenêtre contenant le graphique résumé de la simulation
 		courbe.setVisible(true); //rend la fenêtre graphique visible
 	}
 

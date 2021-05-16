@@ -114,6 +114,11 @@ public class Board extends JPanel implements ActionListener {
 	}
 
 	/**
+	 * Autoriste les n-iemes vagues
+	 */
+	private boolean reinf;
+
+	/**
 	 * Initialise les fonctions et valeurs de la Board
 	 * @param tabBoolean Tableau de valeurs booleennes pour l'initialisation des fonctions de la Board
 	 * @param tabVal Tableau de valeurs numeriques pour l'initialisation des parametres de la Board
@@ -174,6 +179,8 @@ public class Board extends JPanel implements ActionListener {
 		} else {
 			this.maxtemps = -1;
 		}
+		parcours++;
+		reinf = tabBoolean[parcours];
 
 		timer = new Timer(DELAY, this);
 		timer.start();
@@ -265,11 +272,13 @@ public class Board extends JPanel implements ActionListener {
 		if(temps%100==0){
 			double nb = (double) nbSain();
 			listSain.add(nb);
+			if (reinf && nbSain() == ls.size()) {
+				Reinfection();
+			}
 		}
 
 		if (temps % 500 == 0) {
 			reShuffle();
-
 		}
 
 	}
@@ -470,10 +479,23 @@ public class Board extends JPanel implements ActionListener {
 	private int nbSain(){
 		int nb=0;
 		for (Individu indiv : placeur.getIndividus()) {
-			if (indiv.etat == "Neutral") {
+			if (indiv.etat == "Neutral" || indiv.etat == "Recovered") {
 				nb=nb+1;
 			}
 		}
 		return nb;
+	}
+
+	/**
+	 * Creer une n_ieme vague
+	 */
+	private void Reinfection() {
+		List<Individu> individus = placeur.getIndividus();
+		for (int i = 0; i < individus.size(); i++) {
+			if (individus.get(i).etat.equals("Neutral")) {
+				individus.get(i).contamine();
+				return;
+			}
+		}
 	}
 }
