@@ -50,8 +50,8 @@ Simulation:
 
 Exécution:
 
-Se rendre dans le dossier du projet et executer le programme Corona.jar
-(java -jar Cororona.jar)
+Se rendre dans le dossier du projet et executer le programme Corona2Bounce.jar
+(java -jar Cororona2Bounce.jar)
 
 Définition rôle:
 
