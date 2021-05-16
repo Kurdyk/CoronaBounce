@@ -117,6 +117,11 @@ public class Reglage extends JFrame{
 	/**
 	 * JPanel qui va contenir des boites pour ameliorer l'ergonomie
 	 */
+	/***
+	 * Variable qui sera transfere au graphique (valeur de population de depart)
+	 */
+	private int valDeb;
+
 	JPanel Gbox= new JPanel();
 	/**
 	 * Boite pour ergonie numero 1
@@ -232,6 +237,8 @@ public class Reglage extends JFrame{
 		int i=100-taux.getValue();
 		this.x=p*s/100;
 		this.y=p*i/100;
+		this.valDeb=x+y;
+
 		
 		
 
@@ -271,7 +278,7 @@ public class Reglage extends JFrame{
 	}
 
 	public void afficheCourbe(){
-		Courbe courbe= new Courbe(view); //définition de la fenêtre contenant le graphique résumé de la simulation
+		Courbe courbe= new Courbe(view,valDeb); //définition de la fenêtre contenant le graphique résumé de la simulation
 		courbe.setVisible(true); //rend la fenêtre graphique visible
 	}
 
