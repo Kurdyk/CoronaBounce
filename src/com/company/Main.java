@@ -1,16 +1,16 @@
 package com.company;
 
 /**
- * classe qui va permettre l'execution du programme
+ * Classe qui va permettre l'execution du programme
  */
 public class Main {
 	/**
-	 * fenetre qui avec l'utilisateur va agir
+	 * Fenetre qui avec l'utilisateur va agir
 	 */
 	private Reglage view;
 
 	/**
-	 * constructeur de l'objet
+	 * Constructeur de l'objet
 	 */
 	public Main() {
 		view= new Reglage(); //créer une nouvelle fenêtre réglage
@@ -18,12 +18,12 @@ public class Main {
 	}
 
 	/**
-	 * la fonction main du programme
+	 * La fonction main du programme
 	 * @param args parametre par defaut de la fonction
 	 */
 	public static void main (String[]args) {
 		/**
-		 * creer un nouveau test
+		 * Creer un nouveau Main
 		 */
 		new Main();
 	}

@@ -7,41 +7,41 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 /**
- * classe qui permettre de créer une fenetre contenant le graphique résumé de la simulation
+ * Classe qui permettre de creer une fenetre contenant le graphique résume de la simulation
  */
 public class Courbe extends JFrame{
 	/**
-	 * creer l'objet qui va contenir le graphique
+	 * Creer l'objet qui va contenir le graphique
 	 */
 	JPanel Graphique= new JPanel();
 
 	Courbe(Vue view){
 		/**
-		 * fixe le titre de la fenetre
+		 * Fixe le titre de la fenetre
 		 */
 		this.setTitle("Graphique");
 		/**
-		 * fixe les dimensions de la fenetre
+		 * Fixe les dimensions de la fenetre
 		 */
 		this.setSize(800, 400);
 		/**
-		 * fixe la position par defaut de la fenetre
+		 * Fixe la position par defaut de la fenetre
 		 */
 		this.setLocation(Toolkit.getDefaultToolkit().getScreenSize().width-400, Toolkit.getDefaultToolkit().getScreenSize().height - 400);
 		/**
-		 * definit  differentes zones dans la fenetre ou l'on placera des objets
+		 * Definit  differentes zones dans la fenetre ou l'on placera des objets
 		 */
 		this.getContentPane().setLayout(new GridLayout());
 		/**
-		 * de meme pour l'objet graphique
+		 * De meme pour l'objet graphique
 		 */
 		this.Graphique.setLayout(new BorderLayout());
 		/**
-		 * ajoute une courbe a l'objet graphique
+		 * Ajoute une courbe a l'objet graphique
 		 */
 		this.Graphique.add(new Graph(view));
 		/**
-		 * ajoute l'objet graphique a la fenetre
+		 * Ajoute l'objet graphique a la fenetre
 		 */
 		this.getContentPane().add(this.Graphique, BorderLayout.CENTER);
 	}

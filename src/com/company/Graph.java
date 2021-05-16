@@ -11,51 +11,51 @@ import javax.swing.JPanel;
  */
 public class Graph extends JPanel {
         /**
-         * nombre de "rembourage"
+         * Nombre de "rembourage"
          */
         private int padding = 25;
         /**
-         * nombre de "rembourage" des étiquettes
+         * Nombre de "rembourage" des étiquettes
          */
         private int labelPad = 25;
         /**
-         * donne un contour a la fenetre de dessin
+         * Donne un contour a la fenetre de dessin
          */
         private static final Stroke Graph_Stroke = new BasicStroke(2f);
         /**
-         * taille diametre d'un point
+         * Taille diametre d'un point
          */
         private int pointWidth = 4;
         /**
-         * nombre de division de la hauteur Y
+         * Nombre de division de la hauteur Y
          */
         private int numberYDiv = 10;
 
         /**
-         * couleur de ligne
+         * Couleur de ligne
          */
         private Color lineColor = new Color(44, 102, 230, 180);
         /**
-         * couleur des points
+         * Couleur des points
          */
         private Color pointColor = new Color(100, 100, 100, 180);
 
         /**
-         * variable liee a la bord en cours
+         * Variable liee a la bord en cours
          */
         private Board board;
         /**
-         * nombre de population
+         * Nombre de population
          */
         private int population;
 
         /**
-         * liste d'individu sain
+         * Liste d'individu sain
          */
         private List<Double> listSain;
 
         /**
-         * constructeur de la classe graphique
+         * Constructeur de la classe graphique
          * @param view classe vue pour pouvoir recuperer la board courante
          */
         public Graph(Vue view) {
@@ -65,7 +65,7 @@ public class Graph extends JPanel {
         }
 
         /**
-         * dessine la courbe et les axes du graphique des individus contamines
+         * Dessine la courbe et les axes du graphique des individus contamines
          * @param g le g graphique de base de Java
          */
         @Override
@@ -83,7 +83,6 @@ public class Graph extends JPanel {
                 System.out.println(listSain.size());
                 for (int i = 0; i < listSain.size(); i++) {
                         int x1 = (int) (i * xScale + padding + labelPad);
-
                         int inf = (int) (population - listSain.get(i));
                         int y = getHeight() - 2 * padding;
                         int y1 = (y - inf * (int)yScale) ;
@@ -147,30 +146,6 @@ public class Graph extends JPanel {
                         g2.fillOval(x, y, ovalW, ovalH);
                 }
                 repaint();
-        }
-
-        /**
-         * donne le nombre d'individu minimum de la liste sain
-         * @return en double le nombre minimum d'individu sain de la liste
-         */
-       private double getMinSain(){
-                double minSain = Double.MAX_VALUE;
-                for (Double sain : listSain) {
-                        minSain = Math.min(minSain, sain);
-                }
-                return minSain;
-        }
-
-        /**
-         * donne le nombre d'individu maximum de la liste sain
-         * @return en double le nombre maximum d'individu sain de la liste
-         */
-        private double getMaxSain() {
-                double maxSain = Double.MIN_VALUE;
-                for (Double sain : listSain) {
-                        maxSain = Math.max(maxSain, sain);
-                }
-                return maxSain;
         }
 
 }

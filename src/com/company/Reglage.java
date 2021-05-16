@@ -7,35 +7,31 @@ import java.awt.event.ActionListener;
 
 
 /**
- * class qui va creer la fenetre menu pour l'utilisateur
+ * Classe qui va creer la fenetre menu pour l'utilisateur
  */
 public class Reglage extends JFrame{
 	/**
-	 * objet qui va contenir les differents objets avec lesquels l'utilisateur va agir
+	 * Objet qui va contenir les differents objets avec lesquels l'utilisateur va agir
 	 */
 	JPanel panneau= new JPanel();
 	/**
-	 * fenetre qui va contenir la simulation
+	 * Fenetre qui va contenir la simulation
 	 */
 	Vue view;
 	/**
-	 * fenetre qui va contenir le graphique resume de la simulation
-	 */
-	Courbe courbe;
-	/**
-	 * objet qui va contenir
+	 * Objet qui va contenir
 	 */
 	JPanel Spinner =new JPanel();
 	/**
-	 *objet qui contient des JButton lancer simulation et reneatialiser les parametres de la simulation
+	 * Objet qui contient des JButton lancer simulation et reneatialiser les parametres de la simulation
 	 */
 	JPanel Button=new JPanel();
 	/**
-	 * objet qui contient des JCheckBox pour parametrer la simulation
+	 * Objet qui contient des JCheckBox pour parametrer la simulation
 	 */
 	JPanel checkBox = new JPanel();
 	/**
-	 * objet cree par classe interne pour etre utilise
+	 * Objet cree par classe interne pour etre utilise
 	 */
 	JSpinnerText population= new JSpinnerText("Population totale : ", 0,40, 1);
 	/**
@@ -43,35 +39,35 @@ public class Reglage extends JFrame{
 	 */
 	JSliderText taux= new JSliderText(0,100,25,5,"Taux sain :");
 	/**
-	 * tableau qui indiquera quelles options l'utilisateur a voulu dans sa simulation
+	 * Tableau qui indiquera quelles options l'utilisateur a voulu dans sa simulation
 	 */
 	boolean act[];
 	/**
-	 * tableau indiquant la valeur des options voulues si besoin est
+	 * Tableau indiquant la valeur des options voulues si besoin est
 	 */
 	int []val;
 	/**
-	 * creer le bouton reinitialiser
+	 * Creer le bouton reinitialiser
 	 */
 	JButton b1= new JButton("Reinitialiser");
 	/**
-	 * creer le bouton GO
+	 * Creer le bouton GO
 	 */
 	JButton b2= new JButton("GO");
 	/**
-	 * creer le bouton Courbe
+	 * Creer le bouton Courbe
 	 */
 	JButton b3 = new JButton("Courbe");
 	/**
-	 * creer la checkboxe Entreprise(s)
+	 * Creer la checkboxe Entreprise(s)
 	 */
 	JCheckBox entreprise = new JCheckBox("Entreprise(s)");
 	/**
-	 * creer la checkboxe Mortalite
+	 * Creer la checkboxe Mortalite
 	 */
 	JCheckBox mortalite = new JCheckBox("Mortalite");
 	/**
-	 * creer la checkboxe Limiteur temporel
+	 * Creer la checkboxe Limiteur temporel
 	 */
 	JCheckBox tempsTotale = new JCheckBox("Limiteur temporel");
 	/**
@@ -79,43 +75,43 @@ public class Reglage extends JFrame{
 	 */
 	JCheckBox reinfection = new JCheckBox("Reinfection");
 	/**
-	 * creer  un SpinnerText Nombre d'entrepise(s)
+	 * Creer  un SpinnerText Nombre d'entrepise(s)
 	 */
 	JSpinnerText nbEntreprise = new JSpinnerText("Nombre d'entreprise(s)",0,2,1);
 	/**
-	 * creer  un SpinnerText Temps en entreprise
+	 * Creer  un SpinnerText Temps en entreprise
 	 */
 	JSpinnerText tpsEntreprise= new JSpinnerText("Temps en entreprise",500,1500,100);
 	/**
-	 * creer  un SpinnerText Taux mortalite
+	 * Creer  un SpinnerText Taux mortalite
 	 */
 	JSliderText tauxMortalite= new JSliderText(0,100,25,5,"Taux mortalite :");
 	/**
-	 *	creer  un SpinnerText Taux immunite
+	 * Creer  un SpinnerText Taux immunite
 	 */
 	JSpinnerText tauxImmunite = new JSpinnerText("Temps d'immunite",500,5000,100);
 	/**
-	 * creer  un SpinnerText Temps en guerison
+	 * Creer  un SpinnerText Temps en guerison
 	 */
 	JSpinnerText tempsGuerison  = new JSpinnerText("Temps de guerison",500,5000,100);
 	/**
-	 * creer  un SpinnerText Vitesse de la simulation
+	 * Creer  un SpinnerText Vitesse de la simulation
 	 */
 	JSpinnerText VitesseSimulation  = new JSpinnerText("Vitesse de la simulation",1,3,1);
 	/**
-	 * creer  un SpinnerText Temps maximum
+	 * Creer  un SpinnerText Temps maximum
 	 */
 	JSpinnerText tempsMax = new JSpinnerText("Temps maximum",1000,10000,1000);
 	/**
-	 * variable qui indique la population totale a T0
+	 * Variable qui indique la population totale a T0
 	 */
 	private int p;
 	/**
-	 *  variable qui indique la population saine a T0
+	 * Variable qui indique la population saine a T0
 	 */
 	private int x;
 	/**
-	 * variable qui indique la population infecte a T0
+	 * Variable qui indique la population infecte a T0
 	 */
 	private int y;
 	/**
@@ -123,20 +119,20 @@ public class Reglage extends JFrame{
 	 */
 	JPanel Gbox= new JPanel();
 	/**
-	 * boite pour ergonie numero 1
+	 * Boite pour ergonie numero 1
 	 */
 	JPanel box1= new JPanel();
 	/**
-	 * boite pour ergonie numero 1
+	 * Boite pour ergonie numero 1
 	 */
 	JPanel box2= new JPanel();
 	/**
-	 * boite pour ergonie numero 1
+	 * Boite pour ergonie numero 1
 	 */
 	JPanel box3= new JPanel();
 
 	/**
-	 * constructeur de la fenetre
+	 * Constructeur de la fenetre
 	 */
 	Reglage(){
 
@@ -207,7 +203,7 @@ public class Reglage extends JFrame{
 
 
 	/**
-	 * reinitialise tous les parametres de la simulation a des valeurs par defaut
+	 * Reinitialise tous les parametres de la simulation a des valeurs par defaut
 	 */
 	public void reinitialise() {
 		this.population.restart(); //remet la valeur du spinnerText a une valeur par defaut
@@ -228,7 +224,7 @@ public class Reglage extends JFrame{
 	}
 
 	/**
-	 * fonction qui va lancer la simulation
+	 * Fonction qui va lancer la simulation
 	 */
 	public void go() {
 		p= population.getValue(); //recuperation et traitement des valeurs de population et du taux de sain
@@ -281,14 +277,14 @@ public class Reglage extends JFrame{
 
 
 	/**
-	 * classe interne permettant de creer des objets spinnerText
+	 * Classe interne permettant de creer des objets spinnerText
 	 */
 	public class JSpinnerText extends JPanel {
 	    JSpinner spinner;
 	    int reni; //permet de garder la valeur pour reinitialiser la valeur numerique de l'objet
 
 		/**
-		 * constructeur qui va permettre de construire un spinner avec text associe et un maximum definit
+		 * Constructeur qui va permettre de construire un spinner avec text associe et un maximum definit
 		 * @param s texte associé a l'objet
 		 * @param i valeur minimum du spinner
 		 * @param j valeur maximum du spinner
@@ -312,7 +308,7 @@ public class Reglage extends JFrame{
 	        }
 
 		/**
-		 * permet au spinner d'avoir un zone de texte
+		 * Permet au spinner d'avoir un zone de texte
 		 * @param spinner spinner auquel on veut ajoute une zone de texte
 		 * @return spinner avec une zone de texte ou null si echoue
 		 */
@@ -329,7 +325,7 @@ public class Reglage extends JFrame{
 	    }
 
 		/**
-		 * associe un spinnermodel et un label
+		 * Associe un spinnermodel et un label
 		 * @param c ensemble qui va contenir un label et un spinner model
 		 * @param label
 		 * @param model
@@ -347,7 +343,7 @@ public class Reglage extends JFrame{
 	    }
 
 		/**
-		 * renvoie la valeur courante de l'attribut spinner
+		 * Renvoie la valeur courante de l'attribut spinner
 		 * @return la valeur
 		 */
 		int getValue() {
@@ -355,7 +351,7 @@ public class Reglage extends JFrame{
 		}
 
 		/**
-		 * fixe la valeur courante de l'attribut spinner
+		 * Fixe la valeur courante de l'attribut spinner
 		 */
 		void restart() {
 			this.spinner.setValue(reni/2);
@@ -363,7 +359,7 @@ public class Reglage extends JFrame{
 	}
 
 	/**
-	 * classe interne qui va permettre la creation de slider avec du texte
+	 * Classe interne qui va permettre la creation de slider avec du texte
 	 */
 	public class JSliderText extends JPanel{
 		JLabel sliderLabel; //texte desire
@@ -371,7 +367,7 @@ public class Reglage extends JFrame{
 		int reni;
 
 		/**
-		 * constructeur de l'objet
+		 * Constructeur de l'objet
 		 * @param min valeur minimale du slider
 		 * @param max valeur maximale du slider
 		 * @param M	valeur de l'espacement du tick majeur
@@ -395,7 +391,7 @@ public class Reglage extends JFrame{
 		}
 
 		/**
-		 * //fixe la valeur courante du slider de l'objet
+		 * Fixe la valeur courante du slider de l'objet
 		 * @param n valeur qui deviendra courante
 		 */
 		void setValue(int n) {
@@ -403,7 +399,7 @@ public class Reglage extends JFrame{
 		}
 
 		/**
-		 * recupere la valeur  courante du slider
+		 * Recupere la valeur  courante du slider
  		 * @return valeur numerique courante
 		 */
 		int getValue() {
@@ -411,7 +407,7 @@ public class Reglage extends JFrame{
 		}
 
 		/**
-		 * fixe la valeur du slider a une valeur par defaut
+		 * Fixe la valeur du slider a une valeur par defaut
 		 */
 		void restart() {
 			 this.setValue(reni/2);
