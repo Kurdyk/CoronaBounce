@@ -65,7 +65,7 @@ public class Graph extends JPanel {
         }
 
         /**
-         * dessine la courbe et les axes du graphique
+         * dessine la courbe et les axes du graphique des individus contamines
          * @param g le g graphique de base de Java
          */
         @Override
@@ -75,7 +75,8 @@ public class Graph extends JPanel {
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
                 double xScale = ((double) getWidth() - (2 * padding) - labelPad) / (listSain.size() - 1);
-                //double yScale = ((double) getHeight() - (2 * padding) - labelPad) / (getMaxSain() - getMinSain());
+                double yScale = ((double) getHeight() - (2 * padding)- labelPad) / (population);
+
 
 
                 List<Point> graphPoints = new ArrayList<>();
@@ -85,7 +86,8 @@ public class Graph extends JPanel {
 
                         int inf = (int) (population - listSain.get(i));
                         int y = getHeight() - 2 * padding;
-                        int y1 = y - inf * 10;
+                        int y1 = (y - inf * (int)yScale) ;
+
 
                         graphPoints.add(new Point(x1, y1));
                         
@@ -98,12 +100,23 @@ public class Graph extends JPanel {
 
 
                 for (int i = 0; i < numberYDiv + 1; i++) {
-                        int x0 = padding+labelPad;
-                        int x1 = pointWidth+padding+labelPad;
+                        int x0 = padding + labelPad;
+                        int x1 = pointWidth + padding + labelPad;
                         int y0 = getHeight() - ((i * (getHeight() - padding * 2 - labelPad)) / numberYDiv + padding + labelPad);
                         int y1 = y0;
-                        g2.drawLine(x0, y0, x1, y1);
-                }
+
+
+                        if (listSain.size() > 0) {
+
+                                g2.drawLine(padding + labelPad + 1 + pointWidth, y0, getWidth() - padding, y1);
+                                g2.setColor(Color.BLACK);
+                               // String yLabel = ((int) ((getMinSain() + (getMaxSain() - getMinSain()) * ((i * 1.0) / numberYDiv)) * 100)) / 100.0 + "";
+                                String yLabel = (population/10)*i +"";
+                                FontMetrics metrics = g2.getFontMetrics();
+                                int labelWidth = metrics.stringWidth(yLabel);
+                                g2.drawString(yLabel, x0 - labelWidth - 5, y0 + (metrics.getHeight() / 2) - 3);
+                        }
+                        g2.drawLine(x0, y0, x1, y1);}
 
                 g2.drawLine(padding + labelPad, getHeight() - padding - labelPad, padding + labelPad, padding);
                 g2.drawLine(padding + labelPad, getHeight() - padding - labelPad, getWidth() - padding, getHeight() - padding - labelPad);
@@ -140,7 +153,7 @@ public class Graph extends JPanel {
          * donne le nombre d'individu minimum de la liste sain
          * @return en double le nombre minimum d'individu sain de la liste
          */
-       private double getMinSain() {
+       private double getMinSain(){
                 double minSain = Double.MAX_VALUE;
                 for (Double sain : listSain) {
                         minSain = Math.min(minSain, sain);
