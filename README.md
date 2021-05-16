@@ -50,7 +50,7 @@ Simulation:
 
 Exécution:
 
-Se rendre dans le dossier du projet et executer le programme Corona2Bounce.jar
+Se rendre dans le dossier du projet(out/artifacts/Corona2Bounce_jar) et executer le programme Corona2Bounce.jar
 (java -jar Cororona2Bounce.jar)
 
 Définition rôle:
